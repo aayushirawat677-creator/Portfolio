@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lumi — Closed-Loop Behavioral AI Agent · Aayushi</title>
+<meta name="description" content="Lumi is a closed-loop behavioral AI agent that closes the intention–execution gap for ADHD. A deep dive into its 3-layer Gemini architecture, intervention tools, reasoning loop, evals and guardrails." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body data-hero="split">
+
+<nav class="nav" id="nav">
+  <a class="brand" href="index.html"><span class="status-dot"></span><b>AAYUSHI</b><span class="dim">.AGENT</span></a>
+  <div class="nav-links">
+    <a href="projects.html" data-nav="projects.html">AI Products</a>
+    <a href="experience.html" data-nav="experience.html">Experience</a>
+    <a href="case-studies.html" data-nav="case-studies.html">Case Studies</a>
+    <a href="index.html" data-nav="index.html">About</a>
+    <a href="index.html#contact" class="nav-cta"><span class="status-dot"></span><span class="label">available</span></a>
+  </div>
+</nav>
+
+<!-- ============ INTRO ============ -->
+<header class="page-intro">
+  <div class="grid-pattern"></div>
+  <div class="wrap">
+    <a class="backlink" href="projects.html">← AI Products</a>
+    <span class="eyebrow" style="margin-top:22px;">AI Product · Flagship</span>
+    <h1>Lumi — a closed-loop <span class="accent">behavioral AI agent.</span></h1>
+    <p class="sub">The first AI that actually <em>calls you</em> — and stays in the loop until action happens. Co-founded and led product through a 0→1 build on Gemini 3.</p>
+    <div class="detail-meta">
+      <div class="stat"><b><span class="accent">83%</span></b><span>retention</span></div>
+      <div class="stat"><b>90</b><span>NPS</span></div>
+      <div class="stat"><b>+40%</b><span>DAU growth</span></div>
+      <div class="stat"><b>$40/mo</b><span>validated WTP</span></div>
+      <div class="stat"><b>366M</b><span>adults w/ ADHD</span></div>
+    </div>
+  </div>
+</header>
+
+<section class="page-section">
+  <div class="wrap">
+
+    <!-- INTRO / WHAT IT IS -->
+    <div class="doc-section" id="intro" style="margin-top:clamp(20px,3vw,40px);">
+      <div class="section-head reveal">
+        <span class="eyebrow">01 · Intro</span>
+        <h2>Not another to-do list — a personal AI behavioral coach.</h2>
+      </div>
+      <div class="reveal" data-d="1">
+        <p class="lead-para wide">Lumi is an AI behavioral coach powered by Gemini 3. It doesn't just remind you — it <span class="accent">accompanies you through the whole process until action happens.</span></p>
+        <div class="prose">
+          <p>Traditional productivity tools — alarms, to-do lists — are <strong>open-loop systems</strong>. They fire a reminder and assume you'll act. For the ADHD brain that assumption breaks: the problem was never "not knowing what to do," it's "being unable to start." So reminders pile into alarm fatigue and a quiet sense of shame.</p>
+          <p>Lumi flips the model into a <strong>closed loop</strong> — it senses your state, compares reality against the goal, and dynamically adjusts its intervention until the gap between "I want to do it" and "I did it" actually closes.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAIN POINT -->
+    <div class="doc-section" id="problem">
+      <div class="section-head reveal">
+        <span class="eyebrow">02 · The Problem</span>
+        <h2>The intention–execution gap.</h2>
+        <p>A universal pain point, most acute for the ~366M adults worldwide living with ADHD.</p>
+      </div>
+      <div class="info-grid">
+        <div class="info-card reveal">
+          <div class="ic-n">// pain 01</div>
+          <h4>Can't initiate</h4>
+          <p>The core ADHD problem isn't knowing what to do — it's being unable to start doing it. Willpower alone doesn't bridge the gap.</p>
+        </div>
+        <div class="info-card reveal" data-d="1">
+          <div class="ic-n">// pain 02</div>
+          <h4>Alarm fatigue</h4>
+          <p>Open-loop reminders are the easiest notification to dismiss. Over time they stop working entirely — and breed avoidance.</p>
+        </div>
+        <div class="info-card reveal" data-d="2">
+          <div class="ic-n">// pain 03</div>
+          <h4>Shame spiral</h4>
+          <p>Each ignored reminder reinforces a sense of personal failure, making the next attempt even harder to begin.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOLUTION -->
+    <div class="doc-section" id="solution">
+      <div class="section-head reveal">
+        <span class="eyebrow">03 · The Solution</span>
+        <h2>Closed-loop control, borrowed from cybernetics.</h2>
+        <p>Two disciplines, encoded directly into the architecture.</p>
+      </div>
+      <div class="info-grid">
+        <div class="info-card reveal">
+          <div class="ic-n">// foundation</div>
+          <h4>Atomic Habits</h4>
+          <p>James Clear's four laws — make the cue obvious, the habit attractive, the action easy, the reward satisfying — become Lumi's intervention "tool layer."</p>
+        </div>
+        <div class="info-card reveal" data-d="1">
+          <div class="ic-n">// foundation</div>
+          <h4>Cybernetics</h4>
+          <p>Wiener's feedback loop: a thermostat holds temperature not with one command, but by continuously sensing, comparing to target, and re-adjusting. So does Lumi.</p>
+        </div>
+      </div>
+      <div class="codeline reveal" data-d="1" style="margin-top:22px;">
+        <span class="c">// core paradigm — Human-as-Tool</span><br />
+        Most agents: human → instructs AI → AI calls <span class="k">software tools</span>.<br />
+        Lumi reverses it: AI orchestrates → calls the <b>human</b> as an API to execute a physical action.<br />
+        tool.<span class="k">sleep_routine</span>.start() <span class="c">→ guide user to dim lights, brush, sleep</span>
+      </div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <div class="doc-section" id="how">
+      <div class="section-head reveal">
+        <span class="eyebrow">04 · How It Works</span>
+        <h2>Three stages, one continuous loop.</h2>
+      </div>
+      <div class="steps">
+        <div class="step reveal">
+          <span class="snum">01</span>
+          <div>
+            <h4>Perception &amp; Planning</h4>
+            <div class="step-sub">goal store · 3-dimensional memory · AI goal decomposition</div>
+            <p>A multi-dimensional context system reads your original goal ("I want to go to bed early") against three databases: <strong>Interaction Memory</strong> (past conversations &amp; contracts), <strong>Behavior Log</strong> (real-time execution records), and <strong>Physiological Data</strong> (objective body state via Apple Health). Gemini 3 then acts as a planner, decomposing the ambitious goal into tiny, low-resistance atomic actions: 22:00 receive reminder → 22:15 put down the phone → 22:25 brush teeth → 22:40 in bed, wind down.</p>
+          </div>
+        </div>
+        <div class="step reveal">
+          <span class="snum">02</span>
+          <div>
+            <h4>Tools &amp; Environment</h4>
+            <div class="step-sub">behavior-change methodology, encoded as AI-callable tools</div>
+            <p>Once it understands you, Lumi has to <em>do something</em> to drive action. Each Atomic Habits principle is encoded as an intervention mechanism the agent can invoke — from a proactive phone call to dimming your lights (detailed below).</p>
+          </div>
+        </div>
+        <div class="step reveal">
+          <span class="snum">03</span>
+          <div>
+            <h4>Feedback Loop</h4>
+            <div class="step-sub">reasoning · reflection · dynamic replanning</div>
+            <p>The core brain. Lumi reflects on subjective feeling (Ripple Memory), objective behavior (Task Log) and physiological data (Apple Health), then decides whether to push harder or back off — and rewrites the plan accordingly.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ARCHITECTURE -->
+    <div class="doc-section" id="architecture">
+      <div class="section-head reveal">
+        <span class="eyebrow">05 · AI Architecture</span>
+        <h2>A 3-layer architecture that stays fast <span class="accent">and</span> deep.</h2>
+        <p>Decoupling conversation from execution — the design decision that made real-time voice + complex reasoning coexist.</p>
+      </div>
+      <div class="work-card case reveal" style="margin-top:8px;">
+        <div class="work-visual">
+          <div class="grid-pattern"></div>
+          <div class="work-meta-top">
+            <div class="work-logo"><span class="badge">L</span> Lumi</div>
+            <span class="case-tag">3-Layer Architecture</span>
+          </div>
+          <div class="arch">
+            <div class="arch-layer">
+              <div class="lh"><span class="ln">L1</span><span class="lt">Perception</span><span class="lmodel">Gemini Live · Flash</span></div>
+              <p>Real-time voice + emotional support over a persistent WebSocket. Ultra-fast response; deliberately avoids heavy tool calls to stay connected.</p>
+            </div>
+            <div class="arch-layer">
+              <div class="lh"><span class="ln">L2</span><span class="lt">Intent Router</span><span class="lmodel">Gemini 3 Flash</span></div>
+              <p>Rapidly analyzes conversational context and decides whether the user's intent requires an external tool call.</p>
+            </div>
+            <div class="arch-layer">
+              <div class="lh"><span class="ln">L3</span><span class="lt">Execution &amp; Planning</span><span class="lmodel">Gemini 3</span></div>
+              <p>Complex analysis, structured DB read/write, and dynamic context injection via a parallel-running AI.</p>
+            </div>
+          </div>
+          <div class="arch-loop"><span class="lp">↻ loop</span> sense → compare → diagnose → act → verify → replan</div>
+          <div class="arch-src">
+            <span class="lbl">context //</span>
+            <span>Interaction Memory</span><span>Behavior Log</span><span>Apple Health</span>
+          </div>
+        </div>
+        <div class="work-body">
+          <span class="eyebrow">Why three layers</span>
+          <h3>Decoupling solved the disconnect problem.</h3>
+          <div class="role">conversation layer ✕ execution layer</div>
+          <p class="desc">The first build tried to run tool calls directly through the Gemini Live stream — but complex function calling kept <strong>disconnecting the real-time model</strong>, with poor execution stability. The fix was to split perception (L1) from routing (L2) and execution (L3), and introduce a parallel AI for dynamic memory injection. Conversation stays sub-second and stable; heavy reasoning happens out of band.</p>
+          <div class="arch-src" style="margin-top:18px;">
+            <span class="lbl">stack //</span>
+            <span>Gemini 3 Pro</span><span>Gemini Live</span><span>Supabase</span><span>TypeScript</span><span>Swift / iOS</span><span>CallKit</span><span>HomeKit</span><span>HealthKit</span><span>Azure Speech</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INTERVENTION TOOLS -->
+    <div class="doc-section" id="tools">
+      <div class="section-head reveal">
+        <span class="eyebrow">06 · Intervention Tools</span>
+        <h2>Five tools that turn intent into action.</h2>
+        <p>Each one is a behavior-change principle, encoded as an AI-callable mechanism.</p>
+      </div>
+      <div class="info-grid">
+        <div class="info-card reveal">
+          <div class="ic-n">// tool 01</div>
+          <h4>Proactive VoIP Call</h4>
+          <p>The first AI that calls you. A real-time call is far harder to dismiss than a push notification — Lumi senses hesitation mid-call and gently interrupts the procrastination like a real coach.</p>
+        </div>
+        <div class="info-card reveal" data-d="1">
+          <div class="ic-n">// tool 02</div>
+          <h4>App Lockdown + Voice Commitment</h4>
+          <p>Keep scrolling and Lumi uses the iOS Screen Time API to lock temptation apps. To unlock, you speak a consequence statement aloud — verified by Azure Speech. Not punishment: forced metacognition.</p>
+        </div>
+        <div class="info-card reveal" data-d="2">
+          <div class="ic-n">// tool 03</div>
+          <h4>Body Double Mode</h4>
+          <p>Validated ADHD strategy — digital companionship for activation. Lumi suspends the costly voice model for white-noise animation, then performs a "hot reconnection" with full context the moment you speak, saving ~90% of token cost.</p>
+        </div>
+        <div class="info-card reveal">
+          <div class="ic-n">// tool 04</div>
+          <h4>HomeKit Environment Control</h4>
+          <p>Design the environment, not the willpower. Via Apple HomeKit, Lumi auto-dims your smart lights to a warm tone during wind-down — an environmental signal that says "it's time to rest."</p>
+        </div>
+        <div class="info-card reveal" data-d="1">
+          <div class="ic-n">// tool 05</div>
+          <h4>Multimodal Visual Verification</h4>
+          <p>Trust, but verify. Claim you brushed your teeth and Gemini's multimodal vision confirms — e.g. a photo of the toothbrush — before granting gamified coin rewards that reinforce the loop.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- REASONING ENGINE -->
+    <div class="doc-section" id="reasoning">
+      <div class="section-head reveal">
+        <span class="eyebrow">07 · Reasoning Engine</span>
+        <h2>Detective-style reasoning, in four steps.</h2>
+        <p>The feedback loop's brain investigates every gap like a case.</p>
+      </div>
+      <div class="steps">
+        <div class="step reveal">
+          <span class="snum">01</span>
+          <div>
+            <h4>Gap Analysis</h4>
+            <p>Why don't the user's "goal card" and "reality snapshot card" match up right now?</p>
+          </div>
+        </div>
+        <div class="step reveal">
+          <span class="snum">02</span>
+          <div>
+            <h4>Root-Cause Diagnosis</h4>
+            <p>Use physiological data — heart rate, sleep — to tell whether it's "too tired" (physiological) or "procrastinating" (psychological).</p>
+          </div>
+        </div>
+        <div class="step reveal">
+          <span class="snum">03</span>
+          <div>
+            <h4>Decision Generation</h4>
+            <p>Based on the diagnosis, choose the strategy: keep pushing, or suggest rest?</p>
+          </div>
+        </div>
+        <div class="step reveal">
+          <span class="snum">04</span>
+          <div>
+            <h4>Dynamic Replanning</h4>
+            <p>Translate the vague goal into a specific instruction: "It's 10:15 — put down your phone and start meditating." A weekly cross-data report surfaces causal patterns ("Friday's social event caused your sleep regression").</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EVALUATION & METRICS -->
+    <div class="doc-section" id="metrics">
+      <div class="section-head reveal">
+        <span class="eyebrow">08 · Evaluation &amp; Metrics</span>
+        <h2>What "good" looked like.</h2>
+        <p>An agent for your <em>actions</em> is judged on action — not engagement vanity.</p>
+      </div>
+      <div class="metric-grid">
+        <div class="metric reveal"><b><span class="accent">83%</span></b><span>retention</span></div>
+        <div class="metric reveal" data-d="1"><b>90</b><span>NPS</span></div>
+        <div class="metric reveal" data-d="2"><b>+40%</b><span>DAU growth</span></div>
+        <div class="metric reveal"><b>$40/mo</b><span>validated WTP</span></div>
+        <div class="metric reveal" data-d="1"><b>~90%</b><span>token cost saved</span></div>
+        <div class="metric reveal" data-d="2"><b>&lt;1s</b><span>voice latency</span></div>
+      </div>
+    </div>
+
+    <!-- GUARDRAILS -->
+    <div class="doc-section" id="guardrails">
+      <div class="section-head reveal">
+        <span class="eyebrow">09 · Guardrails</span>
+        <h2>Data-driven empathy — when to push, when to let go.</h2>
+        <p>Forceful intervention can't feel like a nagging butler. The guardrails make it feel like a coach.</p>
+      </div>
+      <div class="checks">
+        <div class="check reveal">
+          <span class="ck">✓</span>
+          <div><b>Source-of-truth override</b><span>Apple Watch physiological data decides the call. Genuine exhaustion activates override rules (suggest rest); psychological procrastination keeps the execution strategy pushing.</span></div>
+        </div>
+        <div class="check reveal" data-d="1">
+          <span class="ck">✓</span>
+          <div><b>Metacognition, not punishment</b><span>The voice-commitment unlock forces a conscious choice — making costs explicit instead of crudely blocking. Educational, not adversarial.</span></div>
+        </div>
+        <div class="check reveal">
+          <span class="ck">✓</span>
+          <div><b>Verify before reward</b><span>Gamified coins are only granted after multimodal verification — closing the gap between "I did it" claims and actual completion.</span></div>
+        </div>
+        <div class="check reveal" data-d="1">
+          <span class="ck">✓</span>
+          <div><b>Stability over capability</b><span>Heavy tool calls are kept off the real-time conversation layer so the agent never disconnects mid-intervention.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WHAT'S NEXT -->
+    <div class="doc-section" id="next">
+      <div class="section-head reveal">
+        <span class="eyebrow">10 · What's Next</span>
+        <h2>Lumi is just the beginning of HumanOS.</h2>
+      </div>
+      <div class="info-grid">
+        <div class="info-card reveal">
+          <div class="ic-n">// roadmap</div>
+          <h4>Full-spectrum health ecosystem</h4>
+          <p>Integrate diet, exercise and more Apple Health data — combining medical, lifestyle and physiological signals toward disease prediction and longevity management.</p>
+        </div>
+        <div class="info-card reveal" data-d="1">
+          <div class="ic-n">// roadmap</div>
+          <h4>Social accountability</h4>
+          <p>A friend-ranking, mutual-accountability mechanism — shared goals and gentle social pressure to push execution rates higher.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section" id="contact" style="padding-top: clamp(20px,3vw,40px);">
+  <div class="wrap">
+    <div class="contact-card reveal">
+      <div class="grid-pattern"></div>
+      <span class="eyebrow" style="justify-content:center;">Initialize conversation</span>
+      <h2>Let's build the <span class="accent">next agent.</span></h2>
+      <p class="sub">I'm exploring AI Product Manager roles where I can take agentic products from 0→1. If that sounds like your team, let's talk.</p>
+      <div class="contact-actions">
+        <a class="btn primary" href="mailto:aayushilnu0@gmail.com">→ aayushilnu0@gmail.com</a>
+        <a class="btn ghost" href="https://www.linkedin.com/in/aayushi-23a570a0/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+      <div style="margin-top:28px;">
+        <span class="avail-pill"><span class="status-dot"></span> available for AI PM roles · Sunnyvale, CA / remote</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="log">session://<span class="accent">aayushi.agent</span> — uptime <span id="sessClock">00:00:00</span> · build 2026.05 · all systems nominal</div>
+  <div class="up" id="toTop">return to top ↑</div>
+</footer>
+
+<div id="tweaks-root"></div>
+<script src="site.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="tweaks-app.jsx"></script>
+</body>
+</html>

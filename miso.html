@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MISO — AI Recipe & Ingredient-Optimization Agent · Aayushi</title>
+<meta name="description" content="MISO is an AI recipe recommendation and ingredient-optimization agent. A deep dive into its retrieval pipeline, matching logic, 7-factor ranking, taste-learning memory, evals and guardrails." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body data-hero="split">
+
+<nav class="nav" id="nav">
+  <a class="brand" href="index.html"><span class="status-dot"></span><b>AAYUSHI</b><span class="dim">.AGENT</span></a>
+  <div class="nav-links">
+    <a href="projects.html" data-nav="projects.html">AI Products</a>
+    <a href="experience.html" data-nav="experience.html">Experience</a>
+    <a href="case-studies.html" data-nav="case-studies.html">Case Studies</a>
+    <a href="index.html" data-nav="index.html">About</a>
+    <a href="index.html#contact" class="nav-cta"><span class="status-dot"></span><span class="label">available</span></a>
+  </div>
+</nav>
+
+<!-- ============ INTRO ============ -->
+<header class="page-intro">
+  <div class="grid-pattern"></div>
+  <div class="wrap">
+    <a class="backlink" href="projects.html">← AI Products</a>
+    <span class="eyebrow" style="margin-top:22px;">AI Product · System Design</span>
+    <h1>MISO — a recipe &amp; <span class="accent">ingredient-optimization agent.</span></h1>
+    <p class="sub">Not a recipe search engine — an ingredient-optimization and ranking system that helps busy home cooks decide what to actually make tonight.</p>
+    <div class="detail-meta">
+      <div class="stat"><b><span class="accent">75%</span></b><span>min match threshold</span></div>
+      <div class="stat"><b>7-factor</b><span>weighted ranking</span></div>
+      <div class="stat"><b>3 src</b><span>multi-platform retrieval</span></div>
+      <div class="stat"><b>∞</b><span>adaptive taste vector</span></div>
+    </div>
+  </div>
+</header>
+
+<section class="page-section">
+  <div class="wrap">
+
+    <!-- INTRO -->
+    <div class="doc-section" id="intro" style="margin-top:clamp(20px,3vw,40px);">
+      <div class="section-head reveal">
+        <span class="eyebrow">01 · Intro</span>
+        <h2>Answering two daily questions, faster.</h2>
+      </div>
+      <div class="reveal" data-d="1">
+        <p class="lead-para wide">"What can I cook with what I have?" and "Which recipe should I actually make right now?" — MISO <span class="accent">narrows hundreds of links to a few you're likely to cook.</span></p>
+        <div class="prose">
+          <p>MISO is an AI recipe-recommendation agent for busy people who cook at home. Instead of forcing users to browse endless links, it surfaces a small set of highly relevant recipes drawn from trusted content sources — <strong>YouTube, TikTok and Instagram</strong>. The product is designed to reduce decision fatigue, save time, and cut food waste.</p>
+          <p>The core principle: MISO is <strong>not trying to generate a recipe from scratch</strong>. It's selecting the best recipe for <em>that</em> user, at <em>that</em> moment, with the ingredients available.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- WHO IT'S FOR -->
+    <div class="doc-section" id="users">
+      <div class="section-head reveal">
+        <span class="eyebrow">02 · Who It's For</span>
+        <h2>Tired people who still want a good meal.</h2>
+      </div>
+      <div class="info-grid">
+        <div class="info-card reveal">
+          <div class="ic-n">// primary</div>
+          <h4>Working professionals</h4>
+          <p>Come home tired, have a few ingredients in the fridge, and want a quick, tasty meal without 30–60 minutes of searching.</p>
+        </div>
+        <div class="info-card reveal" data-d="1">
+          <div class="ic-n">// secondary</div>
+          <h4>Students &amp; leftover cooks</h4>
+          <p>People who want simple meals, or are trying to use up leftovers before they expire.</p>
+        </div>
+        <div class="info-card reveal" data-d="2">
+          <div class="ic-n">// secondary</div>
+          <h4>Dietary-specific eaters</h4>
+          <p>Users who want healthier meals, or who eat vegetarian, keto, high-protein or low-spice.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAIN POINTS -->
+    <div class="doc-section" id="problem">
+      <div class="section-head reveal">
+        <span class="eyebrow">03 · Pain Points</span>
+        <h2>Three problems MISO is built around.</h2>
+      </div>
+      <div class="info-grid">
+        <div class="info-card reveal">
+          <div class="ic-n">// pain 01</div>
+          <h4>Decision fatigue</h4>
+          <p>Users open multiple apps and videos and <em>still</em> can't decide what to cook.</p>
+        </div>
+        <div class="info-card reveal" data-d="1">
+          <div class="ic-n">// pain 02</div>
+          <h4>Food waste</h4>
+          <p>Leftover ingredients expire because users don't know how to combine them into a meal.</p>
+        </div>
+        <div class="info-card reveal" data-d="2">
+          <div class="ic-n">// pain 03</div>
+          <h4>Low trust in search</h4>
+          <p>Generic results are too broad, too complex, or not aligned with the ingredients on hand.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOLUTION -->
+    <div class="doc-section" id="solution">
+      <div class="section-head reveal">
+        <span class="eyebrow">04 · The Solution</span>
+        <h2>A faster decision layer on top of existing content.</h2>
+        <p>Optimize for decision <em>reduction</em>, not recipe exploration.</p>
+      </div>
+      <div class="reveal" data-d="1">
+        <div class="prose">
+          <p>The agent understands messy ingredient input, finds candidates across platforms, removes irrelevant ingredients when needed, ranks the best matches, learns from likes &amp; dislikes, and recommends the next best recipe if the first is rejected. The strategy is simple: make the first recommendation <strong>fast</strong>, make it <strong>relevant enough to cook</strong>, and keep the experience lightweight.</p>
+        </div>
+        <div class="codeline" style="margin-top:22px;">
+          <span class="c">// core AI principle — not a search engine</span><br />
+          MISO = <b>ingredient optimization</b> + <b>recipe ranking</b> system.<br />
+          <span class="c">// the only metric that matters</span><br />
+          success = <span class="k">did_the_user_actually_cook_it</span> ? <b>true</b> : false
+        </div>
+      </div>
+    </div>
+
+    <!-- ARCHITECTURE / PIPELINE -->
+    <div class="doc-section" id="architecture">
+      <div class="section-head reveal">
+        <span class="eyebrow">05 · AI Architecture</span>
+        <h2>An agent pipeline, end to end.</h2>
+        <p>Natural-language input becomes a structured, ranked, adaptive recommendation.</p>
+      </div>
+      <div class="work-card case reveal" style="margin-top:8px;">
+        <div class="work-visual">
+          <div class="grid-pattern"></div>
+          <div class="work-meta-top">
+            <div class="work-logo"><span class="badge">M</span> MISO</div>
+            <span class="case-tag">Agent Pipeline</span>
+          </div>
+          <div class="pipe">
+            <div class="pipe-node"><span class="n">01</span><span class="t">Intent Parser</span><span class="d">NL → signals</span></div>
+            <div class="pipe-arrow"></div>
+            <div class="pipe-node"><span class="n">02</span><span class="t">Retrieval Agent</span><span class="d">YT · TikTok · IG</span></div>
+            <div class="pipe-arrow"></div>
+            <div class="pipe-node"><span class="n">03</span><span class="t">Ingredient Optimizer</span><span class="d">best subset</span></div>
+            <div class="pipe-arrow"></div>
+            <div class="pipe-node"><span class="n">04</span><span class="t">Ranking Engine</span><span class="d">7-factor</span></div>
+            <div class="pipe-arrow"></div>
+            <div class="pipe-node"><span class="n">05</span><span class="t">Taste Memory</span><span class="d">re-rank</span></div>
+          </div>
+          <div class="arch-src">
+            <span class="lbl">feedback //</span>
+            <span>capture</span><span>infer reason</span><span>re-rank</span><span>next best</span>
+          </div>
+        </div>
+        <div class="work-body">
+          <span class="eyebrow">Stage breakdown</span>
+          <h3>From messy pantry to one good answer.</h3>
+          <div class="role">parse → retrieve → optimize → rank → learn</div>
+          <p class="desc"><strong>Intent Parser</strong> converts natural language ("spinach, tomato, cheese, bread, 15 minutes, vegetarian, something tasty") into structured signals — ingredients, time limit, diet, preference — normalizing noisy input. The <strong>Retrieval Agent</strong> generates ingredient-based queries and builds a candidate pool across YouTube, TikTok and Instagram. It never picks the final recipe — it only assembles candidates for the ranking engine to judge.</p>
+          <div class="arch-src" style="margin-top:18px;">
+            <span class="lbl">parsed //</span>
+            <span>ingredients[]</span><span>time: 15m</span><span>diet: veg</span><span>pref: easy, tasty</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MATCHING LOGIC -->
+    <div class="doc-section" id="matching">
+      <div class="section-head reveal">
+        <span class="eyebrow">06 · Matching &amp; Optimization</span>
+        <h2>Pick the best feasible subset — don't force a bad match.</h2>
+        <p>The most interesting layer: an optimization system, not a rigid matching one.</p>
+      </div>
+      <div class="reveal" data-d="1">
+        <div class="prose">
+          <p>Given a messy set — spinach, tomato, cheese, bread, brinjal, cucumber — the agent shouldn't cram everything into one recipe. It identifies the best recipe-compatible subset (bread + cheese + tomato + cucumber work together) and recognizes that <strong>brinjal is likely irrelevant</strong> to the best available recipe. Maximize match quality, but never recommend below a minimum feasibility threshold.</p>
+        </div>
+        <div class="codeline" style="margin-top:22px;">
+          <span class="c">// match definition</span><br />
+          Recipe Match Score = (<span class="k">available_required</span> / <span class="k">total_required</span>) × 100<br />
+          <span class="c">// 4 required, user has 3 → 75%</span><br />
+          acceptable minimum = <b>75%</b> · below 75% → find a closer recipe, or ask one clarifying question
+        </div>
+      </div>
+    </div>
+
+    <!-- RANKING -->
+    <div class="doc-section" id="ranking">
+      <div class="section-head reveal">
+        <span class="eyebrow">07 · Ranking Algorithm</span>
+        <h2>A weighted 7-factor score.</h2>
+        <p>Avoids recommending a viral recipe that looks great but isn't cookable with what's on hand.</p>
+      </div>
+      <div class="weights reveal" data-d="1">
+        <div class="wrow">
+          <div class="wname"><b>Ingredient Match Score</b> <span>// how many required ingredients you already have</span></div>
+          <div class="wpct">40%</div>
+          <div class="wbar"><i style="width:40%;"></i></div>
+        </div>
+        <div class="wrow">
+          <div class="wname"><b>Missing Ingredient Penalty</b> <span>// how many extras are needed</span></div>
+          <div class="wpct">15%</div>
+          <div class="wbar"><i style="width:15%;"></i></div>
+        </div>
+        <div class="wrow">
+          <div class="wname"><b>Taste Preference Match</b> <span>// spicy, sweet, healthy, keto, protein…</span></div>
+          <div class="wpct">15%</div>
+          <div class="wbar"><i style="width:15%;"></i></div>
+        </div>
+        <div class="wrow">
+          <div class="wname"><b>Time Fit</b> <span>// fits the stated time limit</span></div>
+          <div class="wpct">10%</div>
+          <div class="wbar"><i style="width:10%;"></i></div>
+        </div>
+        <div class="wrow">
+          <div class="wname"><b>Source Quality / Trust</b> <span>// credible, usable recipe</span></div>
+          <div class="wpct">10%</div>
+          <div class="wbar"><i style="width:10%;"></i></div>
+        </div>
+        <div class="wrow">
+          <div class="wname"><b>Creator Credibility</b> <span>// engagement + trusted history</span></div>
+          <div class="wpct">5%</div>
+          <div class="wbar"><i style="width:5%;"></i></div>
+        </div>
+        <div class="wrow">
+          <div class="wname"><b>Ingredient Utilization Bonus</b> <span>// uses leftovers that would be wasted</span></div>
+          <div class="wpct">5%</div>
+          <div class="wbar"><i style="width:5%;"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LEARNING -->
+    <div class="doc-section" id="learning">
+      <div class="section-head reveal">
+        <span class="eyebrow">08 · Learning System</span>
+        <h2>Feedback as multi-dimensional taste, not thumbs.</h2>
+        <p>A dislike isn't a binary — it's a signal about <em>why</em>.</p>
+      </div>
+      <div class="cmp reveal" data-d="1">
+        <div class="cmp-row head">
+          <div>memory type</div><div>scope</div><div>example behavior</div>
+        </div>
+        <div class="cmp-row">
+          <div class="lbl">Session memory</div>
+          <div>Immediate re-ranking in the same cooking session.</div>
+          <div>User rejects a spicy paneer recipe → <strong>reduce spicy options now</strong>.</div>
+        </div>
+        <div class="cmp-row">
+          <div class="lbl">Long-term memory</div>
+          <div>Builds the user's taste profile over time.</div>
+          <div>Often likes Indian veg, quick recipes, nutritionist content → <strong>weights up</strong>.</div>
+        </div>
+      </div>
+      <div class="prose reveal" data-d="1" style="margin-top:22px;">
+        <p>When a recipe is disliked, MISO infers the reason — too spicy, too much effort, wrong cuisine, not enough protein — then keeps the same ingredient pool, downweights the rejected attributes, re-ranks the remaining candidates, and offers the next best match. That responsiveness is what makes the product feel alive instead of static.</p>
+      </div>
+      <div class="codeblock reveal" data-d="1"><span class="c">// hidden user preference vector — updates with behavior</span>
+{
+  <span class="k">"spicy"</span>: <span class="v">0.8</span>,
+  <span class="k">"sweet"</span>: <span class="v">0.2</span>,
+  <span class="k">"indian_cuisine"</span>: <span class="v">0.9</span>,
+  <span class="k">"italian_cuisine"</span>: <span class="v">0.4</span>,
+  <span class="k">"healthy"</span>: <span class="v">0.7</span>,
+  <span class="k">"cheese_based"</span>: <span class="v">0.6</span>,
+  <span class="k">"quick_meals"</span>: <span class="v">0.95</span>,
+  <span class="k">"dietician_content"</span>: <span class="v">0.8</span>,
+  <span class="k">"novelty"</span>: <span class="v">0.3</span>
+}</div>
+    </div>
+
+    <!-- EVALUATION -->
+    <div class="doc-section" id="metrics">
+      <div class="section-head reveal">
+        <span class="eyebrow">09 · Evaluation</span>
+        <h2>Measured across product, AI and business.</h2>
+        <p>But one metric sits above the rest.</p>
+      </div>
+      <div class="codeline reveal" data-d="1">
+        <span class="c">// core success metric</span><br />
+        Did the user <b>actually cook</b> the recommended recipe? <span class="c">→ the real proof it worked</span>
+      </div>
+      <div class="info-grid" style="margin-top:24px;">
+        <div class="info-card reveal">
+          <div class="ic-n">// product</div>
+          <h4>Product metrics</h4>
+          <p>Time to decision · recipe selection rate · save rate · completion rate · repeat usage · satisfaction.</p>
+        </div>
+        <div class="info-card reveal" data-d="1">
+          <div class="ic-n">// ai</div>
+          <h4>AI metrics</h4>
+          <p>Ingredient-parsing accuracy · match accuracy · top-recommendation relevance · preference-prediction accuracy · next-best acceptance · low-quality rate.</p>
+        </div>
+        <div class="info-card reveal" data-d="2">
+          <div class="ic-n">// business</div>
+          <h4>Business metrics</h4>
+          <p>Retention · weekly active users · referral rate · monetization via affiliate links or creator partnerships.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- GUARDRAILS -->
+    <div class="doc-section" id="guardrails">
+      <div class="section-head reveal">
+        <span class="eyebrow">10 · Guardrails</span>
+        <h2>Daily food decisions need strong guardrails.</h2>
+      </div>
+      <div class="checks">
+        <div class="check reveal">
+          <span class="ck">✓</span>
+          <div><b>Match threshold</b><span>Never recommend any recipe below 75% feasibility.</span></div>
+        </div>
+        <div class="check reveal" data-d="1">
+          <span class="ck">✓</span>
+          <div><b>Dietary hard-constraints</b><span>Vegetarian, keto, nut allergy and low-spice are never violated.</span></div>
+        </div>
+        <div class="check reveal">
+          <span class="ck">✓</span>
+          <div><b>Food safety</b><span>Never recommend unsafe instructions or ingredients that conflict with food safety.</span></div>
+        </div>
+        <div class="check reveal" data-d="1">
+          <span class="ck">✓</span>
+          <div><b>Confidence fallback</b><span>If unsure, ask one clarification question or choose a safer fallback recipe.</span></div>
+        </div>
+        <div class="check reveal">
+          <span class="ck">✓</span>
+          <div><b>No interrogation</b><span>Don't over-ask about ingredients — the user shouldn't feel interrogated.</span></div>
+        </div>
+        <div class="check reveal" data-d="1">
+          <span class="ck">✓</span>
+          <div><b>Trust preference</b><span>Prefer reliable creators and content that is clear, actionable and usable.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAILURE MODES + SCOPE -->
+    <div class="doc-section" id="failure">
+      <div class="section-head reveal">
+        <span class="eyebrow">11 · Failure Modes &amp; Scope</span>
+        <h2>What can go wrong — and the MVP line.</h2>
+      </div>
+      <div class="checks">
+        <div class="check reveal">
+          <span class="ck no">!</span>
+          <div><b>Over-weighting popularity</b><span>A viral recipe ranked above feasibility → fixed by the 75% threshold.</span></div>
+        </div>
+        <div class="check reveal" data-d="1">
+          <span class="ck no">!</span>
+          <div><b>Learning the wrong taste</b><span>A one-time dislike mistaken for a pattern → split short-term vs long-term learning.</span></div>
+        </div>
+        <div class="check reveal">
+          <span class="ck no">!</span>
+          <div><b>Broken / unavailable content</b><span>Filter out broken links, private or region-locked videos, and spam before ranking.</span></div>
+        </div>
+        <div class="check reveal" data-d="1">
+          <span class="ck no">!</span>
+          <div><b>Too hard for a tired user</b><span>Rerank quickly after rejection; log failure reasons for model improvement.</span></div>
+        </div>
+      </div>
+      <div class="prose reveal" data-d="1" style="margin-top:24px;">
+        <p><strong>MVP scope:</strong> ingredient input · preference selection · retrieval from YouTube, TikTok &amp; Instagram · ranking engine · top-3 recommendations · like/dislike feedback · next-best recommendation. <strong>Deliberately out:</strong> grocery delivery, full meal-planning calendar, computer-vision pantry scanning, voice assistant and multi-day optimization — later phases as personalization deepens.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section" id="contact" style="padding-top: clamp(20px,3vw,40px);">
+  <div class="wrap">
+    <div class="contact-card reveal">
+      <div class="grid-pattern"></div>
+      <span class="eyebrow" style="justify-content:center;">Initialize conversation</span>
+      <h2>Let's build the <span class="accent">next agent.</span></h2>
+      <p class="sub">I'm exploring AI Product Manager roles where I can take agentic products from 0→1. If that sounds like your team, let's talk.</p>
+      <div class="contact-actions">
+        <a class="btn primary" href="mailto:aayushilnu0@gmail.com">→ aayushilnu0@gmail.com</a>
+        <a class="btn ghost" href="https://www.linkedin.com/in/aayushi-23a570a0/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+      <div style="margin-top:28px;">
+        <span class="avail-pill"><span class="status-dot"></span> available for AI PM roles · Sunnyvale, CA / remote</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="log">session://<span class="accent">aayushi.agent</span> — uptime <span id="sessClock">00:00:00</span> · build 2026.05 · all systems nominal</div>
+  <div class="up" id="toTop">return to top ↑</div>
+</footer>
+
+<div id="tweaks-root"></div>
+<script src="site.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="tweaks-app.jsx"></script>
+</body>
+</html>
