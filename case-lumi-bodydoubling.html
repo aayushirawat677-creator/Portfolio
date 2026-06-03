@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lumi Body Doubling — Feature PRD · Aayushi</title>
+<meta name="description" content="A feature PRD turning Lumi's voice channel into an on-demand body-doubling companion — Chat & Deep Focus modes, VAD-driven cost management, and a session-completion north star." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body data-hero="split">
+
+<nav class="nav" id="nav">
+  <a class="brand" href="index.html"><span class="status-dot"></span><b>AAYUSHI</b><span class="dim">.AGENT</span></a>
+  <div class="nav-links">
+    <a href="projects.html" data-nav="projects.html">AI Products</a>
+    <a href="experience.html" data-nav="experience.html">Experience</a>
+    <a href="case-studies.html" data-nav="case-studies.html">Case Studies</a>
+    <a href="index.html" data-nav="index.html">About</a>
+    <a href="index.html#contact" class="nav-cta"><span class="status-dot"></span><span class="label">available</span></a>
+  </div>
+</nav>
+
+<!-- ============ INTRO ============ -->
+<header class="page-intro">
+  <div class="grid-pattern"></div>
+  <div class="wrap">
+    <a class="backlink" href="case-studies.html">← Case Studies</a>
+    <span class="eyebrow" style="margin-top:22px;">Case Study · Feature PRD · Proposed</span>
+    <h1>Lumi Body Doubling — <span class="accent">presence after the push.</span></h1>
+    <p class="sub">Lumi is great at getting users <em>over</em> the start friction. Then they get bored, lose momentum, and quit halfway. This PRD turns the voice channel we're already on into an on-demand body-doubling companion.</p>
+    <div class="detail-meta">
+      <div class="stat"><b><span class="accent">75%</span></b><span>already body-double elsewhere</span></div>
+      <div class="stat"><b>85%</b><span>report task benefit</span></div>
+      <div class="stat"><b>70%+</b><span>completion target</span></div>
+      <div class="stat"><b>40–60%</b><span>Gemini Live cost cut</span></div>
+    </div>
+  </div>
+</header>
+
+<section class="page-section">
+  <div class="wrap">
+
+    <!-- PROBLEM -->
+    <div class="doc-section" id="problem" style="margin-top:clamp(20px,3vw,40px);">
+      <div class="section-head reveal">
+        <span class="eyebrow">01 · The Problem</span>
+        <h2>We're hanging up too early.</h2>
+      </div>
+      <div class="reveal" data-d="1">
+        <p class="lead-para wide">The 5-minute persuasive call works — users start the task. But once they're actually doing it, momentum trails off and they reach for their phone. <span class="accent">Lumi is already on the call. We just leave.</span></p>
+        <div class="prose">
+          <p>From interviews, the pattern was consistent: users get started thanks to Lumi, then lose momentum mid-task and quit. <strong>Body doubling</strong> — working alongside someone else — is one of the most evidence-backed techniques for sustaining engagement, especially for executive dysfunction. 75% of our current users are already doing it on Focusmate, Flow Club and ADHD Discords — paying for it, scheduling around it, and asking why Lumi can't.</p>
+          <p>Reminders, habit trackers and rewards only <em>front-load</em> motivation. They don't provide ongoing presence, so motivation trails off after the first few minutes. Lumi already solves start friction — what's missing is the <strong>continuity of presence</strong>, which is exactly what body doubling provides.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- MARKET -->
+    <div class="doc-section" id="market">
+      <div class="section-head reveal">
+        <span class="eyebrow">02 · Market Landscape</span>
+        <h2>Real, paid, and growing — but all scheduled.</h2>
+        <p>Every existing solution requires booking time with another human. That's the wedge.</p>
+      </div>
+      <div class="cmp reveal" data-d="1">
+        <div class="cmp-row head">
+          <div>product</div><div>price</div><div>limitation</div>
+        </div>
+        <div class="cmp-row">
+          <div class="lbl">Focusmate</div>
+          <div>$6.99/mo · 12M+ sessions</div>
+          <div>Must schedule with a stranger; camera required; no instant start</div>
+        </div>
+        <div class="cmp-row">
+          <div class="lbl">Flow Club</div>
+          <div>$33–40/mo</div>
+          <div>High price; host-led, fixed scheduling; no on-demand</div>
+        </div>
+        <div class="cmp-row">
+          <div class="lbl">FLOWN</div>
+          <div>$29/mo</div>
+          <div>Facilitated "Flocks"; schedule required, less spontaneous</div>
+        </div>
+        <div class="cmp-row">
+          <div class="lbl">Caveday</div>
+          <div>$35/mo</div>
+          <div>Ritual-based group video; only works at fixed times</div>
+        </div>
+        <div class="cmp-row">
+          <div class="lbl">ADHD Discords</div>
+          <div>Free</div>
+          <div>Unstructured, timezone-dependent, effortful to find a session</div>
+        </div>
+      </div>
+      <div class="codeline reveal" data-d="1" style="margin-top:22px;">
+        <span class="c">// Lumi's wedge</span><br />
+        <b>No scheduling. No strangers. No camera.</b> Always on-demand, zero friction to start —<br />
+        already inside the voice channel the instant a task begins.
+      </div>
+    </div>
+
+    <!-- WHAT WE'RE BUILDING -->
+    <div class="doc-section" id="building">
+      <div class="section-head reveal">
+        <span class="eyebrow">03 · What We're Building</span>
+        <h2>Two modes — and a clean exit.</h2>
+        <p>When a user confirms "I'm starting," Lumi transitions out of intervention and into a body-doubling session, behaving differently based on the task.</p>
+      </div>
+      <div class="info-grid">
+        <div class="info-card reveal">
+          <div class="ic-n">// mode 01</div>
+          <h4>Chat mode</h4>
+          <p>Lumi makes light conversation, comments on what the user's doing, talks about its own "work." For chores, cooking, exercise. Goes quiet 2–3 min → "Still with me?"</p>
+        </div>
+        <div class="info-card reveal" data-d="1">
+          <div class="ic-n">// mode 02</div>
+          <h4>Deep Focus mode</h4>
+          <p>For studying or focused work. Lumi stays on the call but doesn't speak — plays ambient audio (forest, café, campfire). The user actively ends the session.</p>
+        </div>
+        <div class="info-card reveal" data-d="2">
+          <div class="ic-n">// path 03</div>
+          <h4>Leaving the house</h4>
+          <p>Gym, errands, school drop-off: Lumi guides the prep, then cuts the call the moment the user clicks "I'm starting." Body doubling only applies to in-place tasks.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- USE CASES -->
+    <div class="doc-section" id="usecases">
+      <div class="section-head reveal">
+        <span class="eyebrow">04 · Use Cases</span>
+        <h2>How a session actually feels.</h2>
+      </div>
+      <div class="steps">
+        <div class="step reveal">
+          <span class="snum">01</span>
+          <div>
+            <h4>Chat — folding laundry</h4>
+            <p>"I'll just be over here drafting some notes. Tell me when you're ready." Light banter as the user folds; gentle re-engagement after silence; ends on "I'm done."</p>
+          </div>
+        </div>
+        <div class="step reveal">
+          <span class="snum">02</span>
+          <div>
+            <h4>Deep Focus — studying</h4>
+            <p>"Putting the headphones on. Forest, café, or campfire?" Voice channel stays connected but silent; ambient audio loops; VAD wakes Gemini Live when the user speaks to end or switch.</p>
+          </div>
+        </div>
+        <div class="step reveal">
+          <span class="snum">03</span>
+          <div>
+            <h4>Mid-session switch</h4>
+            <p>"Lumi, switch to deep focus — I want to think." Lumi stops speaking, ambient audio starts at the last-used track, resumes voice only to close out.</p>
+          </div>
+        </div>
+        <div class="step reveal">
+          <span class="snum">04</span>
+          <div>
+            <h4>Interruptions &amp; exits</h4>
+            <p>Heading to the gym → call cuts on "I'm starting." Taking a phone call → session pauses, resumes on return: "You're back. How'd that go?"</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ENGINEERING -->
+    <div class="doc-section" id="engineering">
+      <div class="section-head reveal">
+        <span class="eyebrow">05 · How It Works</span>
+        <h2>VAD is the cost-critical piece.</h2>
+        <p>The whole economic model of Deep Focus mode hinges on waking the expensive model only when needed.</p>
+      </div>
+      <div class="info-grid">
+        <div class="info-card reveal">
+          <div class="ic-n">// frontend</div>
+          <h4>Mode picker &amp; session UI</h4>
+          <p>Default inferred from task type (chores → Chat, study → Deep Focus), user can override. Minimal active-session screen — readable when the phone's propped at arm's length. Locally-bundled ambient audio, 3 tracks.</p>
+        </div>
+        <div class="info-card reveal" data-d="1">
+          <div class="ic-n">// backend</div>
+          <h4>Gemini Live connection mgmt</h4>
+          <p>Chat mode: connection open the full session. Deep Focus: closes once "I'm starting," reopens only when VAD detects speech. A session state machine tracks mode, elapsed time, and last interaction.</p>
+        </div>
+        <div class="info-card reveal" data-d="2">
+          <div class="ic-n">// VAD</div>
+          <h4>Relative-threshold detection</h4>
+          <p>Wake on volume above the <em>rolling ambient average</em>, not an absolute level — so it handles quiet bedrooms and noisy cafés without per-user retuning. Reconnect must land under 2 seconds or the experience breaks.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACCEPTANCE / SCOPE -->
+    <div class="doc-section" id="scope">
+      <div class="section-head reveal">
+        <span class="eyebrow">06 · Acceptance &amp; Scope</span>
+        <h2>The Phase-1 line.</h2>
+      </div>
+      <div class="checks">
+        <div class="check reveal">
+          <span class="ck">✓</span>
+          <div><b>Mode picker &lt;2s</b><span>Appears within 2s of task-start; in Deep Focus, no voice unless the user speaks first.</span></div>
+        </div>
+        <div class="check reveal" data-d="1">
+          <span class="ck">✓</span>
+          <div><b>VAD resume &lt;2s</b><span>Gemini Live wakes within 2s of detected speech; false-positive wakes under 5% of sessions.</span></div>
+        </div>
+        <div class="check reveal">
+          <span class="ck">✓</span>
+          <div><b>Clean outside-task exit</b><span>For away tasks, the call ends within 1s of "I'm starting."</span></div>
+        </div>
+        <div class="check reveal" data-d="1">
+          <span class="ck">✓</span>
+          <div><b>Hard 60-min cap</b><span>Phase-1 session-length cap contains cost exposure; cost monitored daily.</span></div>
+        </div>
+        <div class="check reveal">
+          <span class="ck no">—</span>
+          <div><b>Out of scope (v1)</b><span>Spotify / external music (deferred to v2 Alexa path), Pomodoro timers, CV activity recognition, multi-user body doubling, calendar inference.</span></div>
+        </div>
+        <div class="check reveal" data-d="1">
+          <span class="ck no">—</span>
+          <div><b>Scoping tension</b><span>Users asked for "their music," but Spotify in-call audio is a real lift. Ship local ambient audio, track demand; if consistent, Alexa becomes the v2 route.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- METRICS -->
+    <div class="doc-section" id="metrics">
+      <div class="section-head reveal">
+        <span class="eyebrow">07 · Success Metrics</span>
+        <h2>One metric above the rest.</h2>
+      </div>
+      <div class="metric-grid">
+        <div class="metric reveal"><b><span class="accent">70%+</span></b><span>session completion</span></div>
+        <div class="metric reveal" data-d="1"><b>+50%</b><span>duration vs. non-doubled</span></div>
+        <div class="metric reveal" data-d="2"><b>+15 pts</b><span>7-day retention</span></div>
+        <div class="metric reveal"><b>40+</b><span>target NPS</span></div>
+        <div class="metric reveal" data-d="1"><b>&lt;5%</b><span>VAD false-positive</span></div>
+        <div class="metric reveal" data-d="2"><b>40–60%</b><span>cost reduction</span></div>
+      </div>
+      <div class="codeline reveal" data-d="1" style="margin-top:24px;">
+        <span class="c">// the metric I care most about</span><br />
+        <b>session_completion_rate</b> <span class="c">— if users keep ending early, we haven't solved boredom; we've just moved when the quitting happens.</span>
+      </div>
+    </div>
+
+    <!-- RISKS -->
+    <div class="doc-section" id="risks">
+      <div class="section-head reveal">
+        <span class="eyebrow">08 · Risks</span>
+        <h2>What could break it.</h2>
+      </div>
+      <div class="checks">
+        <div class="check reveal">
+          <span class="ck no">!</span>
+          <div><b>VAD false-positives</b><span>Random wakes during studying kill Deep Focus. Conservative Phase-1 threshold; telemetry on every wake event.</span></div>
+        </div>
+        <div class="check reveal" data-d="1">
+          <span class="ck no">!</span>
+          <div><b>Gemini Live cost overrun</b><span>If VAD underperforms, Deep Focus costs as much as Chat. Hard 60-min cap; monitor cost-per-session daily.</span></div>
+        </div>
+        <div class="check reveal">
+          <span class="ck no">!</span>
+          <div><b>Doubling doesn't lift completion</b><span>The existential risk. If completion isn't better than non-doubled tasks, revert to intervention-only and keep the learnings.</span></div>
+        </div>
+        <div class="check reveal" data-d="1">
+          <span class="ck no">!</span>
+          <div><b>Users prefer humans</b><span>The 75% on Focusmate/Discord may value the human element. Position Lumi as on-demand and complementary, not a replacement.</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section" id="contact" style="padding-top: clamp(20px,3vw,40px);">
+  <div class="wrap">
+    <div class="contact-card reveal">
+      <div class="grid-pattern"></div>
+      <span class="eyebrow" style="justify-content:center;">Initialize conversation</span>
+      <h2>Let's build the <span class="accent">next agent.</span></h2>
+      <p class="sub">I'm exploring AI Product Manager roles where I can take agentic products from 0→1. If that sounds like your team, let's talk.</p>
+      <div class="contact-actions">
+        <a class="btn primary" href="mailto:aayushilnu0@gmail.com">→ aayushilnu0@gmail.com</a>
+        <a class="btn ghost" href="https://www.linkedin.com/in/aayushi-23a570a0/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+      <div style="margin-top:28px;">
+        <span class="avail-pill"><span class="status-dot"></span> available for AI PM roles · Sunnyvale, CA / remote</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="log">session://<span class="accent">aayushi.agent</span> — uptime <span id="sessClock">00:00:00</span> · build 2026.05 · all systems nominal</div>
+  <div class="up" id="toTop">return to top ↑</div>
+</footer>
+
+<div id="tweaks-root"></div>
+<script src="site.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="tweaks-app.jsx"></script>
+</body>
+</html>

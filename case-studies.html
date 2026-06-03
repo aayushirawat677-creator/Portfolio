@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Case Studies — Aayushi · AI Product Manager</title>
-<meta name="description" content="Case studies by Aayushi — coming soon." />
+<meta name="description" content="Case studies by Aayushi — product proposals and feature PRDs for Amazon Rufus, Instacart, and Lumi." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -27,22 +27,48 @@
   <div class="grid-pattern"></div>
   <div class="wrap">
     <span class="eyebrow">Case Studies</span>
-    <h1>Deep dives, <span class="accent">in progress.</span></h1>
-    <p class="sub">Longer write-ups on how I think about building agents — being drafted now.</p>
+    <h1>How I think about <span class="accent">building agents.</span></h1>
+    <p class="sub">Product proposals and feature PRDs — working backwards from a real customer frustration to the spec engineering would build. Tap any one for the full write-up.</p>
   </div>
 </header>
 
 <section class="page-section">
   <div class="wrap">
-    <div class="placeholder reveal">
-      <div class="grid-pattern"></div>
-      <div class="ph-ico">// WRITING IN PROGRESS</div>
-      <h3>Case studies are on the way.<span class="cursor-blink"></span></h3>
-      <p>I'm putting together detailed write-ups here. In the meantime, the full breakdowns of my shipped products live under <a href="projects.html" style="color:var(--accent);">AI Products</a> — Lumi and MISO, taken apart end to end.</p>
-      <div class="contact-actions" style="margin-top:32px;">
-        <a class="btn primary" href="projects.html">→ See AI Products</a>
-        <a class="btn ghost" href="index.html#contact">Get in touch</a>
-      </div>
+    <div class="proj-grid">
+
+      <a class="proj-card reveal" href="case-rufus.html">
+        <div class="pc-top">
+          <div class="pc-logo"><span class="badge">R</span> Rufus</div>
+          <span class="pc-kind">Amazon · External PRD</span>
+        </div>
+        <div class="pc-role">Smart Clarification Engine</div>
+        <p>Teaching Amazon's AI shopping assistant to ask before it recommends — intent-gap detection, dimensional fit reasoning, and a multi-source intelligence stack that feels like advice, not advertising.</p>
+        <div class="pc-tags"><span>Intent gaps</span><span>Dimensional reasoning</span><span>Multi-source ranking</span></div>
+        <div class="pc-link">Read the case study <span aria-hidden="true">→</span></div>
+      </a>
+
+      <a class="proj-card reveal" data-d="1" href="case-instacart.html">
+        <div class="pc-top">
+          <div class="pc-logo"><span class="badge">I</span> Instacart</div>
+          <span class="pc-kind">Product Proposal</span>
+        </div>
+        <div class="pc-role">Smart Batch Accuracy System</div>
+        <p>Eliminating missing items and bad substitutions in batch grocery delivery — a verification layer the shopper app never had, plus an AI substitute engine that knows what each customer actually wants.</p>
+        <div class="pc-tags"><span>Verification layer</span><span>Substitute AI</span><span>Sequential bagging</span></div>
+        <div class="pc-link">Read the case study <span aria-hidden="true">→</span></div>
+      </a>
+
+      <a class="proj-card reveal" data-d="2" href="case-lumi-bodydoubling.html">
+        <div class="pc-top">
+          <div class="pc-logo"><span class="badge">L</span> Lumi</div>
+          <span class="pc-kind">Feature PRD · Proposed</span>
+        </div>
+        <div class="pc-role">Body Doubling</div>
+        <p>Lumi gets users over the start friction — then they lose momentum and quit halfway. This PRD turns the voice channel we're already on into an on-demand body-doubling companion that keeps them present.</p>
+        <div class="pc-tags"><span>Gemini Live</span><span>VAD cost control</span><span>Session completion</span></div>
+        <div class="pc-link">Read the case study <span aria-hidden="true">→</span></div>
+      </a>
+
     </div>
   </div>
 </section>
