@@ -88,20 +88,29 @@
 
 <section class="doc-section">
   <div class="wrap">
-    <h2>Query modes — three ways a decision can be framed.</h2>
-    <p>The Baseline Classifier (Agent 1) identifies which mode the user's input belongs to — and this determines everything downstream: path labels, polarity, output shape, and what context to gather.</p>
-    <div class="cmp">
-      <div class="cmp-item">
-        <h3>binary_decision</h3>
-        <p><strong>A yes/no gate fits the question.</strong><br />Example: "Should I quit my job to start a company?"<br />Paths: yes / no<br />Polarity: Agent assigns positive/negative per path</p>
+    <div class="section-head reveal">
+      <span class="eyebrow">Query Modes</span>
+      <h2>Three ways a decision can be framed.</h2>
+      <p>The Baseline Classifier (Agent 1) identifies which mode the user's input belongs to — and this determines everything downstream: path labels, polarity, output shape, and what context to gather.</p>
+    </div>
+    <div class="info-grid">
+      <div class="info-card reveal">
+        <div class="ic-n">// mode 01</div>
+        <h4>binary_decision</h4>
+        <p><strong>A yes/no gate fits the question.</strong><br /><span class="dim">Example: "Should I quit my job to start a company?"</span></p>
+        <div class="codeline" style="margin-top: 12px; font-size: 13px;">Paths: yes / no<br />Polarity: assigned per path</div>
       </div>
-      <div class="cmp-item">
-        <h3>option_compare</h3>
-        <p><strong>User presents two specific options.</strong><br />Example: "MacBook or Windows laptop?"<br />Paths: option_a / option_b<br />Polarity: none — purely factual, no value judgment</p>
+      <div class="info-card reveal" data-d="1">
+        <div class="ic-n">// mode 02</div>
+        <h4>option_compare</h4>
+        <p><strong>User presents two specific options.</strong><br /><span class="dim">Example: "MacBook or Windows laptop?"</span></p>
+        <div class="codeline" style="margin-top: 12px; font-size: 13px;">Paths: option_a / option_b<br />Polarity: none — purely factual</div>
       </div>
-      <div class="cmp-item">
-        <h3>statement_assessment</h3>
-        <p><strong>User states a fact, implying an implicit decision.</strong><br />Example: "I am 100kg."<br />Agent infers: "Do you want to lose weight?"<br />Paths: yes (act) / no (don't act)<br />Polarity: Agent assigns per path</p>
+      <div class="info-card reveal" data-d="2">
+        <div class="ic-n">// mode 03</div>
+        <h4>statement_assessment</h4>
+        <p><strong>User states a fact, implying an implicit decision.</strong><br /><span class="dim">Example: "I am 100kg."</span></p>
+        <div class="codeline" style="margin-top: 12px; font-size: 13px;">Paths: yes (act) / no (don't)<br />Polarity: agent-assigned</div>
       </div>
     </div>
   </div>
@@ -109,189 +118,280 @@
 
 <section class="doc-section">
   <div class="wrap">
-    <h2>AI architecture — a 3-agent pipeline on Azure AI Foundry.</h2>
-    <div class="codeblock">
-      <pre>User input
-    ↓
-Code Guardrails (instant, pre-agent safety layer)
-    ↓
-Agent 1: Parser-agent1 — Baseline Classifier
-    ↓
-Agent 2: retriever-agent2 — Context Gatherer
-    ↓
-Agent 3: Timeline-agent3 — What-If Generator
-    ↓
-Frontend: Swipeable timeline cards</pre>
+    <div class="section-head reveal">
+      <span class="eyebrow">AI Architecture</span>
+      <h2>A 3-agent pipeline on Azure AI Foundry.</h2>
+      <p>Natural-language decision becomes two honest futures, card by card.</p>
     </div>
-    <p>All agents run on <strong>gpt-4.1-mini</strong> via Azure AI Foundry. The pipeline is orchestrated from the Next.js API layer — agents are called sequentially, with context passed between each stage.</p>
+    <div class="work-card case reveal" style="margin-top: 8px;">
+      <div class="work-visual">
+        <div class="grid-pattern"></div>
+        <div class="work-meta-top">
+          <div class="work-logo"><span class="badge">W</span> What If?</div>
+          <span class="case-tag">Agent Pipeline</span>
+        </div>
+        <div class="pipe">
+          <div class="pipe-node"><span class="n">01</span><span class="t">Baseline Classifier</span><span class="d">decode decision type</span></div>
+          <div class="pipe-arrow"></div>
+          <div class="pipe-node"><span class="n">02</span><span class="t">Context Gatherer</span><span class="d">ask smart questions</span></div>
+          <div class="pipe-arrow"></div>
+          <div class="pipe-node"><span class="n">03</span><span class="t">What-If Generator</span><span class="d">vivid, honest futures</span></div>
+          <div class="pipe-arrow"></div>
+          <div class="pipe-node"><span class="n">→</span><span class="t">Swipeable Cards</span><span class="d">explore both paths</span></div>
+        </div>
+      </div>
+      <div class="work-copy">
+        <p><strong>All agents run on gpt-4.1-mini via Azure AI Foundry.</strong> The pipeline is orchestrated from the Next.js API layer — agents are called sequentially, with context passed between each stage. No agent can recommend or advise — the user's decision is sacred.</p>
+        <div class="codeline" style="margin-top: 14px;">
+          <span class="c">// the non-negotiable rule</span><br />
+          output = <b>possibilities</b>, never advice<br />
+          <span class="c">// the job of each agent</span><br />
+          success = <span class="k">user_makes_own_decision</span> ? <b>true</b> : false
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
 <section class="doc-section">
   <div class="wrap">
-    <h2>Agent 1 — Baseline Classifier.</h2>
-    <p>The Classifier is the entry point for every query. Its job is to understand what kind of decision the user is really facing — and set up the entire downstream pipeline correctly.</p>
-    <h3 style="margin-top: 24px;">Output fields:</h3>
-    <ul style="margin-left: 20px; margin-top: 12px;">
-      <li><code>query_mode</code> — binary_decision / option_compare / statement_assessment</li>
-      <li><code>time_impact</code> — short (hours/days) or long (weeks+)</li>
-      <li><code>baseline_summary</code> — one sentence: who they are and what they're really deciding</li>
-      <li><code>baseline_question</code> — the gate question to ask if needs_gate_answer is true</li>
-      <li><code>polarity_applies</code> — true for binary decisions, false for option compare</li>
-      <li><code>paths</code> — specific labels for each path (yes/no or option_a/option_b)</li>
-      <li><code>required_context</code> — checklist of what Agent 2 needs to collect for each path</li>
-      <li><code>needs_gate_answer</code> — whether to ask the baseline question before gathering</li>
-      <li><code>safety_flag</code> — null / medical / self_harm / harmful_drug</li>
-      <li><code>safe</code> — boolean</li>
-    </ul>
-    <p style="margin-top: 20px;"><strong>Key design decision — polarity:</strong> The Classifier, not the user, decides which path is positive and which is negative. "Should I skip my workout?" → yes=negative, no=positive. The AI understands the goal direction.</p>
-    <p><strong>Key design decision — required_context:</strong> The Classifier pre-defines exactly what context Agent 2 needs to collect for each path. This prevents the Gatherer from asking irrelevant questions.</p>
+    <div class="section-head reveal">
+      <span class="eyebrow">Agent 1</span>
+      <h2>Baseline Classifier — the decision decoder.</h2>
+      <p>Turns a messy question into a structured decision that sets up the entire downstream pipeline.</p>
+    </div>
+    <div class="info-grid">
+      <div class="info-card reveal">
+        <div class="ic-n">// input</div>
+        <h4>User question</h4>
+        <p>Natural language. Messy. Emotional. Real.</p>
+      </div>
+      <div class="info-card reveal" data-d="1">
+        <div class="ic-n">// output</div>
+        <h4>Structured JSON</h4>
+        <p><code>query_mode</code>, <code>paths</code>, <code>polarity</code>, <code>required_context</code>, <code>safety_flag</code></p>
+      </div>
+      <div class="info-card reveal" data-d="2">
+        <div class="ic-n">// key rule</div>
+        <h4>Agent decides polarity</h4>
+        <p>Not the user. "Skip my workout?" → yes=negative, no=positive.</p>
+      </div>
+    </div>
+    <div class="reveal" data-d="3" style="margin-top: 24px;">
+      <div class="prose">
+        <p><strong>Why this matters:</strong> The Classifier pre-defines exactly what context Agent 2 needs to collect for each path. This prevents irrelevant questions and keeps the experience tight.</p>
+      </div>
+    </div>
   </div>
 </section>
 
 <section class="doc-section">
   <div class="wrap">
-    <h2>Agent 2 — Context Gatherer.</h2>
-    <p><strong>One question at a time. Both paths. Maximum 3.</strong></p>
-    <p>The Gatherer's job is to fill in the context checklist from Agent 1 — without interrogating the user. It reads the conversation history, the baseline JSON, and the collected context so far, then decides: what's the single most important thing still missing?</p>
-    <h3 style="margin-top: 24px;">Rules:</h3>
-    <ul style="margin-left: 20px; margin-top: 12px;">
-      <li>Ask ONE question per turn — game feel, not a form</li>
-      <li>Fill context for BOTH paths before marking ready_to_generate: true</li>
-      <li>Prioritize shared context questions (help all paths at once)</li>
-      <li>Never ask more than 3 questions total</li>
-      <li>After 3 questions, generate regardless of missing fields</li>
-      <li>Never ask for age (handled by code guardrails layer)</li>
-      <li>Never give advice, never generate what-ifs</li>
-    </ul>
-    <p style="margin-top: 20px;"><strong>Key design decision — alternating paths:</strong> The Gatherer alternates between collecting context for yes_path and no_path. The user's gate answer (yes/no) doesn't skip context collection for the other path — both futures need grounding.</p>
+    <div class="section-head reveal">
+      <span class="eyebrow">Agent 2</span>
+      <h2>Context Gatherer — one question at a time.</h2>
+      <p>Fills in the context checklist from Agent 1 without interrogating the user. Maximum 3 questions.</p>
+    </div>
+    <div class="info-grid">
+      <div class="info-card reveal">
+        <div class="ic-n">// game feel</div>
+        <h4>One Q per turn</h4>
+        <p>Not a form. Conversational. Fast.</p>
+      </div>
+      <div class="info-card reveal" data-d="1">
+        <div class="ic-n">// both sides</div>
+        <h4>Both paths matter</h4>
+        <p>Collects context for yes AND no, not just the likely path.</p>
+      </div>
+      <div class="info-card reveal" data-d="2">
+        <div class="ic-n">// max 3</div>
+        <h4>Hard stop</h4>
+        <p>After 3 questions, generate regardless. User came for answers.</p>
+      </div>
+    </div>
+    <div class="reveal" data-d="3" style="margin-top: 24px;">
+      <div class="prose">
+        <p><strong>Key design:</strong> Alternates between collecting context for path A and path B. The user's initial answer (yes/no) doesn't skip context for the other path — both futures need grounding.</p>
+      </div>
+    </div>
   </div>
 </section>
 
 <section class="doc-section">
   <div class="wrap">
-    <h2>Agent 3 — What-If Generator.</h2>
-    <p><strong>Two honest futures. No utopia. No doom.</strong></p>
-    <p>The Generator is the creative core of the pipeline. It receives the baseline classification, the collected context, and the full conversation history — then writes vivid, specific, causally connected timelines for each path.</p>
-    <h3 style="margin-top: 24px;">Output shape depends on time_impact:</h3>
-    <table style="width: 100%; margin-top: 16px; border-collapse: collapse;">
-      <tr style="border-bottom: 1px solid var(--line);">
-        <td style="padding: 12px 0; padding-right: 16px;">query_mode</td>
-        <td style="padding: 12px 0; padding-right: 16px;">time_impact</td>
-        <td style="padding: 12px 0;">Output per path</td>
-      </tr>
-      <tr style="border-bottom: 1px solid var(--line);">
-        <td style="padding: 12px 0; padding-right: 16px;">binary_decision / statement_assessment</td>
-        <td style="padding: 12px 0; padding-right: 16px;">short</td>
-        <td style="padding: 12px 0;">what_if: single paragraph + polarity</td>
-      </tr>
-      <tr style="border-bottom: 1px solid var(--line);">
-        <td style="padding: 12px 0; padding-right: 16px;">binary_decision / statement_assessment</td>
-        <td style="padding: 12px 0; padding-right: 16px;">long</td>
-        <td style="padding: 12px 0;">impacts: short_term + medium_term + long_term + polarity</td>
-      </tr>
-      <tr style="border-bottom: 1px solid var(--line);">
-        <td style="padding: 12px 0; padding-right: 16px;">option_compare</td>
-        <td style="padding: 12px 0; padding-right: 16px;">short</td>
-        <td style="padding: 12px 0;">what_if: single paragraph, no polarity</td>
-      </tr>
-      <tr>
-        <td style="padding: 12px 0; padding-right: 16px;">option_compare</td>
-        <td style="padding: 12px 0; padding-right: 16px;">long</td>
-        <td style="padding: 12px 0;">impacts: three time buckets, no polarity</td>
-      </tr>
-    </table>
-    <p style="margin-top: 20px;"><strong>Shared rules for all scenarios:</strong></p>
-    <ul style="margin-left: 20px; margin-top: 12px;">
-      <li>Second person ("you") — specific to what the user told us</li>
-      <li>Every path includes at least one realistic obstacle or friction</li>
-      <li>No utopian outcomes ("everything works out perfectly")</li>
-      <li>No doom scenarios ("everything falls apart")</li>
-      <li>Never gives advice or implies one path is better</li>
-      <li>Checkpoint 2 must causally follow checkpoint 1; checkpoint 3 from checkpoint 2</li>
-    </ul>
+    <div class="section-head reveal">
+      <span class="eyebrow">Agent 3</span>
+      <h2>What-If Generator — two honest futures.</h2>
+      <p>Writes vivid, specific, causally connected timelines for each path. No utopia. No doom.</p>
+    </div>
+    <div class="info-grid">
+      <div class="info-card reveal">
+        <div class="ic-n">// second person</div>
+        <h4>Specific to you</h4>
+        <p>"You start the gym and feel better" is failure. "By week 3 your lower back pain eases" is the target.</p>
+      </div>
+      <div class="info-card reveal" data-d="1">
+        <div class="ic-n">// realism</div>
+        <h4>Every path has friction</h4>
+        <p>No perfect outcomes. No doom scenarios. Just real obstacles.</p>
+      </div>
+      <div class="info-card reveal" data-d="2">
+        <div class="ic-n">// causality</div>
+        <h4>Checkpoint logic</h4>
+        <p>Checkpoint 2 follows checkpoint 1; checkpoint 3 from checkpoint 2.</p>
+      </div>
+    </div>
   </div>
 </section>
 
 <section class="doc-section">
   <div class="wrap">
-    <h2>Safety &amp; guardrails — three layers.</h2>
-    <p>The first one never reaches an agent.</p>
-    <h3 style="margin-top: 24px;">Layer 1 — Code guardrails (runs before any agent, &lt;1ms)</h3>
-    <p><strong>Design principle:</strong> safety checks run in code, not in agents. Code is deterministic. Agents can be jailbroken. A pattern match is faster and more reliable than an LLM judgment for hard stops.</p>
-    <ul style="margin-left: 20px; margin-top: 12px;">
-      <li><strong>Self-harm / suicide:</strong> 💙 988 Lifeline + Crisis Text Line</li>
-      <li><strong>Harm to others / murder:</strong> 🚨 Emergency services + legal warning</li>
-      <li><strong>Hard drugs (heroin, cocaine, meth, fentanyl):</strong> ⚠️ SAMHSA 1-800-662-4357</li>
-      <li><strong>Toxic substances (bleach, poison):</strong> 🏥 Poison Control 1-800-222-1222</li>
-      <li><strong>Medical decisions (stop medication):</strong> Doctor required</li>
-      <li><strong>Illegal activities:</strong> Legal consequences only, no encouragement</li>
-    </ul>
-    <h3 style="margin-top: 24px;">Layer 2 — Age gate (alcohol &amp; tobacco)</h3>
-    <ul style="margin-left: 20px; margin-top: 12px;">
-      <li><strong>Alcohol:</strong> legal age 21 (US). Under 21 → polite redirect with humor ("Your liver will thank you later — raise a glass of OJ 🍊")</li>
-      <li><strong>Smoking / cannabis:</strong> legal age 18. Under 18 → health redirect</li>
-      <li>Legal age confirmed → disclaimer popup (user acknowledges, app cannot verify) → proceed with honest what-ifs</li>
-      <li>Age stored as collected context so Gatherer never re-asks</li>
-    </ul>
-    <h3 style="margin-top: 24px;">Layer 3 — Agent prompt rules</h3>
-    <ul style="margin-left: 20px; margin-top: 12px;">
-      <li>Hard rule: never say "you should", "you must", "I recommend", "the best option"</li>
-      <li>Hard rule: every scenario must include at least one friction point</li>
-      <li>Hard rule: polarity describes trajectory tone, not a judgment of the person</li>
-      <li>Hard rule: option compare never uses polarity — purely factual</li>
-    </ul>
+    <div class="section-head reveal">
+      <span class="eyebrow">Safety &amp; Guardrails</span>
+      <h2>Three layers of protection.</h2>
+      <p>The first one never reaches an agent. Code is deterministic — agents can be jailbroken.</p>
+    </div>
+    
+    <div class="reveal" data-d="1" style="margin-top: 24px;">
+      <h3 style="margin-bottom: 12px;">Layer 1 — Code Guardrails (instant, &lt;1ms)</h3>
+      <p style="margin-bottom: 16px;"><strong>Design principle:</strong> Safety checks run in code, not agents. Pattern matching is faster and more reliable than LLM judgment for hard stops.</p>
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="ic-n">// hard stop</div>
+          <h4>Self-harm / Suicide</h4>
+          <p>💙 988 Lifeline + Crisis Text Line</p>
+        </div>
+        <div class="info-card">
+          <div class="ic-n">// hard stop</div>
+          <h4>Harm to Others</h4>
+          <p>🚨 Emergency services + legal warning</p>
+        </div>
+        <div class="info-card">
+          <div class="ic-n">// hard stop</div>
+          <h4>Hard Drugs</h4>
+          <p>⚠️ SAMHSA 1-800-662-4357</p>
+        </div>
+        <div class="info-card">
+          <div class="ic-n">// hard stop</div>
+          <h4>Toxic Substances</h4>
+          <p>🏥 Poison Control 1-800-222-1222</p>
+        </div>
+        <div class="info-card">
+          <div class="ic-n">// hard stop</div>
+          <h4>Medical Decisions</h4>
+          <p>Doctor required (no AI advice)</p>
+        </div>
+        <div class="info-card">
+          <div class="ic-n">// hard stop</div>
+          <h4>Illegal Activities</h4>
+          <p>Legal consequences only, no encouragement</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal" data-d="2" style="margin-top: 32px;">
+      <h3 style="margin-bottom: 12px;">Layer 2 — Age Gate (Alcohol &amp; Tobacco)</h3>
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="ic-n">// alcohol</div>
+          <h4>Age 21+</h4>
+          <p>Under 21 → polite redirect with humor ("Your liver will thank you later — raise a glass of OJ 🍊")</p>
+        </div>
+        <div class="info-card">
+          <div class="ic-n">// smoking</div>
+          <h4>Age 18+</h4>
+          <p>Under 18 → health redirect. Legal age confirmed → disclaimer popup → proceed with honest what-ifs</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal" data-d="3" style="margin-top: 32px;">
+      <h3 style="margin-bottom: 12px;">Layer 3 — Agent Prompt Rules</h3>
+      <div class="principles">
+        <div class="principle">
+          <span class="check">✓</span>
+          <div>
+            <h4>Never advise</h4>
+            <p>Never say "you should", "you must", "I recommend", "the best option"</p>
+          </div>
+        </div>
+        <div class="principle">
+          <span class="check">✓</span>
+          <div>
+            <h4>Always include friction</h4>
+            <p>Every scenario must have at least one realistic obstacle</p>
+          </div>
+        </div>
+        <div class="principle">
+          <span class="check">✓</span>
+          <div>
+            <h4>Polarity as trajectory</h4>
+            <p>Describes tone direction, never judgment of the person</p>
+          </div>
+        </div>
+        <div class="principle">
+          <span class="check">✓</span>
+          <div>
+            <h4>Option compare is neutral</h4>
+            <p>Never uses polarity — purely factual comparison</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
 <section class="doc-section">
   <div class="wrap">
-    <h2>Evaluation framework — Agent 4.</h2>
-    <p>A dedicated evaluation agent that scores pipeline output across 7 dimensions:</p>
+    <div class="section-head reveal">
+      <span class="eyebrow">Evaluation Framework</span>
+      <h2>Seven dimensions of quality.</h2>
+      <p>A dedicated evaluation agent that scores pipeline output across critical dimensions.</p>
+    </div>
     <div class="steps">
-      <div class="step">
+      <div class="step reveal">
         <span class="step-num">1</span>
         <div>
           <h3>STRUCTURAL</h3>
           <p>Does output match the required JSON schema exactly?</p>
         </div>
       </div>
-      <div class="step">
+      <div class="step reveal" data-d="1">
         <span class="step-num">2</span>
         <div>
           <h3>ACCURACY</h3>
           <p>Correct query_mode, time_impact, polarity_applies?</p>
         </div>
       </div>
-      <div class="step">
+      <div class="step reveal" data-d="2">
         <span class="step-num">3</span>
         <div>
           <h3>QUALITY</h3>
-          <p>Specific, realistic, non-generic?</p>
+          <p>Specific, realistic, non-generic scenarios?</p>
         </div>
       </div>
-      <div class="step">
+      <div class="step reveal" data-d="3">
         <span class="step-num">4</span>
         <div>
           <h3>SAFETY</h3>
           <p>Correct handling of dangerous inputs?</p>
         </div>
       </div>
-      <div class="step">
+      <div class="step reveal" data-d="4">
         <span class="step-num">5</span>
         <div>
           <h3>NO_ADVICE</h3>
-          <p>Avoids "you should", "I recommend", "the best option"?</p>
+          <p>Avoids "should", "recommend", "best option"?</p>
         </div>
       </div>
-      <div class="step">
+      <div class="step reveal" data-d="5">
         <span class="step-num">6</span>
         <div>
           <h3>FRICTION</h3>
           <p>At least one realistic obstacle in every scenario?</p>
         </div>
       </div>
-      <div class="step">
+      <div class="step reveal" data-d="6">
         <span class="step-num">7</span>
         <div>
           <h3>DIVERSITY</h3>
@@ -299,8 +399,12 @@ Frontend: Swipeable timeline cards</pre>
         </div>
       </div>
     </div>
-    <p style="margin-top: 24px;">Returns: scores 0-10 per dimension, overall score, passed: true/false, issues list, one-sentence verdict.</p>
-    <p><strong>Test coverage:</strong> 10 test cases across binary decisions, option comparisons, and statement assessments.</p>
+    <div class="reveal" data-d="7" style="margin-top: 24px;">
+      <div class="prose">
+        <p><strong>Returns:</strong> scores 0-10 per dimension, overall score, passed: true/false, issues list, one-sentence verdict.</p>
+        <p style="margin-top: 12px;"><strong>Test coverage:</strong> 10 test cases covering binary decisions, option comparisons, and statement assessments across real-world decision scenarios.</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -309,35 +413,35 @@ Frontend: Swipeable timeline cards</pre>
     <h2>Product principles.</h2>
     <p>Five rules the entire system is built around.</p>
     <div class="principles">
-      <div class="principle">
+      <div class="principle reveal">
         <span class="check">✓</span>
         <div>
           <h3>Show possibilities, never advice</h3>
           <p>The user decides, always. The AI's job is clarity, not direction.</p>
         </div>
       </div>
-      <div class="principle">
+      <div class="principle reveal" data-d="1">
         <span class="check">✓</span>
         <div>
           <h3>Honest over optimistic</h3>
           <p>Every path includes realistic friction. No path is sold as the obvious right choice.</p>
         </div>
       </div>
-      <div class="principle">
+      <div class="principle reveal" data-d="2">
         <span class="check">✓</span>
         <div>
           <h3>Minimum viable questions</h3>
           <p>Max 3 follow-ups before generating. The user came for answers, not a survey.</p>
         </div>
       </div>
-      <div class="principle">
+      <div class="principle reveal" data-d="3">
         <span class="check">✓</span>
         <div>
           <h3>Safety first, always in code</h3>
           <p>Guardrails run before any agent call. Deterministic checks for hard stops.</p>
         </div>
       </div>
-      <div class="principle">
+      <div class="principle reveal" data-d="4">
         <span class="check">✓</span>
         <div>
           <h3>Specific over generic</h3>
@@ -350,16 +454,42 @@ Frontend: Swipeable timeline cards</pre>
 
 <section class="doc-section">
   <div class="wrap">
-    <h2>Tech stack.</h2>
-    <ul style="margin-left: 20px;">
-      <li><strong>Frontend:</strong> Next.js 16 (App Router) + TypeScript</li>
-      <li><strong>Animations:</strong> Framer Motion</li>
-      <li><strong>Background:</strong> SVG landscape (scales without pixelation)</li>
-      <li><strong>AI Agents:</strong> Azure AI Foundry — gpt-4.1-mini</li>
-      <li><strong>Evaluation:</strong> Azure AI Foundry Evaluation (eval-1)</li>
-      <li><strong>Deployment:</strong> Vercel</li>
-      <li><strong>Dev assistance:</strong> GitHub Copilot</li>
-    </ul>
+    <div class="section-head reveal">
+      <span class="eyebrow">Tech Stack</span>
+      <h2>Built on modern, proven foundations.</h2>
+    </div>
+    <div class="info-grid">
+      <div class="info-card reveal">
+        <div class="ic-n">// frontend</div>
+        <h4>Next.js 16</h4>
+        <p>App Router + TypeScript</p>
+      </div>
+      <div class="info-card reveal" data-d="1">
+        <div class="ic-n">// animation</div>
+        <h4>Framer Motion</h4>
+        <p>Card swipe transitions</p>
+      </div>
+      <div class="info-card reveal" data-d="2">
+        <div class="ic-n">// ai agents</div>
+        <h4>Azure AI Foundry</h4>
+        <p>gpt-4.1-mini, 3 agents</p>
+      </div>
+      <div class="info-card reveal" data-d="3">
+        <div class="ic-n">// evaluation</div>
+        <h4>Azure Eval Framework</h4>
+        <p>7-dimensional scoring</p>
+      </div>
+      <div class="info-card reveal" data-d="4">
+        <div class="ic-n">// deployment</div>
+        <h4>Vercel</h4>
+        <p>Live at whatif-pearl.vercel.app</p>
+      </div>
+      <div class="info-card reveal" data-d="5">
+        <div class="ic-n">// dev</div>
+        <h4>GitHub Copilot</h4>
+        <p>Built in 1 session</p>
+      </div>
+    </div>
   </div>
 </section>
 
