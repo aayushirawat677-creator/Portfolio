@@ -168,90 +168,63 @@
         <div class="step reveal">
           <span class="snum">01</span>
           <div>
-            <h4>Perception &amp; Planning</h4>
-            <div class="step-sub">goal store · multi-source memory · AI goal decomposition</div>
-            <p>A multi-source context system reads your original goal ("I want to go to bed early") against three signals: <strong>Interaction Memory</strong> (past conversations &amp; commitments), <strong>Behavior Log</strong> (real-time execution records), and <strong>Physiological Data</strong> (objective body state via Apple Health). The planning model then decomposes the ambitious goal into tiny, low-resistance atomic actions: 22:00 receive call → 22:15 put down the phone → 22:25 brush teeth → 22:40 in bed, wind down.</p>
+            <h4>Understand the real goal</h4>
+            <div class="step-sub">what the user wants vs. what's actually blocking them</div>
+            <p>Lumi reads the stated goal ("I want to sleep earlier") against three things: what the user has told it before, what they've actually been doing, and objective body signals from Apple Health. The product job here is <strong>decomposition</strong> — turning an intimidating goal into the smallest possible first step, because "go to bed early" fails where "put the phone down at 10:15" succeeds.</p>
           </div>
         </div>
         <div class="step reveal">
           <span class="snum">02</span>
           <div>
-            <h4>Tools &amp; Environment</h4>
-            <div class="step-sub">behavior-change methodology, encoded as AI-callable tools</div>
-            <p>Once it understands you, Lumi has to <em>do something</em> to drive action. Each Atomic Habits principle is encoded as an intervention mechanism the agent can invoke — from a proactive phone call to dimming your lights (detailed below).</p>
+            <h4>Pick the right intervention</h4>
+            <div class="step-sub">match the nudge to the moment</div>
+            <p>Understanding isn't enough — Lumi has to <em>do something</em>. Each behavior-change technique is a tool the agent can reach for, and the product decision is which one fits this user, right now: a call when they're stalling, a gentler touch when they're tired, environment cues when willpower is low.</p>
           </div>
         </div>
         <div class="step reveal">
           <span class="snum">03</span>
           <div>
-            <h4>Feedback Loop</h4>
-            <div class="step-sub">reasoning · reflection · dynamic replanning</div>
-            <p>The core brain. Lumi reflects on subjective feeling, objective behavior (Task Log) and physiological data (Apple Health), then decides whether to push harder or back off — and rewrites the plan accordingly.</p>
+            <h4>Learn from what happened</h4>
+            <div class="step-sub">push harder, or back off — and update the plan</div>
+            <p>The loop closes here. Lumi weighs how the user felt, what they actually did, and what their body says, then decides whether to push or ease up — and rewrites tomorrow's plan accordingly. This is the difference between a tool that nags the same way forever and one that adapts.</p>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ARCHITECTURE -->
+    <!-- ARCHITECTURE / DECISIONS -->
     <div class="doc-section" id="architecture">
       <div class="section-head reveal">
-        <span class="eyebrow">05 · AI Architecture</span>
-        <h2>The system, and the <span class="accent">constraints</span> that shaped it.</h2>
-        <p>The interesting part of a real-time voice agent isn't the diagram — it's the three walls I hit and how the design got around them.</p>
+        <span class="eyebrow">05 · Product Decisions</span>
+        <h2>Three calls that shaped the product — and what each one <span class="accent">traded.</span></h2>
+        <p>Building a real-time voice agent forces hard tradeoffs early. These are the three I owned, why I chose the way I did, and what the user got out of it.</p>
       </div>
       <div class="work-card case reveal" style="margin-top:8px;">
-        <div class="work-visual">
-          <div class="grid-pattern"></div>
-          <div class="work-meta-top">
-            <div class="work-logo"><span class="badge">L</span> Lumi</div>
-            <span class="case-tag">Real-time voice stack</span>
-          </div>
-          <div class="arch">
-            <div class="arch-layer">
-              <div class="lh"><span class="ln">L1</span><span class="lt">Real-time voice</span><span class="lmodel">Gemini Live</span></div>
-              <p>Voice + emotional presence over a persistent connection. Ultra-fast; deliberately kept free of heavy tool calls so the line never drops.</p>
-            </div>
-            <div class="arch-layer">
-              <div class="lh"><span class="ln">L2</span><span class="lt">Intent routing</span><span class="lmodel">GPT-4o-mini</span></div>
-              <p>Reads conversational context in real time and decides whether the user's intent needs an external tool call or a behavior shift.</p>
-            </div>
-            <div class="arch-layer">
-              <div class="lh"><span class="ln">L3</span><span class="lt">Execution &amp; generation</span><span class="lmodel">GPT-4o</span></div>
-              <p>Heavier reasoning, structured DB read/write, and dynamic message generation — run out of band so it never blocks the call.</p>
-            </div>
-          </div>
-          <div class="arch-loop"><span class="lp">↻ loop</span> sense → compare → diagnose → act → verify → replan</div>
-          <div class="arch-src">
-            <span class="lbl">context //</span>
-            <span>Interaction Memory</span><span>Behavior Log</span><span>Apple Health</span>
-          </div>
-        </div>
-        <div class="work-body">
-          <span class="eyebrow">The three design decisions</span>
-          <h3>Where a voice agent actually breaks.</h3>
+        <div class="work-body" style="grid-column:1 / -1;">
 
           <div class="decision">
-            <div class="dn">Decision 01 — decouple voice from reasoning</div>
-            <h4>Heavy tool calls were killing the live connection.</h4>
-            <p>The first build ran complex function calls directly through the live voice stream — and the calls kept <strong>disconnecting the real-time model</strong>. The fix: split real-time voice (L1) from routing (L2) and execution (L3), so heavy reasoning happens out of band. Conversation stays sub-second; the line never drops mid-intervention.</p>
+            <div class="dn">Decision 01 · Responsiveness vs. capability</div>
+            <h4>I made "never freeze mid-sentence" non-negotiable.</h4>
+            <p>Early on the agent could be fast or be smart, not both — richer reasoning made the call stutter and drop. A voice coach that freezes is worse than no coach, so I set responsiveness as the hard constraint: the live conversation stays lightweight and always-on, the heavy thinking happens off the critical path, and the user never feels the seam. I held this as a standing product rule — <strong>stability wins whenever it conflicts with capability</strong> — not a one-time fix.</p>
           </div>
 
           <div class="decision">
-            <div class="dn">Decision 02 — steer behavior mid-session</div>
-            <h4>A live session's instructions can't be changed once set.</h4>
-            <p>To shift the agent's behavior in real time — from coaching to listening the instant a user says something vulnerable — I designed a <strong>parallel virtual-message channel</strong>: a priority queue (<code>EMPATHY &gt; DIRECTIVE &gt; CHECKPOINT &gt; CONTEXT</code>) that injects runtime guidance as text the model treats as system instruction and never speaks aloud. It's how memory and empathy get injected without restarting the call.</p>
+            <div class="dn">Decision 02 · Emotional responsiveness in real time</div>
+            <h4>The agent had to switch from coaching to listening the instant a user got vulnerable.</h4>
+            <p>A real coach reads the room and changes tack mid-conversation. The constraint was that a live voice session's behavior is fixed once it starts — so the question was how to make the agent adapt without an awkward restart that breaks the moment. I specced a way to feed it <strong>prioritized real-time cues</strong> — empathy first, then direction, then context — so when someone says "I'm overwhelmed," Lumi drops the agenda and listens, then picks the thread back up. The product principle: <strong>emotional state outranks the task</strong>. Get that wrong and users feel managed, not supported.</p>
           </div>
 
           <div class="decision">
-            <div class="dn">Decision 03 — control cost with VAD</div>
-            <h4>Keeping a live voice model open during silence is expensive.</h4>
-            <p>A voice-activity-detection wake/sleep design drops the live connection during quiet stretches and re-establishes it on speech — cutting real-time voice cost materially while preserving the "always there" feel.</p>
+            <div class="dn">Decision 03 · Always-on presence vs. unit economics</div>
+            <h4>An always-listening voice agent is magical — and expensive enough to sink the business.</h4>
+            <p>"Body double" mode means Lumi stays on the line while you work — but keeping a live voice model open through long silences burns money fast, and the unit economics decide whether $40/mo is even viable. So I scoped a wake-on-speech approach: Lumi goes quiet during silence and re-engages the moment you talk, preserving the felt presence while cutting the cost of an idle session dramatically. The tradeoff I accepted: a sliver of reconnection latency in exchange for a margin that lets the product exist.</p>
           </div>
 
-          <div class="arch-src" style="margin-top:18px;">
-            <span class="lbl">stack //</span>
-            <span>Gemini Live</span><span>GPT-4o</span><span>GPT-4o-mini</span><span>Azure (ACS · Voice Live)</span><span>Supabase</span><span>Swift / iOS</span><span>CallKit</span><span>HomeKit</span><span>HealthKit</span>
+          <div class="arch-src" style="margin-top:8px;">
+            <span class="lbl">under the hood //</span>
+            <span>Gemini Live (voice)</span><span>GPT-4o · 4o-mini (routing + generation)</span><span>Azure (telephony)</span><span>Supabase (state &amp; memory)</span><span>Swift / iOS</span>
           </div>
+          <p class="prose" style="font-size:13px;color:var(--dim,#8a9099);margin-top:10px;">Enough stack to be credible in an engineering room — the decisions above are the part that's mine to own.</p>
         </div>
       </div>
     </div>
@@ -295,9 +268,9 @@
     <!-- REASONING ENGINE -->
     <div class="doc-section" id="reasoning">
       <div class="section-head reveal">
-        <span class="eyebrow">07 · Reasoning Engine</span>
-        <h2>Detective-style reasoning, in four steps.</h2>
-        <p>When the plan and reality don't match, the loop investigates the gap like a case — instead of just logging a failure.</p>
+        <span class="eyebrow">07 · The "why," not just the "what"</span>
+        <h2>Why Lumi diagnoses a miss instead of <span class="accent">just logging it.</span></h2>
+        <p>Most habit apps record "you failed" and move on — which is exactly what deepens the shame spiral. Lumi's product bet is that <em>understanding why</em> a user missed is what earns the right to try again tomorrow.</p>
       </div>
       <div class="steps">
         <div class="step reveal">
