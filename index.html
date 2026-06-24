@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Aayushi — AI Product Manager · Agentic Systems</title>
-<meta name="description" content="Aayushi is an AI Product Manager who builds 0→1 agentic products — from Lumi, a closed-loop behavioral AI agent, to MISO, an ingredient-optimization agent." />
+<meta name="description" content="Aayushi is an AI Product Manager who builds 0→1 agentic products — from Lumi, a sleep-focused behavioral voice agent, to What If?, a multi-agent decision tool." />
 <meta property="og:title" content="Aayushi — AI Product Manager & 0→1 Agent Builder" />
 <meta property="og:description" content="I design how humans talk to autonomous systems. 0→1 AI PM across voice, behavioral & agentic systems." />
 <meta property="og:type" content="website" />
@@ -13,6 +13,24 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="styles.css" />
+<style>
+  /* compact career strip folded into About */
+  .career-strip{margin-top:clamp(40px,5vw,64px)}
+  .career-strip .cs-rail{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  @media (max-width:860px){.career-strip .cs-rail{grid-template-columns:1fr 1fr}}
+  @media (max-width:520px){.career-strip .cs-rail{grid-template-columns:1fr}}
+  .cs-item{border:1px solid var(--border,#23262b);border-radius:13px;padding:16px 16px 18px;position:relative;background:rgba(255,255,255,.012)}
+  .cs-item.lead{border-color:rgba(67,224,160,.4);background:linear-gradient(180deg,rgba(67,224,160,.05),rgba(255,255,255,0))}
+  .cs-when{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.06em;color:var(--dim,#8a9099)}
+  .cs-role{font-family:'Sora',sans-serif;font-size:13.5px;font-weight:600;color:var(--fg,#e9edf2);margin:8px 0 2px;line-height:1.3}
+  .cs-co{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#9fb2ff;margin-bottom:9px;display:block}
+  .cs-co .tag{color:var(--dim,#8a9099)}
+  .cs-metric{font-family:'Space Grotesk',sans-serif;font-size:12.5px;color:var(--muted,#aab1bb);line-height:1.55}
+  .cs-metric b{color:var(--accent,#43e0a0);font-weight:600}
+  .career-edu{display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:18px;padding-top:18px;border-top:1px solid var(--border,#23262b)}
+  .career-edu .e{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--dim,#8a9099)}
+  .career-edu .e b{color:var(--muted,#aab1bb);font-weight:600}
+</style>
 </head>
 <body data-hero="split">
 
@@ -24,9 +42,8 @@
   </div>
   <div class="nav-links">
     <a href="projects.html" data-nav="projects.html">AI Products</a>
-    <a href="experience.html" data-nav="experience.html">Experience</a>
     <a href="case-studies.html" data-nav="case-studies.html">Case Studies</a>
-    <a href="index.html" data-nav="index.html">About</a>
+    <a href="index.html#about" data-nav="index.html">About</a>
     <a href="index.html#contact" class="nav-cta"><span class="status-dot"></span><span class="label">available</span></a>
   </div>
 </nav>
@@ -41,10 +58,10 @@
         <h1>I build AI products — and the <span class="accent">agents inside them.</span></h1>
         <p class="lead">0→1 AI Product Manager. I take LLM agents from blank page to shipped product — reasoning, evals, guardrails, and the human experience around them.</p>
         <div class="hero-meta">
-          <div class="stat"><b>83%</b><span>agent retention</span></div>
-          <div class="stat"><b>90</b><span>NPS · Lumi</span></div>
-          <div class="stat"><b>3+ yrs</b><span>0→1 AI products</span></div>
-          <div class="stat"><b>4</b><span>products shipped</span></div>
+          <div class="stat"><b>83%</b><span>would-keep · Lumi WoZ</span></div>
+          <div class="stat"><b>+40%</b><span>DAU · Lumi early usage</span></div>
+          <div class="stat"><b>2</b><span>0→1 products shipped</span></div>
+          <div class="stat"><b>3.5 yrs</b><span>AI/PM · 3 countries</span></div>
         </div>
         <div class="hero-pills">
           <button class="pill" data-cmd="whoami">whoami</button>
@@ -89,18 +106,57 @@
       </div>
       <div class="about-body reveal" data-d="1">
         <p class="lead-line">I build the agents people <span class="accent">actually keep talking to.</span></p>
-        <p>I'm Aayushi — an AI Product Manager with <strong>3+ years taking LLM-driven agents from blank page to live product</strong>. Most recently I co-founded and led product for <strong>Lumi</strong>, a closed-loop behavioral AI agent that reasons over behavioral data and intervenes in real time across voice and text. It reached <strong>83% retention</strong> and a <strong>90 NPS</strong>, with validated willingness to pay at $40/month.</p>
-        <p>My edge is that I <strong>think in systems, not screens</strong>. I can spec an agent's reasoning, memory and tool use; define what "good" actually means with real AI-quality metrics — accuracy, tone, helpfulness — and translate fuzzy user needs into the architecture, evals and guardrails engineers can ship. I move fast: Wizard-of-Oz tests and ~2.5 experiments a week, fluent in the modern agent stack, so I hold my own in any room full of engineers.</p>
-        <p>What sets me apart: I pair <strong>IIT-Kharagpur systems rigor</strong> with a <strong>Harvard management lens</strong> and an operator's bias for shipping — across health, voice AI, commerce and telemedicine, in three countries.</p>
-        <p>Off the clock, I'm a relentless home cook — <strong>MISO</strong>, my recipe-optimization agent, literally started as me trying to solve my own "what do I cook tonight?" problem. I also run long, get lost in decision-science books, and collect a few too many half-finished side projects.</p>
+        <p>I'm Aayushi — an AI Product Manager with <strong>3.5 years taking LLM-driven agents from blank page to live product</strong>. Most recently I co-founded and led product for <strong>Lumi</strong>, a sleep-focused behavioral AI voice agent that calls users and coaches them through getting started. I validated demand with Wizard-of-Oz before writing production code — <strong>83% of participants said they'd keep using it, 90 NPS, $40/mo validated willingness to pay</strong> — then shipped the live iOS product, which drove <strong>+40% DAU</strong> in early usage.</p>
+        <p>My edge is that I <strong>think in tradeoffs, not features</strong>. I can decide what an agent should reason about and what stays deterministic, define what "good" actually means with real AI-quality metrics — accuracy, tone, helpfulness — and set the constraints engineers build against: where to spend latency, where to spend cost, where safety can't bend. On Lumi that meant making the live call never-freeze non-negotiable; on <strong>What If?</strong> it meant choosing deterministic pattern-matching over LLM judgment for jailbreak-resistant safety stops.</p>
+        <p>I don't just spec agents — I build them. <strong>What If?</strong> (Microsoft Agents League 2026) is a multi-agent decision tool I built solo on Azure AI Foundry: a 3-stage, 4-agent pipeline that turns an open-ended decision into two grounded outcome timelines, with web-search grounding, a 7-dimension LLM-as-judge eval framework, and deterministic safety guardrails for crisis routing and age-gating. Working prototype, design to deployed code — and a clean demonstration of my core principle: let the LLM do synthesis, keep judgment and safety in deterministic code.</p>
+        <p>What ties it together: <strong>IIT-Kharagpur systems rigor</strong>, a <strong>Harvard management lens</strong>, and an operator's bias for shipping — across health, voice AI, commerce and telemedicine, in three countries. Off the clock I'm a relentless home cook, I run long, I collect stones from places that meant something, and I get lost in decision-science books.</p>
         <div class="about-tags">
           <span class="tag"><span class="accent">▹</span> Agentic AI Strategy</span>
           <span class="tag"><span class="accent">▹</span> LLM Product Design</span>
-          <span class="tag"><span class="accent">▹</span> AI Eval &amp; Benchmarking</span>
+          <span class="tag"><span class="accent">▹</span> AI Eval &amp; Guardrails</span>
           <span class="tag"><span class="accent">▹</span> 0→1 Builder</span>
           <span class="tag"><span class="accent">▹</span> Voice + Real-time</span>
           <span class="tag"><span class="accent">▹</span> Harvard ALM · IIT-KGP</span>
         </div>
+      </div>
+    </div>
+
+    <!-- ===== CAREER STRIP (folded from former Experience page) ===== -->
+    <div class="career-strip reveal" data-d="1">
+      <div class="section-head" style="margin-bottom:20px;">
+        <span class="eyebrow">the track record</span>
+        <h2>Two 0→1 ships, two growth turns.</h2>
+        <p>Before the AI projects, a decade-spanning operator's path across three countries — each role owned end to end.</p>
+      </div>
+      <div class="cs-rail">
+        <div class="cs-item lead">
+          <span class="cs-when">JUL 2025 – MAR 2026 · USA</span>
+          <div class="cs-role">Co-Founder &amp; Product Lead</div>
+          <span class="cs-co">Lumi <span class="tag">· sleep voice agent</span></span>
+          <div class="cs-metric"><b>83%</b> would-keep · <b>90</b> NPS · <b>+40%</b> DAU</div>
+        </div>
+        <div class="cs-item">
+          <span class="cs-when">JUL 2023 – JAN 2024 · JAPAN</span>
+          <div class="cs-role">Product &amp; Operations Associate</div>
+          <span class="cs-co">CyMed <span class="tag">· telemedicine</span></span>
+          <div class="cs-metric"><b>+16%</b> conversion · <b>−9%</b> churn</div>
+        </div>
+        <div class="cs-item">
+          <span class="cs-when">JAN – DEC 2022 · JAPAN</span>
+          <div class="cs-role">Product Manager</div>
+          <span class="cs-co">Cograph · Mayai <span class="tag">· voice AI</span></span>
+          <div class="cs-metric"><b>+20%</b> conversion · <b>+9%</b> ARPU · <b>−40%</b> CAC</div>
+        </div>
+        <div class="cs-item">
+          <span class="cs-when">JUL 2021 – JUN 2022 · JAPAN</span>
+          <div class="cs-role">Associate Product Manager</div>
+          <span class="cs-co">Beenos · Beeyond <span class="tag">· Shopify logistics</span></span>
+          <div class="cs-metric"><b>0→1</b> ship · <b>+16%</b> 30-day retention · <b>10%</b> MoM</div>
+        </div>
+      </div>
+      <div class="career-edu">
+        <span class="e"><b>Harvard University Extension School</b> — ALM, Management · 2025</span>
+        <span class="e"><b>IIT Kharagpur</b> — Integrated MSc, Economics · 2019</span>
       </div>
     </div>
   </div>
@@ -117,19 +173,19 @@
       <div class="cap reveal">
         <div class="cap-idx">[ 01 ]</div>
         <h3>Agent Design &amp; Architecture</h3>
-        <p>Spec an agent's reasoning, memory and tool use; design modular systems that add capabilities without destabilizing the core.</p>
-        <div class="cap-list"><span>LangGraph</span><span>LiveKit</span><span>Pipecat</span><span>MCP Servers</span><span>Vector DBs</span><span>REST APIs</span></div>
+        <p>Decide what an agent reasons about and what stays deterministic; set the constraints engineers build against without destabilizing the core.</p>
+        <div class="cap-list"><span>LangGraph</span><span>LiveKit</span><span>Pipecat</span><span>MCP Servers</span><span>Multi-agent</span><span>REST APIs</span></div>
       </div>
       <div class="cap reveal" data-d="1">
         <div class="cap-idx">[ 02 ]</div>
-        <h3>AI Evaluation &amp; Quality</h3>
-        <p>Define what "good" means — accuracy, tone, helpfulness — build benchmarks, and partner with engineering to reduce response variability.</p>
-        <div class="cap-list"><span>Eval frameworks</span><span>Benchmarking</span><span>Reliability</span><span>Guardrails</span><span>Quality metrics</span></div>
+        <h3>AI Evaluation &amp; Guardrails</h3>
+        <p>Define what "good" means — accuracy, tone, safety — build LLM-as-judge benchmarks, and choose deterministic guardrails where judgment can't bend.</p>
+        <div class="cap-list"><span>Eval frameworks</span><span>LLM-as-judge</span><span>Guardrails</span><span>Reliability</span><span>Quality metrics</span></div>
       </div>
       <div class="cap reveal">
         <div class="cap-idx">[ 03 ]</div>
         <h3>0→1 Product Building</h3>
-        <p>Blank page to launch: discovery, PRDs, ruthless prioritization, PMF validation, and Wizard-of-Oz tests at ~2.5 / week.</p>
+        <p>Blank page to launch: discovery, PRDs, ruthless prioritization, and Wizard-of-Oz validation before a line of production code.</p>
         <div class="cap-list"><span>Discovery</span><span>PRDs</span><span>Impact/Effort</span><span>WoZ testing</span><span>Roadmapping</span></div>
       </div>
       <div class="cap reveal" data-d="1">
@@ -154,17 +210,17 @@
       <a class="dir-card reveal" href="projects.html">
         <div class="dh"><span>01 · BUILD</span><span class="arr">↗</span></div>
         <h3>AI Products</h3>
-        <p>The AI products I've shipped — Lumi &amp; MISO — taken apart end to end.</p>
+        <p>The AI products I've built — Lumi &amp; What If? — taken apart end to end.</p>
       </a>
       <a class="dir-card reveal" data-d="1" href="case-studies.html">
         <div class="dh"><span>02 · DEPTH</span><span class="arr">↗</span></div>
         <h3>Case Studies</h3>
-        <p>Deeper write-ups and notes on building agents — more coming soon.</p>
+        <p>PRDs and product proposals — Rufus, Instacart and Lumi body doubling — worked end to end.</p>
       </a>
-      <a class="dir-card reveal" data-d="2" href="experience.html">
+      <a class="dir-card reveal" data-d="2" href="index.html#about">
         <div class="dh"><span>03 · TRACK</span><span class="arr">↗</span></div>
-        <h3>Work Experience</h3>
-        <p>Four ships across AI, voice, commerce and telemedicine — three countries.</p>
+        <h3>The Track Record</h3>
+        <p>Two 0→1 ships and two growth turns across AI, voice, commerce and telemedicine — three countries.</p>
       </a>
     </div>
   </div>
@@ -177,7 +233,7 @@
       <div class="grid-pattern"></div>
       <span class="eyebrow" style="justify-content:center;">Initialize conversation</span>
       <h2>Let's build the <span class="accent">next agent.</span></h2>
-      <p class="sub">I'm exploring AI Product Manager roles where I can take agentic products from 0→1. If that sounds like your team, let's talk.</p>
+      <p class="sub">I'm exploring AI Product Manager roles where I can take products from 0→1 — agentic systems, voice, or any AI product where the hard part is judgment, evals, and the human experience. If that sounds like your team, let's talk.</p>
       <div class="contact-actions">
         <a class="btn primary" href="mailto:aayushilnu0@gmail.com">→ aayushilnu0@gmail.com</a>
         <a class="btn ghost" href="https://www.linkedin.com/in/aayushi-23a570a0/" target="_blank" rel="noopener">LinkedIn ↗</a>
