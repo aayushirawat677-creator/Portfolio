@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Lumi — Sleep-Focused Behavioral AI Voice Agent · Aayushi</title>
-<meta name="description" content="Lumi is a sleep-focused behavioral AI voice agent that calls you and coaches you through getting started. A deep dive into its real-time voice architecture (Gemini Live + GPT-4o + Azure + Supabase), the mid-session steering channel, the VAD cost design, evals and guardrails." />
+<title>Lumi — Behavioral Health AI Voice Agent · Aayushi</title>
+<meta name="description" content="Lumi is a behavioral health AI voice agent that helps people break start-friction and stick to healthy habits — proven first on sleep. A deep dive into its real-time voice architecture, product decisions, evals and guardrails." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -43,9 +43,9 @@
 <body data-hero="split">
 
 <nav class="nav" id="nav">
-  <a class="brand" href="index.html"><span class="status-dot"></span><b>AAYUSHI</b><span class="dim">.AGENT</span></a>
+  <a class="brand" href="index.html"><span class="status-dot"></span><b>Aayushi</b><span class="dim">.PM</span></a>
   <div class="nav-links">
-    <a href="projects.html" data-nav="projects.html">AI Products</a>
+    <a href="projects.html" data-nav="projects.html">Work</a>
     <a href="experience.html" data-nav="experience.html">Experience</a>
     <a href="case-studies.html" data-nav="case-studies.html">Case Studies</a>
     <a href="index.html" data-nav="index.html">About</a>
@@ -57,10 +57,10 @@
 <header class="page-intro">
   <div class="grid-pattern"></div>
   <div class="wrap">
-    <a class="backlink" href="projects.html">← AI Products</a>
+    <a class="backlink" href="projects.html">← Work</a>
     <span class="eyebrow" style="margin-top:22px;">AI Product · Flagship</span>
-    <h1>Lumi — a sleep-focused <span class="accent">behavioral AI voice agent.</span></h1>
-    <p class="sub">The AI that actually <em>calls you</em> — and coaches you through getting started, not just reminding you to. Co-founded and led product through a 0→1 build: validated with Wizard-of-Oz, then shipped on real-time voice.</p>
+    <h1>Lumi — a behavioral health <span class="accent">AI voice agent.</span></h1>
+    <p class="sub">A health assistant that helps people break start-friction, follow through on tasks, and stick to healthy habits — proven first on sleep. It actually <em>calls you</em> and coaches you through getting started, not just reminding you. Co-founded and led product through a 0→1 build: validated with Wizard-of-Oz, then shipped on real-time voice.</p>
 
     <div class="phase-band" style="margin-top:26px;">
       <div class="phase validated">
@@ -69,9 +69,8 @@
         <div class="pm-row">
           <div class="pm"><b>83%</b><span>said they'd keep using it</span></div>
           <div class="pm"><b>90</b><span>NPS</span></div>
-          <div class="pm"><b>$40/mo</b><span>validated WTP</span></div>
         </div>
-        <div class="note">// stated intent &amp; willingness to pay — a demand signal, not production retention</div>
+        <div class="note">// stated intent from Wizard-of-Oz — a demand signal, not production retention</div>
       </div>
       <div class="phase shipped">
         <div class="phase-tag"><span class="dot"></span>Shipped · early usage</div>
@@ -96,11 +95,11 @@
         <h2>Not another reminder — an AI that coaches you to the start line.</h2>
       </div>
       <div class="reveal" data-d="1">
-        <p class="lead-para wide">Lumi is a sleep-focused behavioral AI voice agent. It doesn't just remind you to wind down — it <span class="accent">calls you, walks you through getting started, and adjusts based on how the night is actually going.</span></p>
+        <p class="lead-para wide">Lumi is a behavioral health AI voice agent. It doesn't just remind you to act — it <span class="accent">calls you, walks you through getting started, and adjusts based on how things are actually going.</span> Sleep is where it was built and proven first.</p>
         <div class="prose">
           <p>Traditional productivity tools — alarms, to-do lists — are <strong>open-loop systems</strong>. They fire a reminder and assume you'll act. But for the people Lumi is built for, that assumption breaks: the problem was never "not knowing what to do," it's "being unable to start." So reminders pile into alarm fatigue and a quiet sense of shame.</p>
           <p>Lumi closes the loop — it senses your state, compares reality against the goal, and adjusts its intervention until the gap between "I want to sleep on time" and "I actually did" starts to close.</p>
-          <p class="prose-aside"><span class="accent">Where this goes:</span> sleep is where Lumi was built and validated, but the same closed-loop approach extends to broader executive-function support — the longer-term thesis, not today's scope.</p>
+          <p class="prose-aside"><span class="accent">Where this goes:</span> sleep was the first proving ground, but the same closed-loop approach extends across healthy-habit and executive-function support — the longer-term thesis behind the product.</p>
         </div>
       </div>
     </div>
@@ -217,7 +216,7 @@
           <div class="decision">
             <div class="dn">Decision 03 · Always-on presence vs. unit economics</div>
             <h4>An always-listening voice agent is magical — and expensive enough to sink the business.</h4>
-            <p>"Body double" mode means Lumi stays on the line while you work — but keeping a live voice model open through long silences burns money fast, and the unit economics decide whether $40/mo is even viable. So I scoped a wake-on-speech approach: Lumi goes quiet during silence and re-engages the moment you talk, preserving the felt presence while cutting the cost of an idle session dramatically. The tradeoff I accepted: a sliver of reconnection latency in exchange for a margin that lets the product exist.</p>
+            <p>"Body double" mode means Lumi stays on the line while you work — but keeping a live voice model open through long silences burns money fast, and the unit economics decide whether a consumer subscription is even viable. So I scoped a wake-on-speech approach: Lumi goes quiet during silence and re-engages the moment you talk, preserving the felt presence while cutting the cost of an idle session dramatically. The tradeoff I accepted: a sliver of reconnection latency in exchange for a margin that lets the product exist.</p>
           </div>
 
           <div class="arch-src" style="margin-top:8px;">
@@ -316,11 +315,10 @@
         <div class="phase validated">
           <div class="phase-tag"><span class="dot"></span>Phase 1 · Wizard-of-Oz</div>
           <h4>Validate demand before building</h4>
-          <p style="color:var(--muted,#aab1bb);line-height:1.7;margin:0 0 16px;font-size:14.5px;">I ran a Wizard-of-Oz test — a human playing the AI behind the scenes — to check one hypothesis: that an AI mimicking a human sleep coach (empathy, nudges, timing) actually drives action. These are <strong>demand signals</strong>, the thing you want <em>before</em> committing engineering.</p>
+          <p style="color:var(--muted,#aab1bb);line-height:1.7;margin:0 0 16px;font-size:14.5px;">I ran a Wizard-of-Oz test — a human playing the AI behind the scenes — to check one hypothesis: that an AI mimicking a human habit coach (empathy, nudges, timing) actually drives action. These are <strong>demand signals</strong>, the thing you want <em>before</em> committing engineering.</p>
           <div class="pm-row">
             <div class="pm"><b>83%</b><span>said they'd keep using it</span></div>
             <div class="pm"><b>90</b><span>NPS</span></div>
-            <div class="pm"><b>$40/mo</b><span>validated WTP</span></div>
           </div>
           <div class="note">// stated intent, not behavioral retention — and labeled that way on purpose</div>
         </div>
@@ -337,7 +335,7 @@
       </div>
     </div>
 
-    <!-- NORTH STAR (NEW) -->
+    <!-- NORTH STAR -->
     <div class="doc-section" id="northstar">
       <div class="section-head reveal">
         <span class="eyebrow">09 · North Star</span>
@@ -419,8 +417,8 @@
   <div class="wrap">
     <div class="contact-card reveal">
       <div class="grid-pattern"></div>
-      <span class="eyebrow" style="justify-content:center;">Initialize conversation</span>
-      <h2>Let's build the <span class="accent">next agent.</span></h2>
+      <span class="eyebrow" style="justify-content:center;">Get in touch</span>
+      <h2>Let's ship the <span class="accent">next one.</span></h2>
       <p class="sub">I'm exploring AI Product Manager roles where I can take products from 0→1 — agentic systems, voice, or any AI product where the hard part is judgment, evals, and the human experience. If that sounds like your team, let's talk.</p>
       <div class="contact-actions">
         <a class="btn primary" href="mailto:aayushilnu0@gmail.com">→ aayushilnu0@gmail.com</a>
@@ -434,7 +432,7 @@
 </section>
 
 <footer class="foot">
-  <div class="log">session://<span class="accent">aayushi.agent</span> — uptime <span id="sessClock">00:00:00</span> · build 2026.05 · all systems nominal</div>
+  <div class="log">% <span class="accent">aayushi</span> — available for AI PM roles · Sunnyvale, CA</div>
   <div class="up" id="toTop">return to top ↑</div>
 </footer>
 
