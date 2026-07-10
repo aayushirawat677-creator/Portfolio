@@ -18,6 +18,63 @@
   .demo-frame{margin-top:24px;border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden;background:#000;position:relative;z-index:2}
   .demo-frame video{display:block;width:100%;height:auto}
   .demo-cap{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--faint);margin-top:12px}
+
+  /* scoped: system-design flow diagram */
+  .flow{position:relative;z-index:2;display:flex;flex-direction:column;gap:0;margin-top:8px}
+  .flow-node{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:color-mix(in oklab,var(--bg-2) 82%,transparent);transition:border-color .3s,background .3s}
+  .flow-node.hot{border-color:color-mix(in oklab,var(--accent) 48%,transparent);background:color-mix(in oklab,var(--accent) 8%,transparent)}
+  .flow-node .fh{display:flex;align-items:center;gap:11px;flex-wrap:wrap}
+  .flow-node .fn{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);flex:0 0 auto}
+  .flow-node .ft{font-family:'Sora',sans-serif;font-weight:600;font-size:15px;color:var(--fg,#e9edf2)}
+  .flow-node .fkind{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--faint);border:1px solid var(--line);padding:3px 8px;border-radius:6px}
+  .flow-node .fkind.code{color:#9fb2ff;border-color:rgba(111,140,255,.4)}
+  .flow-node .fkind.llm{color:var(--accent)}
+  .flow-node .fbody{margin-top:8px;color:var(--muted,#aab1bb);font-size:13.5px;line-height:1.6}
+  .flow-node .fout{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .flow-node .fout span{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted);border:1px solid var(--line);padding:4px 8px;border-radius:6px;background:color-mix(in oklab,var(--bg) 40%,transparent)}
+  .flow-arrow{height:20px;width:1px;background:var(--line-2);margin-left:26px}
+  .flow-arrow.label{position:relative;height:26px}
+  .flow-arrow.label span{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--faint);white-space:nowrap}
+  .flow-branch{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:4px 0}
+  @media (max-width:620px){.flow-branch{grid-template-columns:1fr}}
+  .flow-branch .fb{border:1px solid var(--line);border-radius:11px;padding:12px 14px;background:color-mix(in oklab,var(--bg) 40%,transparent)}
+  .flow-branch .fb.stop{border-color:rgba(255,95,87,.35);background:rgba(255,95,87,.05)}
+  .flow-branch .fb .fbt{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.05em;margin-bottom:5px}
+  .flow-branch .fb.stop .fbt{color:#ff8a80}
+  .flow-branch .fb.go .fbt{color:var(--accent)}
+  .flow-branch .fb p{margin:0;color:var(--muted);font-size:12.5px;line-height:1.55}
+  .flow-loop{display:flex;align-items:center;gap:8px;margin-left:26px;padding:6px 0;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted)}
+  .flow-loop .lp{color:var(--accent)}
+
+  /* scoped: layer bands grouping the flow */
+  .flow-layer{border:1px solid var(--line);border-radius:14px;padding:16px;margin:0;background:color-mix(in oklab,var(--bg-2) 40%,transparent)}
+  .flow-layer + .flow-layer-arrow{margin:0 0 0 26px}
+  .flow-layer .fl-tag{display:flex;align-items:center;gap:9px;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px}
+  .flow-layer .fl-tag .d{width:7px;height:7px;border-radius:50%}
+  .flow-layer.code-layer{border-color:rgba(111,140,255,.3)}
+  .flow-layer.code-layer .fl-tag{color:#9fb2ff}
+  .flow-layer.code-layer .fl-tag .d{background:#6f8cff;box-shadow:0 0 8px #6f8cff}
+  .flow-layer.ai-layer{border-color:color-mix(in oklab,var(--accent) 30%,transparent)}
+  .flow-layer.ai-layer .fl-tag{color:var(--accent)}
+  .flow-layer.ai-layer .fl-tag .d{background:var(--accent);box-shadow:0 0 8px var(--accent)}
+  .flow-layer.ui-layer .fl-tag{color:var(--muted)}
+  .flow-layer.ui-layer .fl-tag .d{background:var(--muted)}
+
+  /* platform / shared-services band */
+  .flow-layer.platform-layer{border-style:dashed;border-color:rgba(111,140,255,.35);background:color-mix(in oklab,var(--bg) 30%,transparent)}
+  .flow-layer.platform-layer .fl-tag{color:#9fb2ff}
+  .flow-layer.platform-layer .fl-tag .d{background:#6f8cff;box-shadow:0 0 8px #6f8cff}
+  .svc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  @media (max-width:720px){.svc-grid{grid-template-columns:1fr 1fr}}
+  @media (max-width:440px){.svc-grid{grid-template-columns:1fr}}
+  .svc{border:1px solid var(--line);border-radius:10px;padding:12px 13px;background:color-mix(in oklab,var(--bg-2) 60%,transparent)}
+  .svc b{display:block;font-family:'Sora',sans-serif;font-size:12.5px;font-weight:600;color:var(--fg,#e9edf2);margin-bottom:3px}
+  .svc span{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--faint);line-height:1.45}
+  /* 3 agents in parallel under the orchestrator */
+  .agents-3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:2px}
+  @media (max-width:620px){.agents-3{grid-template-columns:1fr}}
+  .agents-3 .flow-node{margin:0}
+  .fanout{display:flex;align-items:center;justify-content:center;gap:8px;margin:8px 0 2px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--faint)}
 </style>
 </head>
 <body data-hero="split">
@@ -40,7 +97,7 @@
     <a class="backlink" href="projects.html">← Work</a>
     <span class="eyebrow" style="margin-top:22px;">AI Product · Solo build</span>
     <h1>What If? — a decision-exploration tool that <span class="accent">never gives advice.</span></h1>
-    <p class="sub">Ask any life question, get both honest futures, explore each timeline card by card — and decide for yourself. A multi-agent tool I designed and built solo for Microsoft Agents League 2026: I framed the problem, designed the workflow, made the product calls, and drove the build with AI coding tools.</p>
+    <p class="sub">Ask any life question, get both honest futures, explore each timeline card by card — and decide for yourself. I built What If? solo as a testbed for a product thesis I believe in: that the most useful thing an AI can do with a hard decision isn't to answer it, but to help someone see it clearly. Built for Microsoft Agents League 2026 — I framed the problem, designed the workflow, made the product calls, and drove the build with AI coding tools.</p>
     <div class="detail-meta">
       <div class="stat"><b>Solo</b><span>PM + builder</span></div>
       <div class="stat"><b>1 sprint</b><span>concept to working demo</span></div>
@@ -112,32 +169,118 @@
     <div class="doc-section" id="workflow">
       <div class="section-head reveal">
         <span class="eyebrow">04 · The System I Designed</span>
-        <h2>One messy question → two honest futures, in three stages.</h2>
-        <p>I mapped the decision into a three-stage workflow, and made a deliberate product call at each stage about what the AI does and — just as important — what it's <em>not</em> allowed to do.</p>
+        <h2>How a messy question moves through the system.</h2>
+        <p>I mapped the full flow before building — where the safety gate sits, what the classifier has to output, why the context step is a capped loop, and what has to pass before anything reaches the user. Each box below is a deliberate product decision about what the system does and what it's <em>not</em> allowed to do.</p>
       </div>
-      <div class="work-card case reveal" style="margin-top:8px;">
-        <div class="work-visual">
-          <div class="grid-pattern"></div>
-          <div class="work-meta-top">
-            <div class="work-logo"><span class="badge">W</span> What If?</div>
-            <span class="case-tag">Workflow</span>
-          </div>
-          <div class="pipe">
-            <div class="pipe-node"><span class="n">01</span><span class="t">Classifier</span><span class="d">decode the decision</span></div>
-            <div class="pipe-arrow"></div>
-            <div class="pipe-node"><span class="n">02</span><span class="t">Context Gatherer</span><span class="d">ask, max 3 questions</span></div>
-            <div class="pipe-arrow"></div>
-            <div class="pipe-node"><span class="n">03</span><span class="t">What-If Generator</span><span class="d">two honest futures</span></div>
-            <div class="pipe-arrow"></div>
-            <div class="pipe-node"><span class="n">→</span><span class="t">Swipeable Cards</span><span class="d">explore both paths</span></div>
+
+      <div class="flow reveal" data-d="1">
+
+        <!-- input -->
+        <div class="flow-node">
+          <div class="fh"><span class="fn">IN</span><span class="ft">User query</span><span class="fkind">natural language</span></div>
+          <div class="fbody">"Should I quit my job?" — messy, emotional, real.</div>
+        </div>
+        <div class="flow-arrow"></div>
+
+        <!-- presentation -->
+        <div class="flow-layer ui-layer">
+          <div class="fl-tag"><span class="d"></span>Presentation layer · Next.js</div>
+          <div class="flow-node">
+            <div class="fh"><span class="fn">UI</span><span class="ft">Chat &amp; timeline UI</span><span class="fkind">Next.js · Framer Motion</span></div>
+            <div class="fbody">Landing, chat interface, timeline cards, swipe navigation and the side-by-side overlay.</div>
           </div>
         </div>
-        <div class="work-body">
-          <span class="eyebrow">Stage logic</span>
-          <h3>Each stage exists to protect the "no advice" rule.</h3>
-          <div class="role">classify → gather → generate → explore</div>
-          <p class="desc"><strong>Stage 1 — Classifier</strong> turns a messy question ("should I quit my job?") into a structured decision: what type it is, the two paths, and exactly what context the next stage needs. <strong>Stage 2 — Context Gatherer</strong> fills only those gaps, one question at a time. <strong>Stage 3 — Generator</strong> writes two specific, friction-included futures. No stage is allowed to recommend — the pipeline assembles possibilities and hands the choice back to the user.</p>
+        <div class="flow-arrow label"><span>HTTPS request</span></div>
+
+        <!-- application -->
+        <div class="flow-layer ui-layer">
+          <div class="fl-tag"><span class="d"></span>Application layer · backend API</div>
+          <div class="flow-node">
+            <div class="fh"><span class="fn">API</span><span class="ft">Request &amp; state handling</span><span class="fkind">backend</span></div>
+            <div class="fbody">Session management, request validation, conversation state, prompt-version selection, response formatting and error handling.</div>
+          </div>
         </div>
+        <div class="flow-arrow"></div>
+
+        <!-- LAYER 1: deterministic safety -->
+        <div class="flow-layer code-layer">
+          <div class="fl-tag"><span class="d"></span>Deterministic safety · runs before any LLM</div>
+          <div class="flow-node">
+            <div class="fh"><span class="fn">00</span><span class="ft">Safety engine</span><span class="fkind code">deterministic</span></div>
+            <div class="fbody">Pattern-matches self-harm, violence, illegal activity, medical, drugs and poison — <strong>before any model is invoked</strong>, because a safety stop can't depend on a model that can be talked out of it.</div>
+          </div>
+          <div class="flow-arrow label"><span>safe?</span></div>
+          <div class="flow-branch">
+            <div class="fb stop">
+              <div class="fbt">■ no → safe response</div>
+              <p>Route to real resources. No future is generated.</p>
+            </div>
+            <div class="fb go">
+              <div class="fbt">▶ yes → continue</div>
+              <p>Enters the AI orchestration layer.</p>
+            </div>
+          </div>
+        </div>
+        <div class="flow-arrow"></div>
+
+        <!-- LAYER 2: AI orchestration -->
+        <div class="flow-layer ai-layer">
+          <div class="fl-tag"><span class="d"></span>AI orchestration layer</div>
+          <div class="flow-node">
+            <div class="fh"><span class="fn">ORCH</span><span class="ft">Orchestration logic</span><span class="fkind llm">in agent config + prompts</span></div>
+            <div class="fbody">The workflow is encoded in the agents themselves — each prompt defines its job, the follow-up cap, the ranking of answers, and when to hand off. <strong>Conversation state</strong> (question, collected context, questions asked 0–3, decision type, generated paths, history) is carried between them so multi-turn actually remembers.</div>
+          </div>
+          <div class="fanout">↓ &nbsp; runs three purpose-built agents &nbsp; ↓</div>
+          <div class="agents-3">
+            <div class="flow-node">
+              <div class="fh"><span class="fn">A1</span><span class="ft">Parser</span></div>
+              <div class="fbody">query_mode · polarity · time type · paths. Assigns polarity itself, so user bias doesn't frame the futures.</div>
+            </div>
+            <div class="flow-node">
+              <div class="fh"><span class="fn">A2</span><span class="ft">Context Gatherer</span></div>
+              <div class="fbody">One question at a time, capped at 3, filling only flagged context — for both paths, not just the likely one.</div>
+            </div>
+            <div class="flow-node">
+              <div class="fh"><span class="fn">A3</span><span class="ft">Timeline Generator</span></div>
+              <div class="fbody">Both futures across short / medium / long-term. Friction in every path. Never advises.</div>
+            </div>
+          </div>
+          <div class="flow-arrow" style="margin-top:2px;"></div>
+          <div class="flow-node">
+            <div class="fh"><span class="fn">JSON</span><span class="ft">Structured timeline output</span><span class="fkind">schema-validated</span></div>
+            <div class="fbody">A normalized timeline JSON — validated and shaped into the UI model before it's returned.</div>
+          </div>
+        </div>
+        <div class="flow-arrow"></div>
+
+        <!-- back to presentation -->
+        <div class="flow-layer ui-layer">
+          <div class="fl-tag"><span class="d"></span>Back to presentation</div>
+          <div class="flow-node">
+            <div class="fh"><span class="fn">OUT</span><span class="ft">Timeline renderer</span><span class="fkind">user explores</span></div>
+            <div class="fbody">Summary cards, expandable timelines, swipe navigation, side-by-side comparison. The user reads both paths and <strong>decides for themselves</strong>.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- PLATFORM NOTE -->
+      <div class="flow-layer platform-layer reveal" data-d="1" style="margin-top:16px;">
+        <div class="fl-tag"><span class="d"></span>Powered by Azure AI Foundry (Foundry IQ)</div>
+        <p class="prose" style="margin:0 0 14px;font-size:14px;">Deployed to production on Azure. I designed the three agents, their prompts, the workflow logic and the guardrail rules; Foundry IQ provided the platform underneath — versioned prompts, the eval runner, agent-performance tracking, and analytics.</p>
+        <div class="svc-grid">
+          <div class="svc"><b>GPT-4.1-mini</b><span>the model, via Foundry</span></div>
+          <div class="svc"><b>Prompt library</b><span>versioned, A/B-able prompts</span></div>
+          <div class="svc"><b>Eval runner</b><span>7-dimension scoring</span></div>
+          <div class="svc"><b>Analytics</b><span>usage &amp; agent performance</span></div>
+        </div>
+      </div>
+
+      <div class="codeline reveal" data-d="1" style="margin-top:22px;">
+        <span class="c">// the design story the layers tell</span><br />
+        safety + judgment live in <b>code</b> · synthesis lives in the <span class="k">agents</span> · the platform makes it measurable<br />
+        <span class="c">// the product rule every layer serves</span><br />
+        output = <b>possibilities</b>, never advice — the choice always returns to the user
       </div>
     </div>
 
@@ -199,35 +342,71 @@
     <div class="doc-section" id="eval">
       <div class="section-head reveal">
         <span class="eyebrow">07 · Measuring Quality</span>
-        <h2>How I defined "good" — a 7-dimension eval.</h2>
-        <p>To know whether the pipeline was actually working, I built an evaluation agent that scores every output across seven dimensions, so "quality" was a measured thing, not a vibe.</p>
+        <h2>How I defined "good" — a 7-dimension eval, run on the platform.</h2>
+        <p>To know whether the agents were actually working, I set up an evaluation that scores outputs across seven dimensions — so "quality" was a measured thing, not a vibe. It runs as a separate improvement loop, not in the user's request path.</p>
       </div>
       <div class="info-grid">
         <div class="info-card reveal">
           <div class="ic-n">// 01–02</div>
           <h4>Structural &amp; Accuracy</h4>
-          <p>Does the output match the required schema, and did the classifier get the decision type and polarity right?</p>
+          <p>Does the output match the required JSON schema, and did the parser get the decision type and polarity right?</p>
         </div>
         <div class="info-card reveal" data-d="1">
-          <div class="ic-n">// 03–04</div>
-          <h4>Quality &amp; Safety</h4>
-          <p>Are the scenarios specific and realistic rather than generic — and were dangerous inputs handled correctly?</p>
+          <div class="ic-n">// 03–05</div>
+          <h4>Quality, Safety &amp; No-Advice</h4>
+          <p>Are the futures specific and grounded in the user's answers, were dangerous inputs handled, and does it avoid "should / recommend"?</p>
         </div>
         <div class="info-card reveal" data-d="2">
-          <div class="ic-n">// 05–07</div>
-          <h4>No-Advice, Friction &amp; Diversity</h4>
-          <p>Does it avoid "should/recommend," include real obstacles in each path, and are the two futures genuinely different?</p>
+          <div class="ic-n">// 06–07</div>
+          <h4>Friction &amp; Diversity</h4>
+          <p>Does every path include a real obstacle, and are the two futures genuinely different from each other?</p>
         </div>
       </div>
       <div class="prose reveal" data-d="1" style="margin-top:20px;">
-        <p>Each dimension returns a 0–10 score with a pass/fail and a one-line verdict, run across 10 test cases spanning binary decisions, option comparisons, and statement assessments. The eval loop is what let me tune prompts with evidence instead of guesswork — the same principle I bring to any AI product: <strong>define "good," measure it, then iterate.</strong></p>
+        <p>Each dimension returns a 0–10 score with a pass/fail and a one-line verdict, run across developer test cases spanning binary decisions, option comparisons, and statement assessments. I ran this through <strong>Azure AI Foundry's evaluation</strong>, alongside its analytics on agent performance — so I could version prompts, compare runs, and tune with evidence instead of guesswork. The principle I bring to any AI product: <strong>define "good," measure it, then iterate.</strong></p>
+      </div>
+    </div>
+
+    <!-- SCOPE & RISK -->
+    <div class="doc-section" id="scope">
+      <div class="section-head reveal">
+        <span class="eyebrow">08 · Scope &amp; Risk</span>
+        <h2>What I deliberately <span class="accent">didn't</span> build.</h2>
+        <p>A testbed earns its focus by leaving things out. These were conscious cuts, and the one risk I'd watch first if this went further.</p>
+      </div>
+      <div class="checks">
+        <div class="check reveal">
+          <span class="ck no">—</span>
+          <div><b>No accounts or history</b><span>Single-session only. Persistent profiles and cross-session memory were out of scope for proving the core interaction.</span></div>
+        </div>
+        <div class="check reveal" data-d="1">
+          <span class="ck no">—</span>
+          <div><b>No fine-tuning</b><span>Prompt design + evals on a base model, not a custom-trained one — the thesis was about interaction and guardrails, not model performance.</span></div>
+        </div>
+        <div class="check reveal">
+          <span class="ck no">!</span>
+          <div><b>Biggest risk: path diversity</b><span>The real failure mode isn't safety — it's two futures that quietly say the same thing. If the paths aren't genuinely different, the product has no reason to exist, which is why "diversity" is its own eval dimension.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REFLECTION -->
+    <div class="doc-section" id="reflection">
+      <div class="section-head reveal">
+        <span class="eyebrow">09 · Reflection</span>
+        <h2>What I'd do differently.</h2>
+      </div>
+      <div class="reveal" data-d="1">
+        <div class="prose">
+          <p>The build confirmed the thesis is worth pursuing — the "no advice, both futures" interaction genuinely feels different from every chatbot that rushes to answer. Two things I'd change next time. <strong>First, I'd define the eval before the prompts, not after</strong> — I tuned the generator by feel early on, then built the 7-dimension eval, and some of that early work I'd have done faster with the scorecard in front of me. <strong>Second, I'd pressure-test the 3-question cap</strong> — it's the right instinct, but I set it by judgment, not data; the honest next step is to watch where users actually have enough context and let that number earn itself.</p>
+        </div>
       </div>
     </div>
 
     <!-- DEMO -->
     <div class="doc-section" id="demo">
       <div class="section-head reveal">
-        <span class="eyebrow">08 · Demo</span>
+        <span class="eyebrow">10 · Demo</span>
         <h2>See it in action.</h2>
         <p>A walkthrough of the full flow — question in, two honest futures out, explored card by card.</p>
       </div>
@@ -254,7 +433,7 @@
       <div class="grid-pattern"></div>
       <span class="eyebrow" style="justify-content:center;">Get in touch</span>
       <h2>Let's ship the <span class="accent">next one.</span></h2>
-      <p class="sub">I'm exploring AI Product Manager roles where I can take products from 0→1 — agentic systems, voice, or any AI product where the hard part is judgment, evals, and the human experience. If that sounds like your team, let's talk.</p>
+      <p class="sub">I'm looking for AI Product Manager roles where I can take products from 0→1 and own them through launch. If that fits your team, let's talk.</p>
       <div class="contact-actions">
         <a class="btn primary" href="mailto:aayushilnu0@gmail.com">→ aayushilnu0@gmail.com</a>
         <a class="btn ghost" href="https://www.linkedin.com/in/aayushi-23a570a0/" target="_blank" rel="noopener">LinkedIn ↗</a>
@@ -273,6 +452,19 @@
 
 <div id="tweaks-root"></div>
 <script src="site.js"></script>
+<script>
+  /* cycle the "hot" highlight through the system-design flow nodes */
+  (function(){
+    var nodes = Array.from(document.querySelectorAll('.flow-node'));
+    if(!nodes.length) return;
+    var k = 0;
+    setInterval(function(){
+      nodes.forEach(function(n){ n.classList.remove('hot'); });
+      nodes[k % nodes.length].classList.add('hot');
+      k++;
+    }, 1300);
+  })();
+</script>
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
