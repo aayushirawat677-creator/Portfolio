@@ -1,5 +1,5 @@
 /* ============================================================
-   AAYUSHI.AGENT — interactive hero terminal
+   Aayushi.PM — interactive hero terminal
    Scripted, client-side only. Types intro, accepts commands.
    ============================================================ */
 (function () {
@@ -67,7 +67,7 @@
     help() {
       printLine('<span class="out">available commands —</span>');
       printLine('<span class="key">whoami</span><span class="out">     who I am &amp; what I do → /about</span>');
-      printLine('<span class="key">ai_products</span><span class="out"> what I\'ve built → /ai-products</span>');
+      printLine('<span class="key">work</span><span class="out">       what I\'ve built → /work</span>');
       printLine('<span class="key">case</span><span class="out">       deep dives + writing → /case-studies</span>');
       printLine('<span class="key">experience</span><span class="out"> career log → /experience</span>');
       printLine('<span class="key">skills</span><span class="out">     capability matrix → /about</span>');
@@ -80,7 +80,7 @@
       go('index.html#about');
     },
     projects() {
-      printLine('<span class="out">opening </span><span class="key">/ai-products</span><span class="out"> — Lumi · MISO </span><span class="dim">···</span>');
+      printLine('<span class="out">opening </span><span class="key">/work</span><span class="out"> — Lumi · MISO </span><span class="dim">···</span>');
       go('projects.html');
     },
     casestudies() {
@@ -100,7 +100,7 @@
       go('experience.html');
     },
     skills() {
-      printLine('<span class="out">capability matrix — Agent Design · AI Eval · 0&#8594;1 · Growth </span><span class="dim">···</span>');
+      printLine('<span class="out">capability matrix — Product Building · AI Eval · 0&#8594;1 · Growth </span><span class="dim">···</span>');
       go('index.html#skills');
     },
     contact() {
@@ -118,12 +118,12 @@
   function run(raw) {
     const cmd = raw.trim().toLowerCase();
     if (!cmd) return;
-    printLine('<span class="prompt">aayushi@agent ~ %</span> <span class="usr">' + escapeHtml(raw) + '</span>');
+    printLine('<span class="prompt">aayushi ~ %</span> <span class="usr">' + escapeHtml(raw) + '</span>');
     const key = ALIASES[cmd] || cmd;
     if (RESPONSES[key]) { RESPONSES[key](); }
     else {
       printLine('<span class="warn">command not found: ' + escapeHtml(cmd) + '</span>');
-      printLine('<span class="dim">try</span> <span class="key">help</span> <span class="dim">— or:</span> <span class="key">whoami ai_products case contact</span>');
+      printLine('<span class="dim">try</span> <span class="key">help</span> <span class="dim">— or:</span> <span class="key">whoami work case contact</span>');
     }
     gap();
   }
@@ -134,9 +134,9 @@
   async function boot() {
     stateEl.textContent = 'booting';
     await wait(350);
-    printLine('<span class="prompt">aayushi@agent ~ %</span> <span class="usr">./aayushi --init</span>');
+    printLine('<span class="prompt">aayushi ~ %</span> <span class="usr">./intro</span>');
     await wait(260);
-    printLine('<span class="dim">[ok] loading agent · persona · portfolio modules</span>', 'dim');
+    printLine('<span class="dim">[ok] loading portfolio</span>', 'dim');
     await wait(180);
     stateEl.textContent = 'online';
     gap();
@@ -152,7 +152,7 @@
     await wait(LINE_GAP);
     gap();
     printLine('<span class="dim">type a command or tap a pill below.</span>');
-    printLine('<span class="dim">try:</span> <span class="key">whoami</span> <span class="key">ai_products</span> <span class="key">case</span> <span class="key">contact</span>');
+    printLine('<span class="dim">try:</span> <span class="key">whoami</span> <span class="key">work</span> <span class="key">case</span> <span class="key">contact</span>');
     gap();
     input.removeAttribute('disabled');
   }
