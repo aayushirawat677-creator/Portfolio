@@ -304,21 +304,21 @@
       </div>
 
       <div class="bet reveal">
-        <div class="bn">Bet 01 · Invest upstream, in prevention</div>
-        <h4>Every false block and every slow approval becomes a future reconciliation problem.</h4>
-        <p>Prevention is the cheapest point on the curve: revalidate before booking, check availability before committing an irreversible leg, keep approvals fast. The temptation is to pour effort into better detection and repair — but the highest-leverage work is stopping drift and leakage before they start. I'd measure and fund prevention first.</p>
+        <div class="bn">Bet 01 · Fix content completeness before anything else</div>
+        <h4>Leakage isn't primarily a policy problem — it's a "we didn't show the fare they found" problem.</h4>
+        <p>The industry's own research points at the root cause: the top reason travelers book outside the program is simply better pricing elsewhere, and no amount of policy tuning fixes it — if the cheaper fare exists out there, travelers will find it. So the first bet isn't a smarter guardrail; it's the boring, expensive work of pulling in every content source (GDS, NDC, direct, LCC, OTA) so the managed path actually <em>has</em> what the traveler would find on their own. Completeness is the prevention. Everything downstream — compliance, duty of care, clean data — depends on the traveler never having a reason to leave.</p>
       </div>
 
       <div class="bet reveal" data-d="1">
         <div class="bn">Bet 02 · Make the compliant path the easiest path</div>
-        <h4>Leakage isn't a traveler-behavior problem — it's what happens when the managed option is worse than the unmanaged one.</h4>
-        <p>Around a third of hotel bookings already happen outside managed channels. Over-strict guardrails are a direct cause: one too many legitimate bookings hitting a block, and the traveler just books direct — losing the company its rate, compliance, duty-of-care visibility, and data at once. I'd treat "false-block rate" and "approval latency" as first-class product metrics, because they're the real drivers of leakage.</p>
+        <h4>Over-strict guardrails are a direct cause of the leakage they're meant to prevent.</h4>
+        <p>Travel managers estimate roughly a third of hotel bookings already happen off-channel, and most report leakage flat or growing year over year. One too many legitimate bookings hitting a block or a slow approval, and the traveler stops fighting the tool and books direct — losing the company its negotiated rate, compliance, duty-of-care visibility, and data at once, often without anyone knowing the trip exists. So I'd treat <strong>false-block rate and approval latency as first-class product metrics</strong>, and lean on patterns like "show but don't allow booking" — let travelers see everything so they trust there's nothing better to find, while the program keeps control.</p>
       </div>
 
       <div class="bet reveal">
-        <div class="bn">Bet 03 · Don't waste AI budget on the core</div>
-        <h4>Point the AI at the front; don't ask it to fix an incentive problem.</h4>
-        <p>The AI planner is a real edge — it strips cognitive load off the traveler and cost off the platform, and whoever makes a compliant booking feel like one sentence wins. But I'd resist the pull to throw the model at reconciliation and enforcement, where it doesn't belong. The core is a standoff drawn by incentives, and the honest roadmap says so instead of promising a model will solve it.</p>
+        <div class="bn">Bet 03 · Don't spend the AI budget on the core</div>
+        <h4>Point AI at the front; don't ask it to fix an incentive problem.</h4>
+        <p>The AI planner is a real edge — it strips cognitive load off the traveler and cost off the platform, and whoever makes a compliant booking feel like one sentence wins. But I'd resist the pull to throw the model at enforcement and reconciliation, where being right 99 times out of 100 is still a failure and where the real blocker is an incentive standoff no model can rewrite. The honest roadmap funds AI where it compounds — understanding, ranking, explaining a block humanely so the traveler stays in-system — and keeps guarantees in deterministic code.</p>
       </div>
 
       <div class="reveal" data-d="1" style="margin-top:26px;">
