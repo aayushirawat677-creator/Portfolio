@@ -40,14 +40,14 @@
   .flow-node.gate .fn,.flow-node.gate .ft{color:#ff8a80}
   .flow-loop{display:flex;align-items:center;gap:8px;margin-left:26px;padding:6px 0;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted)}
   .flow-loop .lp{color:var(--accent)}
-  /* ranking weight bars */
-  .weights{display:flex;flex-direction:column;gap:10px;margin-top:8px}
-  .wrow{display:grid;grid-template-columns:190px 1fr 44px;gap:14px;align-items:center}
-  @media (max-width:620px){.wrow{grid-template-columns:1fr;gap:4px}}
-  .wrow .wl{font-family:'Sora',sans-serif;font-size:13.5px;color:var(--fg,#e9edf2);font-weight:500}
-  .wrow .wbar{height:8px;border-radius:99px;background:color-mix(in oklab,var(--bg-2) 90%,transparent);border:1px solid var(--line);overflow:hidden}
-  .wrow .wbar i{display:block;height:100%;background:linear-gradient(90deg,color-mix(in oklab,var(--accent) 85%,transparent),color-mix(in oklab,var(--accent) 45%,transparent))}
-  .wrow .wv{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);text-align:right}
+  /* ranking weight bars — scoped names to avoid collision with styles.css .weights/.wrow */
+  .rankw{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+  .rw{display:grid;grid-template-columns:190px 1fr 44px;gap:14px;align-items:center}
+  @media (max-width:620px){.rw{grid-template-columns:1fr;gap:4px}}
+  .rw .rwl{font-family:'Sora',sans-serif;font-size:13.5px;color:var(--ink);font-weight:500}
+  .rw .rwbar{height:8px;border-radius:99px;background:color-mix(in oklab,var(--bg-2) 90%,transparent);border:1px solid var(--line);overflow:hidden}
+  .rw .rwbar i{display:block;height:100%;background:linear-gradient(90deg,color-mix(in oklab,var(--accent) 85%,transparent),color-mix(in oklab,var(--accent) 45%,transparent))}
+  .rw .rwv{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);text-align:right}
   /* decision cards */
   .decision{border-left:2px solid var(--accent);padding:2px 0 2px 20px;margin:24px 0}
   .decision .dn{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
@@ -58,8 +58,8 @@
   .screens{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:20px;margin-top:10px}
   .screen{display:flex;flex-direction:column;gap:10px}
   .screen img{width:100%;border-radius:14px;border:1px solid var(--line);display:block;background:var(--bg-2)}
-  .screen .cap{font-size:12.5px;color:var(--muted);line-height:1.55}
-  .screen .cap b{display:block;font-family:'Sora',sans-serif;font-weight:600;font-size:13px;color:var(--fg,#e9edf2);margin-bottom:3px}
+  .screen .scap{font-size:12.5px;color:var(--muted);line-height:1.55}
+  .screen .scap b{display:block;font-family:'Sora',sans-serif;font-weight:600;font-size:13px;color:var(--fg,#e9edf2);margin-bottom:3px}
 </style>
 </head>
 <body data-hero="split">
@@ -250,16 +250,16 @@
       </div>
       <div class="screens reveal" data-d="1">
         <div class="screen">
-          <img src="assets/miso/miso-02-input.png" alt="MISO ingredient input screen — 'What's in your kitchen?' with a text field, mic, and common-ingredient chips" />
-          <div class="cap"><b>One question, no form</b>Type or speak the pantry. Chips reduce typing; the mic exists because nobody wants to type after a long day.</div>
+          <img src="assets/miso-02-input.png" alt="MISO ingredient input screen — 'What's in your kitchen?' with a text field, mic, and common-ingredient chips" />
+          <div class="scap"><b>One question, no form</b>Type or speak the pantry. Chips reduce typing; the mic exists because nobody wants to type after a long day.</div>
         </div>
         <div class="screen">
-          <img src="assets/miso/miso-03-recipe.png" alt="MISO recipe screen — Pasta al Pomodoro with 'why this works for you', source attribution, and ingredients marked Buy where missing" />
-          <div class="cap"><b>One recipe, and the honest cost</b>"Why this works for you" explains the pick. Every missing item is tagged <em>Buy</em> — the transparency that replaced the hard floor.</div>
+          <img src="assets/miso-03-recipe.png" alt="MISO recipe screen — Pasta al Pomodoro with 'why this works for you', source attribution, and ingredients marked Buy where missing" />
+          <div class="scap"><b>One recipe, and the honest cost</b>"Why this works for you" explains the pick. Every missing item is tagged <em>Buy</em> — the transparency that replaced the hard floor.</div>
         </div>
         <div class="screen">
-          <img src="assets/miso/miso-05-askai-answer.png" alt="MISO Ask AI screen — user asks 'Can I use butter instead of oil?' and gets a substitution answer with a heat warning" />
-          <div class="cap"><b>The rescue layer</b>Mid-cook reality: no soy sauce, butter not oil. A scoped assistant turns a missing ingredient into a question instead of an abandoned meal.</div>
+          <img src="assets/miso-05-askai-answer.png" alt="MISO Ask AI screen — user asks 'Can I use butter instead of oil?' and gets a substitution answer with a heat warning" />
+          <div class="scap"><b>The rescue layer</b>Mid-cook reality: no soy sauce, butter not oil. A scoped assistant turns a missing ingredient into a question instead of an abandoned meal.</div>
         </div>
       </div>
       <div class="codeline reveal" data-d="1" style="margin-top:24px;">
@@ -276,14 +276,14 @@
         <h2>Feasibility gets 40%. That's the whole argument.</h2>
         <p>Anyone can rank by popularity. The product judgment is in what you refuse to let popularity outrank.</p>
       </div>
-      <div class="weights reveal" data-d="1">
-        <div class="wrow"><div class="wl">Ingredient match score</div><div class="wbar"><i style="width:100%"></i></div><div class="wv">40%</div></div>
-        <div class="wrow"><div class="wl">Missing-ingredient penalty</div><div class="wbar"><i style="width:37.5%"></i></div><div class="wv">15%</div></div>
-        <div class="wrow"><div class="wl">Taste preference match</div><div class="wbar"><i style="width:37.5%"></i></div><div class="wv">15%</div></div>
-        <div class="wrow"><div class="wl">Time fit</div><div class="wbar"><i style="width:25%"></i></div><div class="wv">10%</div></div>
-        <div class="wrow"><div class="wl">Source quality / trust</div><div class="wbar"><i style="width:25%"></i></div><div class="wv">10%</div></div>
-        <div class="wrow"><div class="wl">Creator credibility</div><div class="wbar"><i style="width:12.5%"></i></div><div class="wv">5%</div></div>
-        <div class="wrow"><div class="wl">Ingredient utilization bonus</div><div class="wbar"><i style="width:12.5%"></i></div><div class="wv">5%</div></div>
+      <div class="rankw reveal" data-d="1">
+        <div class="rw"><div class="rwl">Ingredient match score</div><div class="rwbar"><i style="width:100%"></i></div><div class="rwv">40%</div></div>
+        <div class="rw"><div class="rwl">Missing-ingredient penalty</div><div class="rwbar"><i style="width:37.5%"></i></div><div class="rwv">15%</div></div>
+        <div class="rw"><div class="rwl">Taste preference match</div><div class="rwbar"><i style="width:37.5%"></i></div><div class="rwv">15%</div></div>
+        <div class="rw"><div class="rwl">Time fit</div><div class="rwbar"><i style="width:25%"></i></div><div class="rwv">10%</div></div>
+        <div class="rw"><div class="rwl">Source quality / trust</div><div class="rwbar"><i style="width:25%"></i></div><div class="rwv">10%</div></div>
+        <div class="rw"><div class="rwl">Creator credibility</div><div class="rwbar"><i style="width:12.5%"></i></div><div class="rwv">5%</div></div>
+        <div class="rw"><div class="rwl">Ingredient utilization bonus</div><div class="rwbar"><i style="width:12.5%"></i></div><div class="rwv">5%</div></div>
       </div>
       <div class="codeline reveal" data-d="1" style="margin-top:24px;">
         <span class="c">// why feasibility + missing-ingredient penalty = 55% combined</span><br />
