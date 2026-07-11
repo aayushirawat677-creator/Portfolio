@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Corporate Travel — System Design Teardown · Aayushi</title>
+<meta name="description" content="A PM systems teardown of how a modern corporate travel platform is architected end to end — the AI planner, the deterministic policy gate, the executor, and the reconciliation loop that keeps it honest. Synthesized from public knowledge, with Spotnana and Navan as references." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+  /* ---- flow diagram primitives (shared pattern with What If?) ---- */
+  .flow{position:relative;z-index:2;display:flex;flex-direction:column;gap:0;margin-top:8px}
+  .flow-node{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:color-mix(in oklab,var(--bg-2) 82%,transparent);transition:border-color .3s,background .3s}
+  .flow-node.hot{border-color:color-mix(in oklab,var(--accent) 48%,transparent);background:color-mix(in oklab,var(--accent) 8%,transparent)}
+  .flow-node .fh{display:flex;align-items:center;gap:11px;flex-wrap:wrap}
+  .flow-node .fn{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);flex:0 0 auto}
+  .flow-node .ft{font-family:'Sora',sans-serif;font-weight:600;font-size:15px;color:var(--fg,#e9edf2)}
+  .flow-node .fkind{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--faint);border:1px solid var(--line);padding:3px 8px;border-radius:6px}
+  .flow-node .fkind.code{color:#9fb2ff;border-color:rgba(111,140,255,.4)}
+  .flow-node .fkind.llm{color:var(--accent)}
+  .flow-node .fbody{margin-top:8px;color:var(--muted,#aab1bb);font-size:13.5px;line-height:1.6}
+  .flow-node .fout{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .flow-node .fout span{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted);border:1px solid var(--line);padding:4px 8px;border-radius:6px;background:color-mix(in oklab,var(--bg) 40%,transparent)}
+  .flow-arrow{height:20px;width:1px;background:var(--line-2);margin-left:26px}
+  .flow-arrow.label{position:relative;height:26px}
+  .flow-arrow.label span{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--faint);white-space:nowrap}
+  .flow-branch{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:4px 0}
+  @media (max-width:620px){.flow-branch{grid-template-columns:1fr}}
+  .flow-branch .fb{border:1px solid var(--line);border-radius:11px;padding:12px 14px;background:color-mix(in oklab,var(--bg) 40%,transparent)}
+  .flow-branch .fb .fbt{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.05em;margin-bottom:5px}
+  .flow-branch .fb.go .fbt{color:var(--accent)}
+  .flow-branch .fb.warn .fbt{color:#febc2e}
+  .flow-branch .fb.stop{border-color:rgba(255,95,87,.35);background:rgba(255,95,87,.05)}
+  .flow-branch .fb.stop .fbt{color:#ff8a80}
+  .flow-branch .fb p{margin:0;color:var(--muted);font-size:12.5px;line-height:1.55}
+  /* the two load-bearing nodes: red policy gate, green reconciliation */
+  .flow-node.gate{border-color:rgba(255,95,87,.45);background:rgba(255,95,87,.06)}
+  .flow-node.gate .fn,.flow-node.gate .ft{color:#ff8a80}
+  .flow-node.recon{border-color:rgba(67,224,160,.5);background:rgba(67,224,160,.07)}
+  .flow-node.recon .fn{color:#5fe7b0}
+  .flow-loop{display:flex;align-items:center;gap:8px;margin-left:26px;padding:6px 0;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted)}
+  .flow-loop .lp{color:#5fe7b0}
+  /* principle cards */
+  .principle-row{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:8px}
+  @media (max-width:720px){.principle-row{grid-template-columns:1fr}}
+  .principle-card{border:1px solid var(--line);border-radius:13px;padding:18px 20px;background:rgba(255,255,255,.012)}
+  .principle-card .pnum{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);margin-bottom:8px}
+  .principle-card h4{font-family:'Sora',sans-serif;font-size:15px;font-weight:600;margin:0 0 6px;color:var(--fg,#e9edf2)}
+  .principle-card p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.6}
+  /* focus / conclusions bets */
+  .bet{border-left:2px solid var(--accent);padding:2px 0 2px 20px;margin:22px 0}
+  .bet .bn{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+  .bet h4{font-family:'Sora',sans-serif;font-size:clamp(16px,2vw,19px);font-weight:600;margin:0 0 8px;color:var(--fg,#e9edf2)}
+  .bet p{margin:0;color:var(--muted);line-height:1.7}
+</style>
+</head>
+<body data-hero="split">
+
+<nav class="nav" id="nav">
+  <a class="brand" href="index.html"><span class="status-dot"></span><b>Aayushi</b><span class="dim">.PM</span></a>
+  <div class="nav-links">
+    <a href="projects.html" data-nav="projects.html">Work</a>
+    <a href="experience.html" data-nav="experience.html">Experience</a>
+    <a href="case-studies.html" data-nav="case-studies.html">Case Studies</a>
+    <a href="index.html" data-nav="index.html">About</a>
+    <a href="index.html#contact" class="nav-cta"><span class="status-dot"></span><span class="label">available</span></a>
+  </div>
+</nav>
+
+<!-- ============ INTRO ============ -->
+<header class="page-intro">
+  <div class="grid-pattern"></div>
+  <div class="wrap">
+    <a class="backlink" href="case-studies.html">← Case Studies</a>
+    <span class="eyebrow" style="margin-top:22px;">Systems Teardown · Domain Deep-Dive</span>
+    <h1>Corporate travel — an <span class="accent">end-to-end system design.</span></h1>
+    <p class="sub">How I take apart an unfamiliar system: I pulled the thread on corporate travel — a product that looks solved and isn't — and reasoned my way to where it actually breaks. This is the architecture, the two flows that carry the weight, and where I'd focus if I were the PM.</p>
+    <div class="detail-meta">
+      <div class="stat"><b>6</b><span>layers, mapped end to end</span></div>
+      <div class="stat"><b>2</b><span>load-bearing flows</span></div>
+      <div class="stat"><b>Propose</b><span>vs enforce boundary</span></div>
+      <div class="stat"><b>PM lens</b><span>risk pass per layer</span></div>
+    </div>
+    <p class="mono" style="font-size:11.5px;color:var(--faint);margin-top:22px;line-height:1.6;max-width:70ch;">// A reference architecture synthesized from public industry knowledge (GDS/NDC distribution, IATA standards, common platform patterns), using Spotnana and Navan as references. Not a claim about any company's actual internal systems — a demonstration of systems reasoning about the domain.</p>
+  </div>
+</header>
+
+<section class="page-section">
+  <div class="wrap">
+
+    <!-- WHY -->
+    <div class="doc-section" id="why" style="margin-top:clamp(20px,3vw,40px);">
+      <div class="section-head reveal">
+        <span class="eyebrow">01 · Why I did this</span>
+        <h2>The part of the job I care about most: <span class="accent">taking a system apart until I can see where it breaks.</span></h2>
+      </div>
+      <div class="reveal" data-d="1">
+        <p class="lead-para wide">Corporate travel looks like the most solved product on earth — you type a request, get a list, book. <span class="accent">Then I started wondering what actually happens in those few minutes.</span></p>
+        <div class="prose">
+          <p>Where the price comes from, who owns the booking once it exists, what happens when the trip changes, and how many separate companies have to quietly agree for a single business trip to hold together. I've never worked in the industry — this is the record of an outsider reasoning her way in, which for understanding a system's <em>shape</em> I've come to think is worth more than pretending otherwise.</p>
+          <p>What I found wasn't a supply chain with tidy handoffs. It was a web of companies that all depend on each other and all, quietly, want to depend on each other less — and the technical problems are downstream of that. <a href="https://aayushilnu.substack.com/p/corporate-travel-looks-solved-it" target="_blank" rel="noopener" class="accent">I wrote the full essay here →</a></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- THESIS + PRINCIPLES -->
+    <div class="doc-section" id="thesis">
+      <div class="section-head reveal">
+        <span class="eyebrow">02 · The thesis</span>
+        <h2>The hardest job isn't booking a trip.</h2>
+        <p>It's maintaining an honest, timely picture of a trip's state across systems the platform doesn't control and that aren't incentivized to keep it informed — while enforcing a company's rules deterministically and making the experience feel effortless.</p>
+      </div>
+      <div class="principle-row reveal" data-d="1">
+        <div class="principle-card">
+          <div class="pnum">principle 01</div>
+          <h4>The incentive web is upstream of the tech</h4>
+          <p>Content fragmentation, servicing gaps, and desync are the equilibrium of a system of frenemies — not a backlog of bugs.</p>
+        </div>
+        <div class="principle-card">
+          <div class="pnum">principle 02</div>
+          <h4>AI proposes; deterministic code enforces</h4>
+          <p>The model reasons, ranks, and explains. Anything where one wrong answer costs money or strands a person lives in testable, auditable code.</p>
+        </div>
+        <div class="principle-card">
+          <div class="pnum">principle 03</div>
+          <h4>Prevent, detect, reconcile</h4>
+          <p>Because the platform doesn't own the source of truth, its copy of reality drifts. The response is a discipline, not a one-time fix.</p>
+        </div>
+        <div class="principle-card">
+          <div class="pnum">principle 04</div>
+          <h4>The executor owns the transaction</h4>
+          <p>One writer of booking state, so the source of truth stays coherent.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLOW 1: ARCHITECTURE -->
+    <div class="doc-section" id="architecture">
+      <div class="section-head reveal">
+        <span class="eyebrow">03 · The architecture</span>
+        <h2>Six layers between the traveler and a world that won't tell the truth.</h2>
+        <p>A request enters at the top, is understood by an AI reasoning layer, gated by deterministic policy, executed against normalized content, and recorded in a source-of-truth store that a reconciliation loop keeps honest. The <span style="color:#ff8a80;">red gate</span> and the <span style="color:#5fe7b0;">green loop</span> are what separate a production platform from a demo.</p>
+      </div>
+      <div class="flow reveal" data-d="1">
+        <div class="flow-node">
+          <div class="fh"><span class="fn">CH</span><span class="ft">Channels</span><span class="fkind">surface</span></div>
+          <div class="fbody">Web, mobile, chat, email, agent desk — every way a request can enter.</div>
+        </div>
+        <div class="flow-arrow"></div>
+        <div class="flow-node">
+          <div class="fh"><span class="fn">01</span><span class="ft">AI reasoning layer — orchestrator + model</span><span class="fkind llm">proposes</span></div>
+          <div class="fbody">Understands the fuzzy request, searches, ranks, explains. <strong>Proposes an action — never commits one.</strong></div>
+        </div>
+        <div class="flow-arrow label"><span>proposed action</span></div>
+        <div class="flow-node gate">
+          <div class="fh"><span class="fn">02</span><span class="ft">Deterministic policy gate</span><span class="fkind code">enforces</span></div>
+          <div class="fbody">Caps, approvals, duty of care, cancel terms. Returns <strong>allow / warn / block</strong> and produces the audit trail. Nothing the model proposes reaches a real booking without this check.</div>
+        </div>
+        <div class="flow-arrow label"><span>allowed action</span></div>
+        <div class="flow-node">
+          <div class="fh"><span class="fn">03</span><span class="ft">Executor layer</span><span class="fkind">owns the transaction</span></div>
+          <div class="fbody">Search · revalidate · book · ticket · change · cancel. Sagas and idempotency keys. The only writer of booking state.</div>
+        </div>
+        <div class="flow-arrow"></div>
+        <div class="flow-node">
+          <div class="fh"><span class="fn">04</span><span class="ft">Content sources — normalized</span><span class="fkind">anti-corruption</span></div>
+          <div class="fbody">GDS · NDC · direct · LCC · aggregators · hotels · rail · car — collapsed into one canonical model. All the ugliness is absorbed here.</div>
+        </div>
+        <div class="flow-arrow"></div>
+        <div class="flow-node">
+          <div class="fh"><span class="fn">05</span><span class="ft">Source-of-truth store</span><span class="fkind">state</span></div>
+          <div class="fbody">Bookings, PNRs, expense, transaction state — the platform's own record.</div>
+        </div>
+        <div class="flow-loop"><span class="lp">↻</span> and running continuously against it &nbsp;→</div>
+        <div class="flow-node recon">
+          <div class="fh"><span class="fn">LOOP</span><span class="ft">Reconciliation loop</span><span class="fkind code">pulls truth</span></div>
+          <div class="fbody">Poll · webhooks · consistency checks. Because the outside world won't reliably <em>push</em> changes, the platform goes and <strong>pulls</strong> the truth.</div>
+        </div>
+      </div>
+      <div class="codeline reveal" data-d="1" style="margin-top:22px;">
+        <span class="c">// the two features that carry most of the weight</span><br />
+        the <b style="color:#ff8a80;">policy gate</b> sits between reasoning and executor — nothing commits without an auditable check<br />
+        the <b style="color:#5fe7b0;">reconciliation loop</b> exists because the platform doesn't own the source of truth
+      </div>
+    </div>
+
+    <!-- FLOW 2: BOOKING -->
+    <div class="doc-section" id="booking">
+      <div class="section-head reveal">
+        <span class="eyebrow">04 · Flow A — a booking, end to end</span>
+        <h2>The happy path — and why payment comes <span class="accent">last.</span></h2>
+        <p>Note where the gate sits, and that booking is a four-state transaction (search → revalidate → book → ticket) with payment as an explicit, idempotent, late-sequenced step.</p>
+      </div>
+      <div class="flow reveal" data-d="1">
+        <div class="flow-node">
+          <div class="fh"><span class="fn">AUTH</span><span class="ft">Auth + gateway</span><span class="fkind">SSO / OAuth</span></div>
+          <div class="fbody">Edge layer resolves the verified identity — and the tenant/policy set that comes with it.</div>
+        </div>
+        <div class="flow-arrow"></div>
+        <div class="flow-node">
+          <div class="fh"><span class="fn">STATE</span><span class="ft">Conversation service</span><span class="fkind">state outside the model</span></div>
+          <div class="fbody">Holds session state durably, because a transaction can stall for hours on human approval — the model can't be the notebook.</div>
+        </div>
+        <div class="flow-arrow"></div>
+        <div class="flow-node">
+          <div class="fh"><span class="fn">01</span><span class="ft">Orchestrator + model</span><span class="fkind llm">proposes an itinerary</span></div>
+          <div class="fbody">Intent, enterprise context, search, rank. Proposes — doesn't book.</div>
+        </div>
+        <div class="flow-arrow"></div>
+        <div class="flow-node gate">
+          <div class="fh"><span class="fn">02</span><span class="ft">Deterministic policy gate</span><span class="fkind code">allow / warn / block</span></div>
+          <div class="fbody">Resolve rules, caps, duty of care → verdict + audit trail. Most-restrictive-rule wins.</div>
+        </div>
+        <div class="flow-arrow label"><span>if over threshold</span></div>
+        <div class="flow-branch">
+          <div class="fb go"><div class="fbt">▶ in policy → auto-approve</div><p>Cheap, compliant, confident bookings proceed.</p></div>
+          <div class="fb warn"><div class="fbt">⚑ over → human approval</div><p>Routed to a manager; state held durably while it waits.</p></div>
+        </div>
+        <div class="flow-arrow"></div>
+        <div class="flow-node">
+          <div class="fh"><span class="fn">03</span><span class="ft">Revalidate the fare</span><span class="fkind">load-bearing</span></div>
+          <div class="fbody">Is it still real, at this price? Fares are live inventory — re-ask the source right before committing.</div>
+        </div>
+        <div class="flow-arrow"></div>
+        <div class="flow-node">
+          <div class="fh"><span class="fn">04</span><span class="ft">Payment — authorize, then capture</span><span class="fkind code">idempotent · late</span></div>
+          <div class="fbody">Sequenced last, via a token never a raw card. Authorize; capture only once the full trip is confirmed reservable.</div>
+        </div>
+        <div class="flow-arrow"></div>
+        <div class="flow-node">
+          <div class="fh"><span class="fn">05</span><span class="ft">Book, then ticket → write to source of truth</span><span class="fkind">saga + idempotency</span></div>
+          <div class="fbody">The executor commits and is the only writer of booking state. Confirmations out to traveler; expense record to finance; events to the warehouse.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLOW 3: RECONCILIATION -->
+    <div class="doc-section" id="reconciliation">
+      <div class="section-head reveal">
+        <span class="eyebrow">05 · Flow B — the reconciliation loop</span>
+        <h2>The half most first drafts omit: <span class="accent">the platform is the last to know.</span></h2>
+        <p>After booking, the trip changes at the source — and the platform is structurally the last to hear about it. This loop is how it fights back: detect the drift because nobody pushed it, then reconcile to the provider's truth.</p>
+      </div>
+      <div class="flow reveal" data-d="1">
+        <div class="flow-node" style="border-color:rgba(255,95,87,.3);">
+          <div class="fh"><span class="fn" style="color:#ff8a80;">!</span><span class="ft">Trip changes at the source</span><span class="fkind">weather · off-channel</span></div>
+          <div class="fbody">A flight cancels. The airline knows at once.</div>
+        </div>
+        <div class="flow-arrow"></div>
+        <div class="flow-node" style="border-color:rgba(255,95,87,.3);">
+          <div class="fh"><span class="fn" style="color:#ff8a80;">!</span><span class="ft">Airline tells the traveler directly</span><span class="fkind">not the platform</span></div>
+          <div class="fbody">The structured update reaches only the booking source — and isn't reliably pushed onward to the platform.</div>
+        </div>
+        <div class="flow-arrow"></div>
+        <div class="flow-node" style="border-color:rgba(255,95,87,.3);">
+          <div class="fh"><span class="fn" style="color:#ff8a80;">✕</span><span class="ft">Platform record now stale</span><span class="fkind">wrong reminder</span></div>
+          <div class="fbody">Still shows on time. May cheerfully tell the traveler to leave for a flight that's cancelled.</div>
+        </div>
+        <div class="flow-arrow label"><span>the loop catches it</span></div>
+        <div class="flow-node recon">
+          <div class="fh"><span class="fn">DETECT</span><span class="ft">Reconciliation loop</span><span class="fkind code">pull, don't wait</span></div>
+          <div class="fbody">Poll and re-fetch PNRs, take webhooks where they exist, run consistency checks that flag trips that no longer make sense — needing no provider at all.</div>
+        </div>
+        <div class="flow-arrow"></div>
+        <div class="flow-node recon">
+          <div class="fh"><span class="fn">RECON</span><span class="ft">Re-sync to truth → repair</span><span class="fkind">saga compensation</span></div>
+          <div class="fbody">The provider owns the truth; the platform copies it. Rebooking options, compensation, or escalate to an agent — then re-notify the traveler and correct the expense record.</div>
+        </div>
+        <div class="flow-loop"><span class="lp">↻</span> runs continuously — drift is constant, not exceptional</div>
+      </div>
+    </div>
+
+    <!-- AI BOUNDARY -->
+    <div class="doc-section" id="ai">
+      <div class="section-head reveal">
+        <span class="eyebrow">06 · Where AI helps — and where it doesn't</span>
+        <h2>AI makes the front effortless. It can't rewrite the core.</h2>
+        <p>The whole industry is racing on the AI planner. Being precise about where the model belongs is the actual product judgment.</p>
+      </div>
+      <div class="checks">
+        <div class="check reveal">
+          <span class="ck">✓</span>
+          <div><b>Where the model earns its place</b><span>Understanding a fuzzy request, weighing soft tradeoffs, ranking options, and — critically — explaining a deterministic block in plain language, which keeps a blocked traveler inside the system instead of booking direct.</span></div>
+        </div>
+        <div class="check reveal" data-d="1">
+          <span class="ck no">✕</span>
+          <div><b>Where it must never be</b><span>The enforcement gate. A spend cap that holds 99 times and clears a $4,000 overage on the 100th isn't a spend cap. A model is probabilistic — it always has a 100th case — so enforcement lives in deterministic, auditable code.</span></div>
+        </div>
+        <div class="check reveal">
+          <span class="ck no">!</span>
+          <div><b>What AI can't fix at all</b><span>The core problem — an honest, timely picture of a trip — depends on parties whose incentives point elsewhere and whose plumbing for telling the middle of the chain was underbuilt from the start. No better model solves an incentive problem.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WHERE I'D FOCUS (the "outcome") -->
+    <div class="doc-section" id="focus">
+      <div class="section-head reveal">
+        <span class="eyebrow">07 · If I were the PM here</span>
+        <h2>Where I'd focus — <span class="accent">the conclusions this teardown earns.</span></h2>
+        <p>Understanding a system is only worth something if it points somewhere. Given everything above, here are the bets I'd make and the trap I'd watch.</p>
+      </div>
+
+      <div class="bet reveal">
+        <div class="bn">Bet 01 · Invest upstream, in prevention</div>
+        <h4>Every false block and every slow approval becomes a future reconciliation problem.</h4>
+        <p>Prevention is the cheapest point on the curve: revalidate before booking, check availability before committing an irreversible leg, keep approvals fast. The temptation is to pour effort into better detection and repair — but the highest-leverage work is stopping drift and leakage before they start. I'd measure and fund prevention first.</p>
+      </div>
+
+      <div class="bet reveal" data-d="1">
+        <div class="bn">Bet 02 · Make the compliant path the easiest path</div>
+        <h4>Leakage isn't a traveler-behavior problem — it's what happens when the managed option is worse than the unmanaged one.</h4>
+        <p>Around a third of hotel bookings already happen outside managed channels. Over-strict guardrails are a direct cause: one too many legitimate bookings hitting a block, and the traveler just books direct — losing the company its rate, compliance, duty-of-care visibility, and data at once. I'd treat "false-block rate" and "approval latency" as first-class product metrics, because they're the real drivers of leakage.</p>
+      </div>
+
+      <div class="bet reveal">
+        <div class="bn">Bet 03 · Don't waste AI budget on the core</div>
+        <h4>Point the AI at the front; don't ask it to fix an incentive problem.</h4>
+        <p>The AI planner is a real edge — it strips cognitive load off the traveler and cost off the platform, and whoever makes a compliant booking feel like one sentence wins. But I'd resist the pull to throw the model at reconciliation and enforcement, where it doesn't belong. The core is a standoff drawn by incentives, and the honest roadmap says so instead of promising a model will solve it.</p>
+      </div>
+
+      <div class="reveal" data-d="1" style="margin-top:26px;">
+        <p class="lead-para wide">The best product problems have a simple surface and a merciless depth — where every clean feature sits on a fault line drawn by <span class="accent">incentives rather than code.</span></p>
+        <div class="prose">
+          <p>Corporate travel is the cleanest example of that pattern I know in enterprise software. That's the real pull for me: not that it's broken, but that it's broken in an honest, structural, load-bearing way — the kind you can't patch with a clever feature and can't solve alone. <a href="https://aayushilnu.substack.com/p/corporate-travel-looks-solved-it" target="_blank" rel="noopener" class="accent">Full essay on Substack →</a></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section" id="contact" style="padding-top: clamp(20px,3vw,40px);">
+  <div class="wrap">
+    <div class="contact-card reveal">
+      <div class="grid-pattern"></div>
+      <span class="eyebrow" style="justify-content:center;">Get in touch</span>
+      <h2>Let's ship the <span class="accent">next one.</span></h2>
+      <p class="sub">I'm looking for AI Product Manager roles where I can take products from 0→1 and own them through launch. If that fits your team, let's talk.</p>
+      <div class="contact-actions">
+        <a class="btn primary" href="mailto:aayushilnu0@gmail.com">→ aayushilnu0@gmail.com</a>
+        <a class="btn ghost" href="https://www.linkedin.com/in/aayushi-23a570a0/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+      <div style="margin-top:28px;">
+        <span class="avail-pill"><span class="status-dot"></span> available for AI PM roles · Sunnyvale, CA / remote</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="log">% <span class="accent">aayushi</span> — available for AI PM roles · Sunnyvale, CA</div>
+  <div class="up" id="toTop">return to top ↑</div>
+</footer>
+
+<div id="tweaks-root"></div>
+<script src="site.js"></script>
+<script>
+  /* cycle the "hot" highlight through each flow diagram independently */
+  (function(){
+    document.querySelectorAll('.flow').forEach(function(flow){
+      var nodes = Array.from(flow.querySelectorAll('.flow-node'));
+      if(!nodes.length) return;
+      var k = 0;
+      setInterval(function(){
+        nodes.forEach(function(n){ n.classList.remove('hot'); });
+        nodes[k % nodes.length].classList.add('hot');
+        k++;
+      }, 1400);
+    });
+  })();
+</script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="tweaks-app.jsx"></script>
+</body>
+</html>
