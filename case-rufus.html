@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Lumi Body Doubling — Feature PRD · Aayushi</title>
-<meta name="description" content="A feature PRD turning Lumi's voice channel into an on-demand body-doubling companion — Chat & Deep Focus modes, VAD-driven cost management, and a session-completion north star." />
+<title>Rufus — Smart Clarification Engine · Case Study · Aayushi</title>
+<meta name="description" content="An external PRD proposal for Amazon Rufus: a Smart Clarification Engine that teaches the AI shopping assistant to ask before it recommends — intent-gap detection, dimensional fit reasoning, and multi-source web intelligence." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -28,16 +28,15 @@
   <div class="grid-pattern"></div>
   <div class="wrap">
     <a class="backlink" href="case-studies.html">← Case Studies</a>
-    <span class="eyebrow" style="margin-top:22px;">Case Study · Feature PRD · Proposed</span>
-    <h1>Lumi Body Doubling — <span class="accent">presence after the push.</span></h1>
-    <p class="sub">Lumi is great at getting users <em>over</em> the start friction. Then they get bored, lose momentum, and quit halfway. This PRD turns the voice channel we're already on into an on-demand body-doubling companion.</p>
+    <span class="eyebrow" style="margin-top:22px;">Case Study · External PRD Proposal</span>
+    <h1>Rufus — a Smart <span class="accent">Clarification Engine.</span></h1>
+    <p class="sub">Teaching Amazon's AI shopping assistant to <em>ask before it recommends</em>. A product proposal written as a frustrated customer who thought hard about why — and what the fix looks like.</p>
     <div class="detail-meta">
-      <div class="stat"><b><span class="accent">75%</span></b><span>already body-double elsewhere</span></div>
-      <div class="stat"><b>85%</b><span>report it helps them</span></div>
-      <div class="stat"><b>70%+</b><span>completion target</span></div>
-      <div class="stat"><b>40–60%</b><span>Gemini Live cost cut</span></div>
+      <div class="stat"><b><span class="accent">32%</span></b><span>match rate today (cited)</span></div>
+      <div class="stat"><b>+15%</b><span>add-to-cart lift</span></div>
+      <div class="stat"><b>≤5</b><span>questions / flow</span></div>
+      <div class="stat"><b>6</b><span>intelligence sources</span></div>
     </div>
-    <p class="mono" style="font-size:11px;color:var(--faint);margin-top:16px;">// 75% / 85% are from our own user survey. 70%+ completion and 40–60% cost cut are targets to validate, not results.</p>
   </div>
 </header>
 
@@ -48,227 +47,334 @@
     <div class="doc-section" id="problem" style="margin-top:clamp(20px,3vw,40px);">
       <div class="section-head reveal">
         <span class="eyebrow">01 · The Problem</span>
-        <h2>We're hanging up too early.</h2>
+        <h2>Working backwards from the customer.</h2>
       </div>
       <div class="reveal" data-d="1">
-        <p class="lead-para wide">The 5-minute persuasive call works — users start the task. But once they're actually doing it, momentum trails off and they reach for their phone. <span class="accent">Lumi is already on the call. We just leave.</span></p>
+        <p class="lead-para wide">"I want a cover for my MacBook Air." Rufus showed me a shelf of cases based on what I'd browsed before. <span class="accent">It guessed. It guessed wrong.</span></p>
         <div class="prose">
-          <p>From interviews, the pattern was consistent: users get started thanks to Lumi, then lose momentum mid-task and quit. <strong>Body doubling</strong> — working alongside someone else — is one of the most evidence-backed techniques for sustaining engagement through the hard middle of a task. In our user survey, 75% said they already do it elsewhere — on Focusmate, Flow Club and focus communities — paying for it, scheduling around it, and asking why Lumi can't.</p>
-          <p>Reminders, habit trackers and rewards only <em>front-load</em> motivation. They don't provide ongoing presence, so motivation trails off after the first few minutes. Lumi already solves start friction — what's missing is the <strong>continuity of presence</strong>, which is exactly what body doubling provides.</p>
+          <p>It didn't know my laptop size, my budget, whether I needed pockets, or that I just wanted a slim sleeve to slip inside my backpack. I went to Google, found my answer on a Reddit thread, and came back to Amazon to buy it manually. <strong>Rufus was absent from the most important moment in my journey — the moment I was trying to decide.</strong></p>
+          <p>The root cause: Rufus builds recommendations from three passive signals — order history, browsing history, and the keyword you typed. All three describe what you did <em>before</em>, not what you need <em>right now</em>. So two people asking the exact same question get the same generic answer, even when their needs are completely different.</p>
         </div>
-      </div>
-    </div>
-
-    <!-- MARKET -->
-    <div class="doc-section" id="market">
-      <div class="section-head reveal">
-        <span class="eyebrow">02 · Market Landscape</span>
-        <h2>Real, paid, and growing — but all scheduled.</h2>
-        <p>Every existing solution requires booking time with another human. That's the wedge.</p>
       </div>
       <div class="cmp reveal" data-d="1">
         <div class="cmp-row head">
-          <div>product</div><div>price</div><div>limitation</div>
+          <div>same query</div><div>person A needs</div><div>person B needs</div>
         </div>
         <div class="cmp-row">
-          <div class="lbl">Focusmate</div>
-          <div>$6.99/mo · 12M+ sessions</div>
-          <div>Must schedule with a stranger; camera required; no instant start</div>
+          <div class="lbl">"a face mask"</div>
+          <div>Clay mask, oily skin, acne, under $15</div>
+          <div>Hydrating sheet mask, dry skin, no budget limit</div>
         </div>
         <div class="cmp-row">
-          <div class="lbl">Flow Club</div>
-          <div>$33–40/mo</div>
-          <div>High price; host-led, fixed scheduling; no on-demand</div>
+          <div class="lbl">"running shoes"</div>
+          <div>Stability, flat feet, road, injury prevention</div>
+          <div>Minimalist trail, high arch, experienced</div>
         </div>
         <div class="cmp-row">
-          <div class="lbl">FLOWN</div>
-          <div>$29/mo</div>
-          <div>Facilitated "Flocks"; schedule required, less spontaneous</div>
+          <div class="lbl">"a MacBook cover"</div>
+          <div>13″ fabric sleeve, pockets, fits in backpack</div>
+          <div>15″ hard shell, no pockets, max protection</div>
         </div>
         <div class="cmp-row">
-          <div class="lbl">Caveday</div>
-          <div>$35/mo</div>
-          <div>Ritual-based group video; only works at fixed times</div>
+          <div class="lbl">"protein powder"</div>
+          <div>Vegan, weight loss, chocolate</div>
+          <div>Whey, muscle building, unflavoured, budget</div>
         </div>
-        <div class="cmp-row">
-          <div class="lbl">Focus communities</div>
-          <div>Free</div>
-          <div>Unstructured, timezone-dependent, effortful to find a session</div>
-        </div>
-      </div>
-      <div class="codeline reveal" data-d="1" style="margin-top:22px;">
-        <span class="c">// Lumi's wedge</span><br />
-        <b>No scheduling. No strangers. No camera.</b> Always on-demand, zero friction to start —<br />
-        already inside the voice channel the instant a task begins.
       </div>
     </div>
 
-    <!-- WHAT WE'RE BUILDING -->
-    <div class="doc-section" id="building">
+    <!-- WHY IT MATTERS -->
+    <div class="doc-section" id="why">
       <div class="section-head reveal">
-        <span class="eyebrow">03 · What We're Building</span>
-        <h2>Two modes — and a clean exit.</h2>
-        <p>When a user confirms "I'm starting," Lumi transitions out of intervention and into a body-doubling session, behaving differently based on the task.</p>
+        <span class="eyebrow">02 · Why It Matters</span>
+        <h2>The trust gap is the conversion gap.</h2>
+      </div>
+      <div class="metric-grid">
+        <div class="metric reveal"><b><span class="accent">32%</span></b><span>recs that match the ask</span></div>
+        <div class="metric reveal" data-d="1"><b>83%</b><span>results Amazon-owned</span></div>
+        <div class="metric reveal" data-d="2"><b>→ Google</b><span>where users go instead</span></div>
+      </div>
+      <p class="mono" style="font-size:11px;color:var(--faint);margin-top:14px;">// 32% accurate / 83% self-serving — industry analysis by Warren Cowan (CEO, FoundIt!), via Retail Technology Innovation Hub, 2026. A single-vendor estimate, not an Amazon-published figure — I treat it as directional.</p>
+      <div class="codeline reveal" data-d="1" style="margin-top:24px;">
+        <span class="c">// the core insight</span><br />
+        Rufus does not have a ranking problem. It has a <b>listening problem.</b><br />
+        <span class="c">// it skips the most important step — understanding what the person actually needs</span><br />
+        Fix the listening → the recommendations follow.
+      </div>
+    </div>
+
+    <!-- GOALS -->
+    <div class="doc-section" id="goals">
+      <div class="section-head reveal">
+        <span class="eyebrow">03 · Goals</span>
+        <h2>Make Rufus the assistant users trust enough to follow.</h2>
+        <p>Because it asked the right questions before making any recommendation.</p>
       </div>
       <div class="info-grid">
         <div class="info-card reveal">
-          <div class="ic-n">// mode 01</div>
-          <h4>Chat mode</h4>
-          <p>Lumi makes light conversation, comments on what the user's doing, talks about its own "work." For chores, cooking, exercise. Goes quiet 2–3 min → "Still with me?"</p>
+          <div class="ic-n">// business</div>
+          <h4>Earn the conversion</h4>
+          <p>+15% guided-session add-to-cart vs. passive sessions; lift 7-day return rate. The current 32% match rate is the cited baseline; 60%+ is my target — a hypothesis to validate, not a promise, and the first thing I'd pressure-test with a query audit before building.</p>
         </div>
         <div class="info-card reveal" data-d="1">
-          <div class="ic-n">// mode 02</div>
-          <h4>Deep Focus mode</h4>
-          <p>For studying or focused work. Lumi stays on the call but doesn't speak — plays ambient audio (forest, café, campfire). The user actively ends the session.</p>
+          <div class="ic-n">// user</div>
+          <h4>Feel understood, not targeted</h4>
+          <p>Recommendations that match what they actually need — less filtering and second-guessing, more confident buying. The difference between advice and advertising is whether someone listened first.</p>
         </div>
         <div class="info-card reveal" data-d="2">
-          <div class="ic-n">// path 03</div>
-          <h4>Leaving the house</h4>
-          <p>Gym, errands, school drop-off: Lumi guides the prep, then cuts the call the moment the user clicks "I'm starting." Body doubling only applies to in-place tasks.</p>
+          <div class="ic-n">// scope</div>
+          <h4>What this is not</h4>
+          <p>Not an ad-strategy redesign, not human chat, not a catalogue-data fix, not category-specific. It improves how existing data is interpreted against stated needs — across all product types.</p>
         </div>
       </div>
     </div>
 
-    <!-- USE CASES -->
-    <div class="doc-section" id="usecases">
+    <!-- HOW IT WORKS -->
+    <div class="doc-section" id="how">
       <div class="section-head reveal">
-        <span class="eyebrow">04 · Use Cases</span>
-        <h2>How a session actually feels.</h2>
-      </div>
-      <div class="steps">
-        <div class="step reveal">
-          <span class="snum">01</span>
-          <div>
-            <h4>Chat — folding laundry</h4>
-            <p>"I'll just be over here drafting some notes. Tell me when you're ready." Light banter as the user folds; gentle re-engagement after silence; ends on "I'm done."</p>
-          </div>
-        </div>
-        <div class="step reveal">
-          <span class="snum">02</span>
-          <div>
-            <h4>Deep Focus — studying</h4>
-            <p>"Putting the headphones on. Forest, café, or campfire?" Voice channel stays connected but silent; ambient audio loops; VAD wakes Gemini Live when the user speaks to end or switch.</p>
-          </div>
-        </div>
-        <div class="step reveal">
-          <span class="snum">03</span>
-          <div>
-            <h4>Mid-session switch</h4>
-            <p>"Lumi, switch to deep focus — I want to think." Lumi stops speaking, ambient audio starts at the last-used track, resumes voice only to close out.</p>
-          </div>
-        </div>
-        <div class="step reveal">
-          <span class="snum">04</span>
-          <div>
-            <h4>Interruptions &amp; exits</h4>
-            <p>Heading to the gym → call cuts on "I'm starting." Taking a phone call → session pauses, resumes on return: "You're back. How'd that go?"</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ENGINEERING -->
-    <div class="doc-section" id="engineering">
-      <div class="section-head reveal">
-        <span class="eyebrow">05 · How It Works</span>
-        <h2>VAD is the cost-critical piece.</h2>
-        <p>The whole economic model of Deep Focus mode hinges on waking the expensive model only when needed.</p>
-      </div>
-      <div class="info-grid">
-        <div class="info-card reveal">
-          <div class="ic-n">// frontend</div>
-          <h4>Mode picker &amp; session UI</h4>
-          <p>Default inferred from task type (chores → Chat, study → Deep Focus), user can override. Minimal active-session screen — readable when the phone's propped at arm's length. Locally-bundled ambient audio, 3 tracks.</p>
-        </div>
-        <div class="info-card reveal" data-d="1">
-          <div class="ic-n">// backend</div>
-          <h4>Gemini Live connection mgmt</h4>
-          <p>Chat mode: connection open the full session. Deep Focus: closes once "I'm starting," reopens only when VAD detects speech. A session state machine tracks mode, elapsed time, and last interaction.</p>
-        </div>
-        <div class="info-card reveal" data-d="2">
-          <div class="ic-n">// VAD</div>
-          <h4>Relative-threshold detection</h4>
-          <p>Wake on volume above the <em>rolling ambient average</em>, not an absolute level — so it handles quiet bedrooms and noisy cafés without per-user retuning. Reconnect must land under 2 seconds or the experience breaks.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- ACCEPTANCE / SCOPE -->
-    <div class="doc-section" id="scope">
-      <div class="section-head reveal">
-        <span class="eyebrow">06 · Acceptance &amp; Scope</span>
-        <h2>The Phase-1 line.</h2>
+        <span class="eyebrow">04 · How It Works</span>
+        <h2>Ask what you don't yet know.</h2>
+        <p>Before recommending anything, Rufus asks itself: "What don't I know about this person's situation that would change my recommendation?" Those gaps become the questions.</p>
       </div>
       <div class="checks">
         <div class="check reveal">
-          <span class="ck">✓</span>
-          <div><b>Mode picker &lt;2s</b><span>Appears within 2s of task-start; in Deep Focus, no voice unless the user speaks first.</span></div>
+          <span class="ck">1</span>
+          <div><b>Never ask what the user already told you</b><span>"Cheap MacBook cover" → budget is answered. Move on.</span></div>
         </div>
         <div class="check reveal" data-d="1">
-          <span class="ck">✓</span>
-          <div><b>VAD resume &lt;2s</b><span>Gemini Live wakes within 2s of detected speech; false-positive wakes under 5% of sessions.</span></div>
+          <span class="ck">2</span>
+          <div><b>Ask only what changes the recommendation</b><span>Irrelevant questions erode trust. Every question must have a purpose.</span></div>
         </div>
         <div class="check reveal">
-          <span class="ck">✓</span>
-          <div><b>Clean outside-task exit</b><span>For away tasks, the call ends within 1s of "I'm starting."</span></div>
-        </div>
-        <div class="check reveal" data-d="1">
-          <span class="ck">✓</span>
-          <div><b>Hard 60-min cap</b><span>Phase-1 session-length cap contains cost exposure; cost monitored daily.</span></div>
-        </div>
-        <div class="check reveal">
-          <span class="ck no">—</span>
-          <div><b>Out of scope (v1)</b><span>Spotify / external music (deferred to v2 Alexa path), Pomodoro timers, CV activity recognition, multi-user body doubling, calendar inference.</span></div>
-        </div>
-        <div class="check reveal" data-d="1">
-          <span class="ck no">—</span>
-          <div><b>Scoping tension</b><span>Users asked for "their music," but Spotify in-call audio is a real lift. Ship local ambient audio, track demand; if consistent, Alexa becomes the v2 route.</span></div>
+          <span class="ck">3</span>
+          <div><b>Never block the user</b><span>Every question has a Skip option. Rufus gives its best answer even with incomplete information.</span></div>
         </div>
       </div>
     </div>
 
-    <!-- METRICS -->
+    <!-- INTELLIGENCE STACK -->
+    <div class="doc-section" id="stack">
+      <div class="section-head reveal">
+        <span class="eyebrow">05 · Intelligence Stack</span>
+        <h2>Six sources, ranked by priority.</h2>
+        <p>After gathering needs, Rufus draws on every available source — not just the Amazon catalogue.</p>
+      </div>
+      <div class="cmp reveal" data-d="1">
+        <div class="cmp-row head">
+          <div>source</div><div>what it contributes</div><div>priority</div>
+        </div>
+        <div class="cmp-row">
+          <div class="lbl">This conversation</div>
+          <div>Explicit stated needs — the primary signal.</div>
+          <div><strong>P0</strong> · always</div>
+        </div>
+        <div class="cmp-row">
+          <div class="lbl">Amazon catalogue</div>
+          <div>The pool of purchasable products, filtered by hard constraints.</div>
+          <div><strong>P0</strong> · always</div>
+        </div>
+        <div class="cmp-row">
+          <div class="lbl">Trusted experts</div>
+          <div>Wirecutter, Runner's World, Paula's Choice, r/SkincareAddiction, Serious Eats.</div>
+          <div><strong>P0</strong> · validate &amp; rank</div>
+        </div>
+        <div class="cmp-row">
+          <div class="lbl">Specs &amp; dimensions</div>
+          <div>Physical compatibility — actual measurements, not keyword tags.</div>
+          <div><strong>P0</strong> · where fit matters</div>
+        </div>
+        <div class="cmp-row">
+          <div class="lbl">Reviews &amp; Q&amp;A</div>
+          <div>Granular product-specific confidence signals.</div>
+          <div><strong>P1</strong> · supportive</div>
+        </div>
+        <div class="cmp-row">
+          <div class="lbl">Order / browse history</div>
+          <div>Soft signal for brand preference — never overrides stated needs.</div>
+          <div><strong>P2</strong> · supportive only</div>
+        </div>
+      </div>
+      <div class="codeline reveal" data-d="1" style="margin-top:22px;">
+        <span class="c">// why source attribution changes everything</span><br />
+        "Amazon recommends this" <span class="c">→ feels like an ad.</span><br />
+        "<b>Runner's World</b> recommends this for flat-footed road runners, on Amazon for $95" <span class="c">→ feels like advice.</span>
+      </div>
+    </div>
+
+    <!-- DIMENSIONAL INTELLIGENCE -->
+    <div class="doc-section" id="dimensional">
+      <div class="section-head reveal">
+        <span class="eyebrow">06 · Dimensional Intelligence</span>
+        <h2>Tag matching is not fit verification.</h2>
+        <p>The insight that separates Smart Clarification from every existing shopping assistant.</p>
+      </div>
+      <div class="reveal" data-d="1">
+        <div class="prose">
+          <p>For any product where physical fit matters — laptop covers, phone cases, furniture, clothing, cookware — Rufus shouldn't rely on a tag like "13-inch compatible." It should reason about actual dimensions and real-world constraints.</p>
+        </div>
+        <div class="codeblock reveal" data-d="1"><span class="c">// MacBook Air 13" = 11.97 × 8.36 in</span>
+cover tagged "13-inch compatible"   → internal cavity 13.2 × 9.1 in
+without pockets                     → fits (0.23 in clearance each side)
+<span class="v">but user needs pockets</span> → front-pocket stitching compresses width 0.3–0.8 in
+13.2 − 0.6 compression             → <span class="k">12.6 in effective</span> → laptop won't slide in → return
+
+<span class="c">// Rufus rule</span>
+if (needs_pockets) min_internal = <span class="v">13.5 × 9.5 in</span>  → auto-filter, then explain why</div>
+        <div class="prose">
+          <p>Rufus discloses the exclusion in plain language: <strong>"I've removed covers that would be too tight once pockets are factored in — here's what will actually fit."</strong> No current shopping tool does this.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONVERSATION EXAMPLE -->
+    <div class="doc-section" id="example">
+      <div class="section-head reveal">
+        <span class="eyebrow">07 · Conversation Example</span>
+        <h2>The MacBook Air cover, annotated.</h2>
+        <p>Six unknowns, asked most-consequential first. Every step shows Rufus's reasoning.</p>
+      </div>
+      <div class="steps">
+        <div class="step reveal">
+          <span class="snum">Q1</span>
+          <div>
+            <h4>"Which MacBook Air do you have?"</h4>
+            <div class="step-sub">user: 13-inch</div>
+            <p>A wrong size = a wrong product, full stop — so size goes first. Records 11.97 × 8.36 in as the compatibility anchor for every cover considered.</p>
+          </div>
+        </div>
+        <div class="step reveal">
+          <span class="snum">Q2</span>
+          <div>
+            <h4>"Material preference?" → "Budget?"</h4>
+            <div class="step-sub">user: fabric · under $50</div>
+            <p>Budget is most likely to reshape the product set next; material narrows the field. Hard filters, applied early.</p>
+          </div>
+        </div>
+        <div class="step reveal">
+          <span class="snum">Q3</span>
+          <div>
+            <h4>"Do you need pockets, or a clean sleeve?"</h4>
+            <div class="step-sub">user: pockets — charger + cables</div>
+            <p>The critical branch. Pockets confirmed → activates the dimensional filter: minimum internal cavity 13.5 × 9.5 in. Every cover below that is excluded, regardless of its "13-inch compatible" tag.</p>
+          </div>
+        </div>
+        <div class="step reveal">
+          <span class="snum">Q4</span>
+          <div>
+            <h4>"Carry on its own, or inside a bag?"</h4>
+            <div class="step-sub">user: inside a backpack — just a sleeve</div>
+            <p>Profile complete. Handles, straps and rigid structure excluded. Rufus searches catalogue + expert sources and returns 5 confirmed-to-fit sleeves — each with a one-line reason and source ("Recommended by Wirecutter as best fabric sleeve for MacBook Air").</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FUNCTIONAL REQUIREMENTS -->
+    <div class="doc-section" id="requirements">
+      <div class="section-head reveal">
+        <span class="eyebrow">08 · Functional Requirements</span>
+        <h2>What engineering builds.</h2>
+      </div>
+      <div class="info-grid">
+        <div class="info-card reveal">
+          <div class="ic-n">FR-01 / 02</div>
+          <h4>Intent gaps &amp; progressive questions</h4>
+          <p>Parse the query for category, stated constraints, and unknown attributes. Generate questions dynamically — never a hardcoded per-category script. Max 5; viable recommendation after 2.</p>
+        </div>
+        <div class="info-card reveal" data-d="1">
+          <div class="ic-n">FR-03</div>
+          <h4>Dimensional reasoning</h4>
+          <p>Retrieve verified dimensions where fit matters; apply real-world compatibility logic (pocket compression, inseam, clearance); disclose and explain every exclusion.</p>
+        </div>
+        <div class="info-card reveal" data-d="2">
+          <div class="ic-n">FR-04</div>
+          <h4>Multi-source engine</h4>
+          <p>Search catalogue + external experts in parallel. Rank by attribute match, expert endorsement, then review quality. Sponsored items are labelled and may not displace top organic matches.</p>
+        </div>
+        <div class="info-card reveal">
+          <div class="ic-n">FR-05</div>
+          <h4>Post-rec refinement</h4>
+          <p>Offer cheaper / premium / brand / material filters without restarting. Any prior answer can change at any time, context retained.</p>
+        </div>
+        <div class="info-card reveal" data-d="1">
+          <div class="ic-n">FR-06</div>
+          <h4>Session memory</h4>
+          <p>All answers persist for the session; returning keeps them as defaults. Rufus acknowledges prior answers: "Since you mentioned fabric earlier…"</p>
+        </div>
+        <div class="info-card reveal" data-d="2">
+          <div class="ic-n">// non-functional</div>
+          <h4>Speed &amp; access</h4>
+          <p>&lt;300ms question render, &lt;1.5s post-answer results, &lt;15min catalogue freshness. Full voice parity, WCAG 2.1 AA, session-only storage in v1.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUCCESS METRICS -->
     <div class="doc-section" id="metrics">
       <div class="section-head reveal">
-        <span class="eyebrow">07 · Success Metrics</span>
-        <h2>One metric above the rest.</h2>
+        <span class="eyebrow">09 · Success Metrics</span>
+        <h2>Measured against a baseline — not activity.</h2>
       </div>
-      <div class="metric-grid">
-        <div class="metric reveal"><b><span class="accent">70%+</span></b><span>session completion</span></div>
-        <div class="metric reveal" data-d="1"><b>+50%</b><span>duration vs. non-doubled</span></div>
-        <div class="metric reveal" data-d="2"><b>+15 pts</b><span>7-day retention</span></div>
-        <div class="metric reveal"><b>40+</b><span>target NPS</span></div>
-        <div class="metric reveal" data-d="1"><b>&lt;5%</b><span>VAD false-positive</span></div>
-        <div class="metric reveal" data-d="2"><b>40–60%</b><span>cost reduction</span></div>
+      <div class="cmp reveal" data-d="1">
+        <div class="cmp-row head">
+          <div>metric</div><div>baseline</div><div>target</div>
+        </div>
+        <div class="cmp-row">
+          <div class="lbl">Match rate</div>
+          <div>32% (cited baseline)</div>
+          <div><strong>60%+</strong> target — to validate</div>
+        </div>
+        <div class="cmp-row">
+          <div class="lbl">Add-to-cart</div>
+          <div>unguided, set at launch</div>
+          <div><strong>+15%</strong> lift, guided vs. control</div>
+        </div>
+        <div class="cmp-row">
+          <div class="lbl">Flow completion</div>
+          <div>new feature</div>
+          <div><strong>55%+</strong> of initiated flows</div>
+        </div>
+        <div class="cmp-row">
+          <div class="lbl">Question skip rate</div>
+          <div>new feature</div>
+          <div><strong>&lt;40%</strong> per question</div>
+        </div>
       </div>
-      <div class="codeline reveal" data-d="1" style="margin-top:24px;">
-        <span class="c">// the metric I care most about</span><br />
-        <b>session_completion_rate</b> <span class="c">— if users keep ending early, we haven't solved boredom; we've just moved when the quitting happens.</span>
+      <div class="codeline reveal" data-d="1" style="margin-top:22px;">
+        <span class="c">// what we are NOT measuring</span><br />
+        number_of_questions <span class="c">— more questions ≠ better outcomes.</span><br />
+        session_length <span class="c">— a 30s flow that ends in a purchase beats a 5-min one that ends in abandonment.</span>
       </div>
     </div>
 
     <!-- RISKS -->
     <div class="doc-section" id="risks">
       <div class="section-head reveal">
-        <span class="eyebrow">08 · Risks</span>
-        <h2>What could break it.</h2>
+        <span class="eyebrow">10 · Risks &amp; Open Questions</span>
+        <h2>What could go wrong.</h2>
       </div>
       <div class="checks">
         <div class="check reveal">
           <span class="ck no">!</span>
-          <div><b>VAD false-positives</b><span>Random wakes during studying kill Deep Focus. Conservative Phase-1 threshold; telemetry on every wake event.</span></div>
+          <div><b>Questions feel annoying</b><span>All skippable, max 5, escape hatch always visible; A/B test the question count.</span></div>
         </div>
         <div class="check reveal" data-d="1">
           <span class="ck no">!</span>
-          <div><b>Gemini Live cost overrun</b><span>If VAD underperforms, Deep Focus costs as much as Chat. Hard 60-min cap; monitor cost-per-session daily.</span></div>
+          <div><b>Sponsored revenue drops</b><span>Monitor ad CTR in the A/B test before rollout; sponsored items stay labelled, not removed.</span></div>
         </div>
         <div class="check reveal">
           <span class="ck no">!</span>
-          <div><b>Doubling doesn't lift completion</b><span>The existential risk. If completion isn't better than non-doubled tasks, revert to intervention-only and keep the learnings.</span></div>
+          <div><b>Dimensional data missing</b><span>Apply fit logic only where spec data is verified; flag unverified products in results.</span></div>
         </div>
         <div class="check reveal" data-d="1">
           <span class="ck no">!</span>
-          <div><b>Users prefer humans</b><span>The 75% already using Focusmate and focus communities may value the human element. Position Lumi as on-demand and complementary, not a replacement.</span></div>
+          <div><b>Long-tail question quality</b><span>Launch with high-confidence categories only; require a quality bar before enabling new ones.</span></div>
+        </div>
+      </div>
+      <div class="reveal" data-d="1">
+        <p class="lead-para wide" style="margin-top:38px;">"Rufus doesn't have a ranking problem or an AI problem. It has a listening problem. <span class="accent">It recommends before it understands.</span>"</p>
+        <div class="prose">
+          <p>The best version of Rufus isn't a smarter search bar — it's the knowledgeable friend who asks two or three good questions, then finds you exactly the right thing because it understood what you actually needed.</p>
         </div>
       </div>
     </div>
