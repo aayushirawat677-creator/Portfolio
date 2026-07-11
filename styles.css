@@ -849,13 +849,13 @@ body.no-scan .portrait .scan { display: none; }
   .brand .dim { display: none; }
   .hero-meta { gap: 18px; }
   .term-body { font-size: 12.5px; }
-}/* ============================================================
-   ADD THIS TO THE END OF styles.css
-   Fixes: .prose-aside was used in lumi.html but never defined,
-   so it was rendering as a plain paragraph with no distinction.
+}
+
+/* ============================================================
+   ADDITION — .prose-aside
+   (was used in lumi.html but never defined)
    ============================================================ */
 
-/* aside / forward-looking callout inside .prose */
 .prose p.prose-aside {
   margin-top: 22px;
   padding: 16px 18px;
