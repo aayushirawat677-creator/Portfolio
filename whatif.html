@@ -104,7 +104,7 @@
       <div class="stat"><b>Solo</b><span>PM + builder</span></div>
       <div class="stat"><b>1 sprint</b><span>concept to working demo</span></div>
       <div class="stat"><b>AI-built</b><span>drove the build with AI tools</span></div>
-      <div class="stat"><b>Multi-agent</b><span>3-stage pipeline</span></div>
+      <div class="stat"><b>4 agents</b><span>3 in the pipeline + 1 judge</span></div>
     </div>
   </div>
 </header>
@@ -269,7 +269,7 @@
       <!-- PLATFORM NOTE -->
       <div class="flow-layer platform-layer reveal" data-d="1" style="margin-top:16px;">
         <div class="fl-tag"><span class="d"></span>Powered by Azure AI Foundry (Foundry IQ)</div>
-        <p class="prose" style="margin:0 0 14px;font-size:14px;">Deployed to production on Azure. I designed the three agents, their prompts, the workflow logic and the guardrail rules; Foundry IQ provided the platform underneath — versioned prompts, the eval runner, agent-performance tracking, and analytics.</p>
+        <p class="prose" style="margin:0 0 14px;font-size:14px;">Deployed to production on Azure. I designed all four agents — the three in the request path plus the LLM-as-judge that scores their output — along with their prompts, the workflow logic and the guardrail rules; Foundry IQ provided the platform underneath — versioned prompts, the eval runner, agent-performance tracking, and analytics.</p>
         <div class="svc-grid">
           <div class="svc"><b>GPT-4.1-mini</b><span>the model, via Foundry</span></div>
           <div class="svc"><b>Prompt library</b><span>versioned, A/B-able prompts</span></div>
@@ -344,8 +344,8 @@
     <div class="doc-section" id="eval">
       <div class="section-head reveal">
         <span class="eyebrow">07 · Measuring Quality</span>
-        <h2>How I defined "good" — a 7-dimension eval, run on the platform.</h2>
-        <p>To know whether the agents were actually working, I set up an evaluation that scores outputs across seven dimensions — so "quality" was a measured thing, not a vibe. It runs as a separate improvement loop, not in the user's request path.</p>
+        <h2>How I defined "good" — a fourth agent that grades the other three.</h2>
+        <p>To know whether the agents were actually working, I built an <strong>LLM-as-judge</strong> — the pipeline's fourth agent — that scores every output across seven dimensions, so "quality" was a measured thing rather than a vibe. It runs <em>offline</em>, in a separate improvement loop, never in the user's request path: judgment about quality shouldn't cost the user latency.</p>
       </div>
       <div class="info-grid">
         <div class="info-card reveal">
