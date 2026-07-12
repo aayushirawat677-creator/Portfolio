@@ -10,6 +10,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="styles.css" />
 <style>
+  /* architecture SVG wrapper */
+  .archwrap{margin-top:10px;border:1px solid var(--line);border-radius:14px;background:#0f141a;padding:18px;overflow-x:auto}
+  .archwrap img{width:100%;min-width:660px;height:auto;display:block}
   /* ---- flow diagram primitives (shared pattern with What If?) ---- */
   .flow{position:relative;z-index:2;display:flex;flex-direction:column;gap:0;margin-top:8px}
   .flow-node{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:color-mix(in oklab,var(--bg-2) 82%,transparent);transition:border-color .3s,background .3s}
@@ -78,8 +81,8 @@
     <h1>Corporate travel — an <span class="accent">end-to-end system design.</span></h1>
     <p class="sub">How I take apart an unfamiliar system: I pulled the thread on corporate travel — a product that looks solved and isn't — and reasoned my way to where it actually breaks. This is the architecture, the two flows that carry the weight, and where I'd focus if I were the PM.</p>
     <div class="detail-meta">
-      <div class="stat"><b>6</b><span>layers, mapped end to end</span></div>
-      <div class="stat"><b>2</b><span>load-bearing flows</span></div>
+      <div class="stat"><b>7</b><span>layers, mapped end to end</span></div>
+      <div class="stat"><b>1</b><span>decision loop that re-plans</span></div>
       <div class="stat"><b>Propose</b><span>vs enforce boundary</span></div>
       <div class="stat"><b>PM lens</b><span>risk pass per layer</span></div>
     </div>
@@ -140,49 +143,17 @@
     <div class="doc-section" id="architecture">
       <div class="section-head reveal">
         <span class="eyebrow">03 · The architecture</span>
-        <h2>Six layers between the traveler and a world that won't tell the truth.</h2>
-        <p>A request enters at the top, is understood by an AI reasoning layer, gated by deterministic policy, executed against normalized content, and recorded in a source-of-truth store that a reconciliation loop keeps honest. The <span style="color:#ff8a80;">red gate</span> and the <span style="color:#5fe7b0;">green loop</span> are what separate a production platform from a demo.</p>
+        <h2>The whole system, end to end.</h2>
+        <p>A request enters at the top and travels down through orchestration, a deterministic execution layer, the live travel ecosystem, and a transaction safety layer — with a <span style="color:#3ddbc8;">decision loop</span> that re-plans instead of dead-ending, and a <span style="color:#ff8a80;">policy gate</span> nothing commits without. Every decision becomes an event at the bottom, which is what makes the system improvable.</p>
       </div>
-      <div class="flow reveal" data-d="1">
-        <div class="flow-node">
-          <div class="fh"><span class="fn">CH</span><span class="ft">Channels</span><span class="fkind">surface</span></div>
-          <div class="fbody">Web, mobile, chat, email, agent desk — every way a request can enter.</div>
-        </div>
-        <div class="flow-arrow"></div>
-        <div class="flow-node">
-          <div class="fh"><span class="fn">01</span><span class="ft">AI reasoning layer — orchestrator + model</span><span class="fkind llm">proposes</span></div>
-          <div class="fbody">Understands the fuzzy request, searches, ranks, explains. <strong>Proposes an action — never commits one.</strong></div>
-        </div>
-        <div class="flow-arrow label"><span>proposed action</span></div>
-        <div class="flow-node gate">
-          <div class="fh"><span class="fn">02</span><span class="ft">Deterministic policy gate</span><span class="fkind code">enforces</span></div>
-          <div class="fbody">Caps, approvals, duty of care, cancel terms. Returns <strong>allow / warn / block</strong> and produces the audit trail. Nothing the model proposes reaches a real booking without this check.</div>
-        </div>
-        <div class="flow-arrow label"><span>allowed action</span></div>
-        <div class="flow-node">
-          <div class="fh"><span class="fn">03</span><span class="ft">Executor layer</span><span class="fkind">owns the transaction</span></div>
-          <div class="fbody">Search · revalidate · book · ticket · change · cancel. Sagas and idempotency keys. The only writer of booking state.</div>
-        </div>
-        <div class="flow-arrow"></div>
-        <div class="flow-node">
-          <div class="fh"><span class="fn">04</span><span class="ft">Content sources — normalized</span><span class="fkind">anti-corruption</span></div>
-          <div class="fbody">GDS · NDC · direct · LCC · aggregators · hotels · rail · car — collapsed into one canonical model. All the ugliness is absorbed here.</div>
-        </div>
-        <div class="flow-arrow"></div>
-        <div class="flow-node">
-          <div class="fh"><span class="fn">05</span><span class="ft">Source-of-truth store</span><span class="fkind">state</span></div>
-          <div class="fbody">Bookings, PNRs, expense, transaction state — the platform's own record.</div>
-        </div>
-        <div class="flow-loop"><span class="lp">↻</span> and running continuously against it &nbsp;→</div>
-        <div class="flow-node recon">
-          <div class="fh"><span class="fn">LOOP</span><span class="ft">Reconciliation loop</span><span class="fkind code">pulls truth</span></div>
-          <div class="fbody">Poll · webhooks · consistency checks. Because the outside world won't reliably <em>push</em> changes, the platform goes and <strong>pulls</strong> the truth.</div>
-        </div>
+      <div class="archwrap reveal" data-d="1">
+        <img src="assets/corp-travel-arch.svg" alt="End-to-end corporate travel platform architecture — channels, conversation and orchestration layer with AI planner and LLM, deterministic execution layer, live travel ecosystem, decision loop with re-plan feedback, transaction safety layer with deterministic policy engine, post-booking automation, and event streaming to analytics." />
       </div>
       <div class="codeline reveal" data-d="1" style="margin-top:22px;">
-        <span class="c">// the two features that carry most of the weight</span><br />
-        the <b style="color:#ff8a80;">policy gate</b> sits between reasoning and executor — nothing commits without an auditable check<br />
-        the <b style="color:#5fe7b0;">reconciliation loop</b> exists because the platform doesn't own the source of truth
+        <span class="c">// the three things that carry the weight</span><br />
+        the <b style="color:#3ddbc8;">AI planner</b> proposes and re-plans — <span class="c">it never commits a transaction</span><br />
+        the <b style="color:#ff8a80;">deterministic policy engine</b> is the gate — <span class="c">allow / warn / require approval / block, with an audit trail</span><br />
+        the <b style="color:#5fe7b0;">decision loop</b> means missing info or a non-compliant trip <span class="c">re-plans instead of failing</span>
       </div>
     </div>
 
