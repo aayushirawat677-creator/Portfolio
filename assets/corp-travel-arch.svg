@@ -1,0 +1,288 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 2560" width="100%" role="img" aria-label="End-to-end corporate travel platform architecture: channels, orchestration layer, deterministic execution, live travel ecosystem, decision loop, transaction safety layer, post-booking automation, and event streaming.">
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#7d8794"/>
+    </marker>
+    <marker id="ah-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#3ddbc8"/>
+    </marker>
+    <marker id="ah-r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#ff8a80"/>
+    </marker>
+    <marker id="ah-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5fe7b0"/>
+    </marker>
+    <style>
+      .bx   { fill:#1b212b; stroke:#39424f; stroke-width:1; rx:8; }
+      .bx-a { fill:#10312f; stroke:#3ddbc8; stroke-width:1.3; rx:8; }
+      .bx-r { fill:#2e1a1c; stroke:#ff8a80; stroke-width:1.4; rx:8; }
+      .bx-g { fill:#12302a; stroke:#5fe7b0; stroke-width:1.3; rx:8; }
+      .bx-s { fill:#171d26; stroke:#2f3742; stroke-width:1; rx:7; }
+      .band { fill:#141a22; stroke:#2b3340; stroke-width:1; rx:10; }
+      .lbl  { font-family:'JetBrains Mono',monospace; font-size:11px; fill:#3ddbc8; letter-spacing:.14em; }
+      .t    { font-family:'Sora',system-ui,sans-serif; font-size:13.5px; fill:#e9edf2; font-weight:600; }
+      .ts   { font-family:'Sora',system-ui,sans-serif; font-size:12px; fill:#cdd4dd; font-weight:500; }
+      .sub  { font-family:'JetBrains Mono',monospace; font-size:10px; fill:#8b95a3; }
+      .tag  { font-family:'JetBrains Mono',monospace; font-size:9.5px; fill:#7d8794; letter-spacing:.06em; }
+      .ln   { stroke:#4a5462; stroke-width:1.4; fill:none; marker-end:url(#ah); }
+      .ln-a { stroke:#3ddbc8; stroke-width:1.6; fill:none; marker-end:url(#ah-a); }
+      .ln-r { stroke:#ff8a80; stroke-width:1.7; fill:none; marker-end:url(#ah-r); }
+      .ln-g { stroke:#5fe7b0; stroke-width:1.7; fill:none; marker-end:url(#ah-g); }
+      .ln-d { stroke:#4a5462; stroke-width:1.2; fill:none; stroke-dasharray:4 4; }
+      .ec   { font-family:'JetBrains Mono',monospace; font-size:9.5px; fill:#5fe7b0; }
+      .er   { font-family:'JetBrains Mono',monospace; font-size:9.5px; fill:#ff8a80; }
+    </style>
+  </defs>
+
+  <!-- ================= CHANNELS ================= -->
+  <text class="lbl" x="30" y="26">CHANNELS</text>
+  <rect class="bx" x="380" y="40" width="240" height="34"/>
+  <text class="t" x="500" y="62" text-anchor="middle">User</text>
+  <path class="ln" d="M500 74 V 96"/>
+  <rect class="bx-s" x="250" y="96" width="500" height="32"/>
+  <text class="ts" x="500" y="117" text-anchor="middle">Web · Mobile · Slack · Teams · Voice</text>
+  <path class="ln" d="M500 128 V 152"/>
+  <rect class="bx-s" x="330" y="152" width="340" height="32"/>
+  <text class="ts" x="500" y="173" text-anchor="middle">Authentication — SSO / OAuth</text>
+  <path class="ln" d="M500 184 V 208"/>
+  <rect class="bx" x="300" y="208" width="400" height="42"/>
+  <text class="t" x="500" y="227" text-anchor="middle">API Gateway / Edge</text>
+  <text class="sub" x="500" y="242" text-anchor="middle">routing · auth · rate limiting · versioning</text>
+  <path class="ln" d="M500 250 V 288"/>
+
+  <!-- ================= ORCHESTRATION ================= -->
+  <rect class="band" x="20" y="288" width="960" height="580"/>
+  <text class="lbl" x="40" y="312">CONVERSATION &amp; ORCHESTRATION LAYER</text>
+
+  <rect class="bx" x="300" y="330" width="400" height="42"/>
+  <text class="t" x="500" y="349" text-anchor="middle">Conversation Service</text>
+  <text class="sub" x="500" y="364" text-anchor="middle">session memory · planner state · history</text>
+  <path class="ln" d="M500 372 V 396"/>
+
+  <rect class="bx-a" x="330" y="396" width="340" height="38"/>
+  <text class="t" x="500" y="420" text-anchor="middle">AI Planner / Orchestrator</text>
+
+  <!-- fan-out to 3 -->
+  <path class="ln" d="M500 434 V 450 H 165 V 470"/>
+  <path class="ln" d="M500 434 V 470"/>
+  <path class="ln" d="M500 434 V 450 H 835 V 470"/>
+
+  <rect class="bx-s" x="70" y="470" width="190" height="34"/>
+  <text class="ts" x="165" y="491" text-anchor="middle">Intent Detection</text>
+  <rect class="bx-s" x="405" y="470" width="190" height="34"/>
+  <text class="ts" x="500" y="491" text-anchor="middle">Context Builder</text>
+  <rect class="bx-s" x="740" y="470" width="190" height="34"/>
+  <text class="ts" x="835" y="491" text-anchor="middle">Planner State Machine</text>
+
+  <path class="ln" d="M500 504 V 528"/>
+  <rect class="bx" x="345" y="528" width="310" height="34"/>
+  <text class="ts" x="500" y="549" text-anchor="middle">Retrieve Enterprise Context</text>
+
+  <!-- fan-out to 4 sources -->
+  <path class="ln" d="M500 562 V 578 H 130 V 598"/>
+  <path class="ln" d="M500 562 V 578 H 375 V 598"/>
+  <path class="ln" d="M500 562 V 578 H 625 V 598"/>
+  <path class="ln" d="M500 562 V 578 H 870 V 598"/>
+
+  <rect class="bx-s" x="50" y="598" width="160" height="32"/>
+  <text class="sub" x="130" y="618" text-anchor="middle">User Profile</text>
+  <rect class="bx-s" x="295" y="598" width="160" height="32"/>
+  <text class="sub" x="375" y="618" text-anchor="middle">Travel Policy</text>
+  <rect class="bx-s" x="545" y="598" width="160" height="32"/>
+  <text class="sub" x="625" y="618" text-anchor="middle">Booking History</text>
+  <rect class="bx-s" x="790" y="598" width="160" height="32"/>
+  <text class="sub" x="870" y="618" text-anchor="middle">Calendar</text>
+
+  <!-- fan-in -->
+  <path class="ln-d" d="M130 630 V 650 H 870 V 630"/>
+  <path class="ln-d" d="M375 630 V 650"/>
+  <path class="ln-d" d="M625 630 V 650"/>
+  <path class="ln" d="M500 650 V 672"/>
+
+  <rect class="bx" x="375" y="672" width="250" height="34"/>
+  <text class="ts" x="500" y="693" text-anchor="middle">Prompt Builder</text>
+  <path class="ln" d="M500 706 V 730"/>
+
+  <rect class="bx-a" x="355" y="730" width="290" height="38"/>
+  <text class="t" x="500" y="754" text-anchor="middle">Large Language Model</text>
+
+  <!-- LLM two outputs -->
+  <path class="ln" d="M500 768 V 784 H 285 V 806"/>
+  <path class="ln" d="M500 768 V 784 H 715 V 806"/>
+  <rect class="bx-s" x="175" y="806" width="220" height="34"/>
+  <text class="ts" x="285" y="827" text-anchor="middle">Natural Language Output</text>
+  <rect class="bx-s" x="605" y="806" width="220" height="34"/>
+  <text class="ts" x="715" y="827" text-anchor="middle">Suggested Tool Calls</text>
+  <text class="tag" x="715" y="853" text-anchor="middle">proposals — never commits</text>
+
+  <path class="ln-d" d="M285 840 V 866 H 715 V 840"/>
+  <path class="ln" d="M500 866 V 900"/>
+
+  <!-- ================= DETERMINISTIC EXECUTION ================= -->
+  <rect class="band" x="20" y="900" width="960" height="270"/>
+  <text class="lbl" x="40" y="924">DETERMINISTIC EXECUTION LAYER</text>
+
+  <rect class="bx-r" x="320" y="944" width="360" height="38"/>
+  <text class="t" x="500" y="968" text-anchor="middle">AI Planner validates</text>
+  <path class="ln-r" d="M500 982 V 1006"/>
+
+  <rect class="bx" x="300" y="1006" width="400" height="44"/>
+  <text class="t" x="500" y="1026" text-anchor="middle">Tool Executor Runtime</text>
+  <text class="sub" x="500" y="1041" text-anchor="middle">retries · timeouts · authentication</text>
+
+  <path class="ln" d="M500 1050 V 1068 H 145 V 1090"/>
+  <path class="ln" d="M500 1050 V 1068 H 382 V 1090"/>
+  <path class="ln" d="M500 1050 V 1068 H 618 V 1090"/>
+  <path class="ln" d="M500 1050 V 1068 H 855 V 1090"/>
+
+  <rect class="bx-s" x="65" y="1090" width="160" height="32"/>
+  <text class="sub" x="145" y="1110" text-anchor="middle">Flight Search</text>
+  <rect class="bx-s" x="302" y="1090" width="160" height="32"/>
+  <text class="sub" x="382" y="1110" text-anchor="middle">Hotel Search</text>
+  <rect class="bx-s" x="538" y="1090" width="160" height="32"/>
+  <text class="sub" x="618" y="1110" text-anchor="middle">Calendar Tool</text>
+  <rect class="bx-s" x="775" y="1090" width="160" height="32"/>
+  <text class="sub" x="855" y="1110" text-anchor="middle">Expense Tool</text>
+
+  <path class="ln" d="M145 1122 V 1146 H 500 V 1190"/>
+
+  <!-- ================= LIVE ECOSYSTEM ================= -->
+  <rect class="band" x="20" y="1190" width="960" height="190"/>
+  <text class="lbl" x="40" y="1214">LIVE TRAVEL ECOSYSTEM</text>
+
+  <rect class="bx-s" x="80" y="1234" width="170" height="32"/>
+  <text class="sub" x="165" y="1254" text-anchor="middle">GDS</text>
+  <rect class="bx-s" x="305" y="1234" width="170" height="32"/>
+  <text class="sub" x="390" y="1254" text-anchor="middle">NDC APIs</text>
+  <rect class="bx-s" x="530" y="1234" width="170" height="32"/>
+  <text class="sub" x="615" y="1254" text-anchor="middle">Airline APIs</text>
+  <rect class="bx-s" x="755" y="1234" width="170" height="32"/>
+  <text class="sub" x="840" y="1254" text-anchor="middle">Hotel APIs</text>
+
+  <path class="ln-d" d="M165 1266 V 1288 H 840 V 1266"/>
+  <path class="ln-d" d="M390 1266 V 1288"/>
+  <path class="ln-d" d="M615 1266 V 1288"/>
+  <path class="ln" d="M500 1288 V 1312"/>
+
+  <rect class="bx" x="370" y="1312" width="260" height="34"/>
+  <text class="ts" x="500" y="1333" text-anchor="middle">Live Search Results</text>
+  <path class="ln" d="M500 1346 V 1400"/>
+
+  <!-- ================= DECISION LOOP ================= -->
+  <rect class="band" x="20" y="1400" width="960" height="320"/>
+  <text class="lbl" x="40" y="1424">DECISION LOOP</text>
+
+  <rect class="bx-a" x="315" y="1444" width="370" height="38"/>
+  <text class="t" x="500" y="1468" text-anchor="middle">AI Planner evaluates results</text>
+
+  <!-- 3-way branch -->
+  <path class="ln" d="M500 1482 V 1500 H 165 V 1522"/>
+  <path class="ln" d="M500 1482 V 1522"/>
+  <path class="ln" d="M500 1482 V 1500 H 835 V 1522"/>
+
+  <rect class="bx-s" x="65" y="1522" width="200" height="34"/>
+  <text class="ts" x="165" y="1543" text-anchor="middle">Missing info?</text>
+  <rect class="bx-s" x="400" y="1522" width="200" height="34"/>
+  <text class="ts" x="500" y="1543" text-anchor="middle">No compliant trip?</text>
+  <rect class="bx-g" x="735" y="1522" width="200" height="34"/>
+  <text class="ts" x="835" y="1543" text-anchor="middle">Good options?</text>
+
+  <path class="ln" d="M165 1556 V 1580"/>
+  <path class="ln" d="M500 1556 V 1580"/>
+  <path class="ln-g" d="M835 1556 V 1580"/>
+
+  <rect class="bx-s" x="65" y="1580" width="200" height="34"/>
+  <text class="ts" x="165" y="1601" text-anchor="middle">Ask User</text>
+  <rect class="bx-s" x="400" y="1580" width="200" height="34"/>
+  <text class="ts" x="500" y="1601" text-anchor="middle">Broaden Search</text>
+  <rect class="bx-g" x="735" y="1580" width="200" height="34"/>
+  <text class="ts" x="835" y="1601" text-anchor="middle">Recommend Options</text>
+
+  <!-- THE LOOP BACK — routed inside the band, right side, clean -->
+  <path class="ln-a" d="M165 1614 V 1640 H 62 V 1463 H 315"/>
+  <path class="ln-a" d="M500 1614 V 1640 H 62"/>
+  <rect x="72" y="1428" width="196" height="17" rx="4" fill="#10312f" stroke="#3ddbc8" stroke-width="0.8"/>
+  <text class="ec" x="170" y="1440" text-anchor="middle">↻ re-plan — never dead-end</text>
+
+  <path class="ln-g" d="M835 1614 V 1660 H 500 V 1682"/>
+  <rect class="bx" x="360" y="1682" width="280" height="34"/>
+  <text class="ts" x="500" y="1703" text-anchor="middle">User selects itinerary</text>
+  <path class="ln" d="M500 1716 V 1750"/>
+
+  <!-- ================= TRANSACTION SAFETY ================= -->
+  <rect class="band" x="20" y="1750" width="960" height="530"/>
+  <text class="lbl" x="40" y="1774">TRANSACTION SAFETY LAYER</text>
+
+  <rect class="bx-r" x="285" y="1794" width="430" height="46"/>
+  <text class="t" x="500" y="1814" text-anchor="middle">Deterministic Policy Engine</text>
+  <text class="sub" x="500" y="1830" text-anchor="middle">allow · warn · require approval · block</text>
+  <text class="er" x="730" y="1821">← the gate. nothing commits without it</text>
+
+  <path class="ln-r" d="M500 1840 V 1866"/>
+  <rect class="bx-s" x="330" y="1866" width="340" height="34"/>
+  <text class="ts" x="500" y="1887" text-anchor="middle">Manager Approval Workflow</text>
+  <text class="tag" x="690" y="1887">if approval required</text>
+
+  <path class="ln" d="M500 1900 V 1924"/>
+  <rect class="bx" x="315" y="1924" width="370" height="42"/>
+  <text class="t" x="500" y="1943" text-anchor="middle">Inventory Revalidation</text>
+  <text class="sub" x="500" y="1958" text-anchor="middle">price? seat? fare still available?</text>
+
+  <path class="ln" d="M500 1966 V 1990"/>
+  <rect class="bx" x="340" y="1990" width="320" height="34"/>
+  <text class="ts" x="500" y="2011" text-anchor="middle">Payment Authorization</text>
+  <text class="tag" x="675" y="2011">idempotent · late-sequenced</text>
+
+  <path class="ln" d="M500 2024 V 2048"/>
+  <rect class="bx-a" x="360" y="2048" width="280" height="36"/>
+  <text class="t" x="500" y="2071" text-anchor="middle">Booking Executor</text>
+
+  <path class="ln" d="M500 2084 V 2108"/>
+  <rect class="bx-s" x="320" y="2108" width="360" height="32"/>
+  <text class="ts" x="500" y="2129" text-anchor="middle">Airline / GDS Commit Booking</text>
+
+  <path class="ln" d="M500 2140 V 2164"/>
+  <rect class="bx-s" x="330" y="2164" width="340" height="32"/>
+  <text class="ts" x="500" y="2185" text-anchor="middle">Ticket Issued / PNR Created</text>
+
+  <path class="ln" d="M500 2196 V 2220"/>
+  <rect class="bx-g" x="315" y="2220" width="370" height="36"/>
+  <text class="t" x="500" y="2243" text-anchor="middle">Write Booking → Operational DB</text>
+
+  <path class="ln" d="M500 2256 V 2300"/>
+
+  <!-- ================= POST-BOOKING ================= -->
+  <rect class="band" x="20" y="2300" width="960" height="110"/>
+  <text class="lbl" x="40" y="2324">POST-BOOKING AUTOMATION</text>
+  <rect class="bx-s" x="45" y="2344" width="170" height="30"/>
+  <text class="sub" x="130" y="2363" text-anchor="middle">Confirmation Email</text>
+  <rect class="bx-s" x="230" y="2344" width="160" height="30"/>
+  <text class="sub" x="310" y="2363" text-anchor="middle">Calendar Update</text>
+  <rect class="bx-s" x="405" y="2344" width="180" height="30"/>
+  <text class="sub" x="495" y="2363" text-anchor="middle">Expense Initialization</text>
+  <rect class="bx-s" x="600" y="2344" width="150" height="30"/>
+  <text class="sub" x="675" y="2363" text-anchor="middle">Notifications</text>
+  <rect class="bx-s" x="765" y="2344" width="190" height="30"/>
+  <text class="sub" x="860" y="2363" text-anchor="middle">Itinerary Generation</text>
+
+  <path class="ln" d="M500 2374 V 2394 V 2430"/>
+
+  <!-- ================= EVENT STREAMING ================= -->
+  <rect class="band" x="20" y="2430" width="960" height="120"/>
+  <text class="lbl" x="40" y="2454">EVENT STREAMING &amp; ANALYTICS</text>
+  <rect class="bx-s" x="45" y="2472" width="270" height="30"/>
+  <text class="sub" x="180" y="2491" text-anchor="middle">BookingConfirmed · PolicyOverride · …</text>
+  <path class="ln" d="M315 2487 H 350"/>
+  <rect class="bx-s" x="350" y="2472" width="90" height="30"/>
+  <text class="sub" x="395" y="2491" text-anchor="middle">Kafka</text>
+  <path class="ln" d="M440 2487 H 475"/>
+  <rect class="bx-s" x="475" y="2472" width="110" height="30"/>
+  <text class="sub" x="530" y="2491" text-anchor="middle">Snowflake</text>
+  <path class="ln" d="M585 2487 H 620"/>
+  <rect class="bx-s" x="620" y="2472" width="90" height="30"/>
+  <text class="sub" x="665" y="2491" text-anchor="middle">dbt</text>
+  <path class="ln" d="M710 2487 H 745"/>
+  <rect class="bx-s" x="745" y="2472" width="210" height="30"/>
+  <text class="sub" x="850" y="2491" text-anchor="middle">Semantic Layer → BI</text>
+  <text class="tag" x="500" y="2528" text-anchor="middle">every decision the planner makes becomes an event — the loop that makes the system improvable</text>
+</svg>
