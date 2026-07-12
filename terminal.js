@@ -68,39 +68,43 @@
       printLine('<span class="out">available commands —</span>');
       printLine('<span class="key">whoami</span><span class="out">     who I am &amp; what I do → /about</span>');
       printLine('<span class="key">work</span><span class="out">       what I\'ve built → /work</span>');
-      printLine('<span class="key">case</span><span class="out">       deep dives + writing → /case-studies</span>');
+      printLine('<span class="key">case</span><span class="out">       case studies &amp; deep dives → /case-studies</span>');
       printLine('<span class="key">experience</span><span class="out"> career log → /experience</span>');
       printLine('<span class="key">skills</span><span class="out">     capability matrix → /about</span>');
       printLine('<span class="key">contact</span><span class="out">    start a conversation</span>');
       printLine('<span class="key">clear</span><span class="out">      reset the session</span>');
     },
     whoami() {
-      printLine('<span class="out">Aayushi · AI Product Manager — 0&#8594;1 agentic products.</span>');
+      printLine('<span class="out">Aayushi · AI Product Manager — I take AI products from problem to launch.</span>');
       printLine('<span class="out">routing to </span><span class="key">/about</span> <span class="dim">···</span>');
       go('index.html#about');
     },
     projects() {
-      printLine('<span class="out">opening </span><span class="key">/work</span><span class="out"> — Lumi · MISO </span><span class="dim">···</span>');
+      printLine('<span class="out">opening </span><span class="key">/work</span><span class="out"> — Lumi · What If? · MISO </span><span class="dim">···</span>');
       go('projects.html');
     },
     casestudies() {
-      printLine('<span class="out">opening </span><span class="key">/case-studies</span><span class="out"> — deep dives + writing </span><span class="dim">···</span>');
+      printLine('<span class="out">opening </span><span class="key">/case-studies</span><span class="out"> — corporate travel · Rufus · Lumi </span><span class="dim">···</span>');
       go('case-studies.html');
     },
     lumi() {
-      printLine('<span class="out">loading </span><span class="key">Lumi</span><span class="out"> — 3-layer Gemini arch </span><span class="dim">···</span>');
+      printLine('<span class="out">loading </span><span class="key">Lumi</span><span class="out"> — behavioral health voice assistant, shipped 0&#8594;1 </span><span class="dim">···</span>');
       go('lumi.html');
     },
+    whatif() {
+      printLine('<span class="out">loading </span><span class="key">What If?</span><span class="out"> — multi-agent decision tool </span><span class="dim">···</span>');
+      go('whatif.html');
+    },
     miso() {
-      printLine('<span class="out">loading </span><span class="key">MISO</span><span class="out"> — optimization agent </span><span class="dim">···</span>');
+      printLine('<span class="out">loading </span><span class="key">MISO</span><span class="out"> — ingredient optimization agent </span><span class="dim">···</span>');
       go('miso.html');
     },
     experience() {
-      printLine('<span class="out">Lumi · Cograph · CyMed · Beenos — rendering career log </span><span class="dim">···</span>');
+      printLine('<span class="out">Lumi · CyMed · Cograph · Beenos — rendering career log </span><span class="dim">···</span>');
       go('experience.html');
     },
     skills() {
-      printLine('<span class="out">capability matrix — Product Building · AI Eval · 0&#8594;1 · Growth </span><span class="dim">···</span>');
+      printLine('<span class="out">capability matrix — 0&#8594;1 Building · AI System Design · Evals &amp; Guardrails · Growth </span><span class="dim">···</span>');
       go('index.html#skills');
     },
     contact() {
@@ -113,7 +117,7 @@
     }
   };
 
-  const ALIASES = { about:'whoami', work:'projects', products:'projects', ai_products:'projects', career:'experience', capabilities:'skills', 'case':'casestudies', writing:'casestudies', '?':'help', ls:'help', man:'help' };
+  const ALIASES = { about:'whoami', work:'projects', products:'projects', ai_products:'projects', career:'experience', capabilities:'skills', 'case':'casestudies', writing:'casestudies', 'what if':'whatif', 'whatif?':'whatif', travel:'casestudies', rufus:'casestudies', '?':'help', ls:'help', man:'help' };
 
   function run(raw) {
     const cmd = raw.trim().toLowerCase();
@@ -142,12 +146,12 @@
     gap();
     await typeLine([
       { t: "I'm ", c: 'out' }, { t: 'Aayushi', c: 'key' },
-      { t: ' — an AI Product Manager who ships ', c: 'out' },
-      { t: '0\u21921 agentic products', c: 'usr' }, { t: '.', c: 'out' }
+      { t: ' — an AI Product Manager who takes AI products ', c: 'out' },
+      { t: 'from problem to launch', c: 'usr' }, { t: '.', c: 'out' }
     ]);
     await wait(LINE_GAP);
     await typeLine([
-      { t: '3+ yrs · LLM agents · voice + behavioral systems · eval & guardrails.', c: 'out' }
+      { t: '3.5 yrs · 0\u21921 products · voice + behavioral AI · evals & guardrails.', c: 'out' }
     ]);
     await wait(LINE_GAP);
     gap();
